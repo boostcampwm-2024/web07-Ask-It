@@ -1,0 +1,53 @@
+{
+  "ignorePatterns": ["dist", "vite.config.ts", "vite-env.d.ts"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "airbnb",
+    "airbnb-typescript",
+    "prettier"
+  ],
+  "overrides": [
+    {
+      "files": ["**/*.{ts,tsx}"],
+      "parserOptions": {
+        "ecmaVersion": 2020,
+        "project": "./tsconfig.app.json"
+      },
+      "env": {
+        "browser": true
+      },
+      "plugins": ["react-hooks", "react-refresh"],
+      "rules": {
+        "camelcase": [
+          "error",
+          {
+            "ignoreDestructuring": true
+          }
+        ],
+        "react/react-in-jsx-scope": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react-refresh/only-export-components": [
+          "warn",
+          {
+            "allowConstantExport": true
+          }
+        ],
+        "import/extensions": "off",
+        "import/order": [
+          "error",
+          {
+            "groups": ["builtin", "external", ["parent", "sibling"], "index"],
+            "named": true,
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            },
+            "newlines-between": "always"
+          }
+        ]
+      }
+    }
+  ]
+}
