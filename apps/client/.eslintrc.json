@@ -5,7 +5,8 @@
     "plugin:@typescript-eslint/recommended",
     "airbnb",
     "airbnb-typescript",
-    "prettier"
+    "prettier",
+    "plugin:@tanstack/query/recommended"
   ],
   "overrides": [
     {
