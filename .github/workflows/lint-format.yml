@@ -27,7 +27,7 @@ jobs:
         run: pnpm install
 
       - name: Install Turborepo
-        run: pnpm install turbo -g
+        run: npm install turbo -g
 
       - name: Run ESLint
         run: turbo run lint
