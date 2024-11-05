@@ -5,14 +5,8 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin', 'import'],
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-    'plugin:import/typescript',
-  ],
+  plugins: ['@typescript-eslint/eslint-plugin', 'import', 'prettier'],
+  extends: ['plugin:@typescript-eslint/recommended', 'plugin:import/errors', 'plugin:import/warnings', 'plugin:import/typescript'],
   root: true,
   env: {
     node: true,
@@ -27,35 +21,27 @@ module.exports = {
     'import/order': [
       'error',
       {
-        groups: [
-          'builtin',
-          'external',
-          [
-            'parent',
-            'sibling'
-          ],
-          'index'
-        ],
+        groups: ['builtin', 'external', ['parent', 'sibling'], 'index'],
         named: true,
         alphabetize: {
           order: 'asc',
-          caseInsensitive: true
+          caseInsensitive: true,
         },
-        'newlines-between': 'always'
-      }
+        'newlines-between': 'always',
+      },
     ],
     'import/no-unresolved': 'error',
-    'import/no-duplicates': 'error'
+    'import/no-duplicates': 'error',
   },
   settings: {
     'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx']
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
     },
     'import/resolver': {
       typescript: {},
       node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
-      }
-    }
-  }
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
+  },
 };
