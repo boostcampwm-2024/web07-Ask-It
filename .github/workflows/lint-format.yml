@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Install Turborepo
+        run: pnpm install turbo -g
+
       - name: Run ESLint
         run: turbo run lint
 
