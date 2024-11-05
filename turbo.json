@@ -1,0 +1,12 @@
+{
+  "tasks": {
+    "lint": {
+      "dependsOn": [],
+      "outputs": []
+    },
+    "format": {
+      "dependsOn": [],
+      "outputs": []
+    }
+  }
+}

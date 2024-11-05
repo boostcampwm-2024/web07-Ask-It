@@ -1,0 +1,38 @@
+name: Lint & Format
+
+on:
+  pull_request:
+    branches: ['main', 'develop-fe', 'develop-be']
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.CI_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run ESLint
+        run: turbo run lint
+
+      - name: Run Prettier
+        run: turbo run format
+
+      - name: Commit changes if any
+        env:
+          GITHUB_TOKEN: ${{ secrets.CI_TOKEN }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git diff --quiet || (git add . && git commit -m 'chore: auto-fix linting and formatting issues' && git push --set-upstream origin ${{ github.head_ref }})
