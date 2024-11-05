@@ -18,7 +18,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: '18'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       - name: Install dependencies
         run: pnpm install
@@ -35,4 +38,4 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git diff --quiet || (git add . && git commit -m 'chore: auto-fix linting and formatting issues' && git push --set-upstream origin ${{ github.head_ref }})
+          git diff --quiet || (git add . && git commit -m 'chore: auto-fix linting and formatting issues' && git push origin ${{ github.head_ref }})
