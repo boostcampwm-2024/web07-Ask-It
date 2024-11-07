@@ -7,12 +7,12 @@ export interface QASlice {
   resetQuestions: () => void;
   addQuestion: (question: Question) => void;
   updateQuestion: (question: Question) => void;
-  removeQuestion: (questionId: Question['id']) => void;
-  upvoteQuestion: (questionId: Question['id']) => void;
+  removeQuestion: (question: Question) => void;
+  upvoteQuestion: (question: Question) => void;
   addReply: (reply: Reply) => void;
   updateReply: (reply: Reply) => void;
-  removeReply: (replyId: Reply['id']) => void;
-  upvoteReply: (replyId: Reply['id']) => void;
+  removeReply: (reply: Reply) => void;
+  upvoteReply: (reply: Reply) => void;
 }
 
 export const createQASlice: StateCreator<QASlice, [], [], QASlice> = (set) => ({
@@ -27,16 +27,16 @@ export const createQASlice: StateCreator<QASlice, [], [], QASlice> = (set) => ({
         q.id === question.id ? question : q,
       ),
     })),
-  removeQuestion: (questionId) =>
+  removeQuestion: (question) =>
     set((state) => ({
       ...state,
-      questions: state.questions.filter((q) => q.id !== questionId),
+      questions: state.questions.filter((q) => q.id !== question.id),
     })),
-  upvoteQuestion: (questionId) =>
+  upvoteQuestion: (question) =>
     set((state) => ({
       ...state,
       questions: state.questions.map((q) =>
-        q.id === questionId ? { ...q, upvotes: q.upvotes + 1 } : q,
+        q.id === question.id ? { ...q, upvotes: q.upvotes + 1 } : q,
       ),
     })),
   addReply: (reply) =>
@@ -60,21 +60,21 @@ export const createQASlice: StateCreator<QASlice, [], [], QASlice> = (set) => ({
           : q,
       ),
     })),
-  removeReply: (replyId) =>
+  removeReply: (reply) =>
     set((state) => ({
       ...state,
       questions: state.questions.map((q) => ({
         ...q,
-        replies: q.replies.filter((r) => r.id !== replyId),
+        replies: q.replies.filter((r) => r.id !== reply.id),
       })),
     })),
-  upvoteReply: (replyId) =>
+  upvoteReply: (reply) =>
     set((state) => ({
       ...state,
       questions: state.questions.map((q) => ({
         ...q,
         replies: q.replies.map((r) =>
-          r.id === replyId ? { ...r, upvotes: r.upvotes + 1 } : r,
+          r.id === reply.id ? { ...r, upvotes: r.upvotes + 1 } : r,
         ),
       })),
     })),
