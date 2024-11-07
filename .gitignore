@@ -7,3 +7,5 @@ apps/**/node_modules
 .vscode
 
 .turbo
+
+apps/.DS_Store
