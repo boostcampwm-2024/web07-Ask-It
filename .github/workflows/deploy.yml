@@ -38,9 +38,10 @@ jobs:
         run: |
           # AWS CLI 설치 확인 및 설정
           sudo apt-get update && sudo apt-get install -y awscli
-          
-          cd apps/client
-          
+          aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          aws configure set default.region "kr-standard"
+                
           # 빌드된 정적 파일을 오브젝트 스토리지로 업로드
           aws --endpoint-url=https://kr.object.ncloudstorage.com s3 sync ./dist s3://ask-it-static/dist --acl public-read
 
