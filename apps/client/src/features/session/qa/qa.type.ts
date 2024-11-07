@@ -1,4 +1,4 @@
-import { Session } from '@/features/session';
+import { Session } from '@/features/session/session.type';
 
 export interface Question {
   id: number;
