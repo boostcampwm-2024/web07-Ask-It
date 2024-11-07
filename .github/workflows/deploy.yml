@@ -64,4 +64,6 @@ jobs:
             # 환경 변수 설정
             echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" > .env
             
-            pm2 start pnpm --name "ask-it" -- run start:prod
+            pm2 stop ask-it || true   # 기존 프로세스 종료, 없으면 무시
+            pm2 delete ask-it || true # 기존 프로세스 제거, 없으면 무시
+            pm2 start npm --name "ask-it" -- run start:prod  # 새로 시작
