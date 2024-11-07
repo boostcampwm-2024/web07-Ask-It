@@ -1,9 +1,11 @@
-import { PropsWithChildren } from 'react';
+import { MouseEvent, PropsWithChildren } from 'react';
 
 function Background({
   children,
   onClick,
-}: PropsWithChildren<{ onClick: () => void }>) {
+}: PropsWithChildren<{
+  onClick: (e: MouseEvent<HTMLButtonElement>) => void;
+}>) {
   return (
     <button
       type='button'
