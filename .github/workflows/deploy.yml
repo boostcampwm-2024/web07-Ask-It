@@ -39,6 +39,8 @@ jobs:
           # AWS CLI 설치 확인 및 설정
           sudo apt-get update && sudo apt-get install -y awscli
           
+          cd apps/client
+          
           # 빌드된 정적 파일을 오브젝트 스토리지로 업로드
           aws --endpoint-url=https://kr.object.ncloudstorage.com s3 sync ./dist s3://ask-it-static/dist --acl public-read
 
