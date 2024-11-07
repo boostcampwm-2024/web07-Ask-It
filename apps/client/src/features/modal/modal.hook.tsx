@@ -17,15 +17,7 @@ export const useModal = (children: ReactNode) => {
     if (!isOpen) return null;
     return createPortal(
       <ModalContext.Provider value={contextValue}>
-        <Background
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              closeModal();
-            }
-          }}
-        >
-          {children}
-        </Background>
+        <Background>{children}</Background>
       </ModalContext.Provider>,
       document.body,
     );
