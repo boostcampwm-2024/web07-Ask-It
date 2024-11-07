@@ -4,6 +4,7 @@ import { Question, Reply } from '@/features/session/qa/qa.type';
 
 export interface QASlice {
   questions: Question[];
+  resetQuestions: () => void;
   addQuestion: (question: Question) => void;
   updateQuestion: (question: Question) => void;
   removeQuestion: (questionId: Question['id']) => void;
@@ -16,6 +17,7 @@ export interface QASlice {
 
 export const createQASlice: StateCreator<QASlice, [], [], QASlice> = (set) => ({
   questions: [],
+  resetQuestions: () => set({ questions: [] }),
   addQuestion: (question) =>
     set((state) => ({ ...state, questions: [...state.questions, question] })),
   updateQuestion: (question) =>

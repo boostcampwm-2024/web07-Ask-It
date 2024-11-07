@@ -4,6 +4,7 @@ import { Chat } from '@/features/session/chatting';
 
 export interface ChattingSlice {
   chatting: Chat[];
+  resetChatting: () => void;
   addChatting: (chat: Chat) => void;
 }
 
@@ -14,6 +15,7 @@ export const createChattingSlice: StateCreator<
   ChattingSlice
 > = (set) => ({
   chatting: [],
+  resetChatting: () => set({ chatting: [] }),
   addChatting: (chat) =>
     set((state) => ({ chatting: [...state.chatting, chat] })),
 });
