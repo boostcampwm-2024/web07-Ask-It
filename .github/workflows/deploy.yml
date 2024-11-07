@@ -51,6 +51,8 @@ jobs:
           key: ${{ secrets.NCP_SERVER_RSA_PRIVATE_KEY }}
           script: |
             # 배포 디렉토리로 이동
+            npm install -g pnpm
+            npm install -g pm2
             cd ~/web07-Ask-It
             # 최신 코드로 업데이트
             git pull origin main
@@ -62,4 +64,4 @@ jobs:
             # 환경 변수 설정
             echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" > .env
             
-            pnpm start
+            pm2 start pnpm --name "ask-it" -- run start:prod
