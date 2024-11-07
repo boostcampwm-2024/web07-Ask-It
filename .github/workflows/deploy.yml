@@ -1,0 +1,69 @@
+name: Deploy to Development Server
+
+on:
+  push:
+    branches:
+      - main  # main 브랜치에 변경 사항이 푸시될 때만 실행
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Node.js 및 pnpm 설치
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'  # 원하는 Node.js 버전으로 설정
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      # 2. Repository Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # 3. Build Project
+      - name: Install dependencies and build project
+        run: |
+          pnpm install
+          cd apps/client
+          pnpm run build
+
+      # 4. Upload static files to Object Storage
+      - name: Upload to Object Storage
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          # AWS CLI 설치 확인 및 설정
+          sudo apt-get update && sudo apt-get install -y awscli
+          
+          # 빌드된 정적 파일을 오브젝트 스토리지로 업로드
+          aws --endpoint-url=https://kr.object.ncloudstorage.com s3 sync ./dist s3://ask-it-static/dist --acl public-read
+
+      # 5. Deploy Code and Start Server
+      - name: Deploy to Development Server
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.WEB_SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.NCP_SERVER_RSA_PRIVATE_KEY }}
+          script: |
+            # 배포 디렉토리로 이동
+            npm install -g pnpm
+            npm install -g pm2
+            cd ~/web07-Ask-It
+            # 최신 코드로 업데이트
+            git pull origin main
+            
+            pnpm install
+            
+            cd apps/server
+            
+            # 환경 변수 설정
+            echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" > .env
+            
+            pm2 stop ask-it || true   # 기존 프로세스 종료, 없으면 무시
+            pm2 delete ask-it || true # 기존 프로세스 제거, 없으면 무시
+            pm2 start npm --name "ask-it" -- run start:prod  # 새로 시작
