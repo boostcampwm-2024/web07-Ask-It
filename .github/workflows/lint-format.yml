@@ -2,7 +2,7 @@ name: Lint & Format
 
 on:
   pull_request:
-    branches: ['main', 'develop-fe', 'develop-be']
+    branches: ['main']
 
 jobs:
   lint:
