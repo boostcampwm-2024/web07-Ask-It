@@ -71,4 +71,5 @@ jobs:
             # pm2로 기존 프로세스 종료 및 새 프로세스 시작
             pm2 stop ask-it || true
             pm2 delete ask-it || true
+            pnpx prisma generate
             pm2 start pnpm --name "ask-it" -- run start:prod
