@@ -15,11 +15,12 @@ export const CreateUserSwagger = {
     schema: {
       example: {
         type: 'fail',
-        error: '잘못된 요청입니다. 필드를 확인하세요.',
-        message: {
-          email: '이메일 형식이 올바르지 않습니다.',
-          nickname: '닉네임은 최소 3자 이상이어야 합니다.',
-          password: '비밀번호는 최소 8자 이상이어야 합니다.',
+        error: {
+          message: {
+            email: '이메일 형식이 올바르지 않습니다.',
+            nickname: '닉네임은 최소 3자 이상이어야 합니다.',
+            password: '비밀번호는 최소 8자 이상이어야 합니다.',
+          },
         },
       },
     },

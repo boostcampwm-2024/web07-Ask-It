@@ -19,9 +19,19 @@ export const CheckDuplicationSwagger = {
       example: { type: 'success', data: { exists: 'true || false' } },
     },
   }),
-
   ApiResponse400: ApiResponse({
     status: 400,
-    description: '잘못된 요청: email 또는 nickname 하나만 제공해야 합니다.',
+    description: '잘못된 요청 (유효성 검사 실패)',
+    schema: {
+      example: {
+        type: 'fail',
+        error: {
+          message: {
+            errorType1: '이메일 또는 닉네임 하나만 요청해 주세요.',
+            errorType2: '올바른 이메일 형식이어야 합니다.',
+          },
+        },
+      },
+    },
   }),
 };
