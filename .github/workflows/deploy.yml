@@ -72,4 +72,5 @@ jobs:
             pm2 stop ask-it || true
             pm2 delete ask-it || true
             pnpx prisma generate
+            pnpm build
             pm2 start pnpm --name "ask-it" -- run start:prod
