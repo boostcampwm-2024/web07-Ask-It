@@ -14,3 +14,11 @@ model User {
   nickname   String   @unique
   created_at DateTime @default(now())
 }
+
+model Session {
+  session_id String @id
+  create_user_id String
+  title String
+  expired_at DateTime
+  created_at DateTime @default(now())
+}
