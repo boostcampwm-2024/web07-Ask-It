@@ -11,10 +11,11 @@ export class SessionsAuthService {
     const { session_id, user_id, token } = data;
 
     if (!token) {
-      return await this.sessionsAuthRepository.createToken({ ...data });
+      const result = user_id ? await this.sessionsAuthRepository.findToken(user_id, session_id, token) : null;
+      return result || (await this.sessionsAuthRepository.generateTokenForNotLogined({ ...data }));
     } else {
       const result = await this.sessionsAuthRepository.findToken(user_id, session_id, token);
-      return result ? { token: result.token } : await this.sessionsAuthRepository.updateToken({ ...data });
+      return result ? result : await this.sessionsAuthRepository.generateTokenForLogined({ ...data });
     }
   }
 }

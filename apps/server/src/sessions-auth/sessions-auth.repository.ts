@@ -8,37 +8,40 @@ import { SessionAuthDto } from './dto/session-auth.dto';
 export class SessionsAuthRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createToken(data: SessionAuthDto) {
-    const result = await this.prisma.userSessionToken.create({
+  async generateTokenForNotLogined(data: SessionAuthDto) {
+    const newUserSessionToken = await this.prisma.userSessionToken.create({
       data: {
         ...data,
-        token: uuid4(), // 새로운 UUID 생성하여 token 필드에 할당
+        token: uuid4(),
       },
     });
-    return result.token;
+    return newUserSessionToken.token;
   }
 
-  async updateToken(data: SessionAuthDto) {
-    const newToken = uuid4();
-    await this.prisma.userSessionToken.updateMany({
-      where: {
-        session_id: data.session_id,
-        user_id: data.user_id,
-      },
-      data: {
-        token: newToken,
-      },
-    });
+  async generateTokenForLogined(data: SessionAuthDto) {
+    const newToken = await this.generateTokenForNotLogined(data);
+    const deletedToken = await this.findToken(data.user_id, data.session_id, null);
+    await this.deleteToken(deletedToken);
     return newToken;
   }
 
   async findToken(user_id: string | null, session_id: string, token: string) {
-    return await this.prisma.userSessionToken.findFirst({
+    const findedToken = await this.prisma.userSessionToken.findFirst({
       where: {
         session_id,
-        token,
-        ...(user_id !== null && { user_id }),
+        ...(user_id ? { user_id } : {}),
+        ...(token ? { token } : {}),
       },
+      select: {
+        token: true,
+      },
+    });
+    return findedToken?.token || null;
+  }
+
+  async deleteToken(token: string) {
+    await this.prisma.userSessionToken.delete({
+      where: { token },
     });
   }
 }
