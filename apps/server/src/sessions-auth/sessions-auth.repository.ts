@@ -19,9 +19,9 @@ export class SessionsAuthRepository {
   }
 
   async generateTokenForLogined(data: SessionAuthDto) {
+    const result = await this.findToken(data.user_id, data.session_id, null);
+    if (result) return result;
     const newToken = await this.generateTokenForNotLogined(data);
-    const deletedToken = await this.findToken(data.user_id, data.session_id, null);
-    await this.deleteToken(deletedToken);
     return newToken;
   }
 
