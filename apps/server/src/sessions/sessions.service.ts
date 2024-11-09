@@ -17,5 +17,6 @@ export class SessionsService {
       expired_at: expiredAt,
       create_user_id: 123,
     });
+    return { sessionId };
   }
 }
