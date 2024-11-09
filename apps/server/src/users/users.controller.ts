@@ -19,10 +19,7 @@ export class UsersController {
   @ApiBody({ type: CreateUserDto })
   async create(@Body() createUserDto: CreateUserDto) {
     await this.usersService.create(createUserDto);
-    return {
-      type: 'success',
-      data: {},
-    };
+    return {};
   }
 
   @Get()
@@ -40,11 +37,6 @@ export class UsersController {
       throw new BadRequestException('이메일 또는 닉네임 하나만 요청해 주세요.');
     }
 
-    return {
-      type: 'success',
-      data: {
-        exists: await this.usersService.exist(validateUserDto),
-      },
-    };
+    return { exists: await this.usersService.exist(validateUserDto) };
   }
 }

@@ -17,11 +17,6 @@ export class SessionsController {
   @ApiBody({ type: CreateSessionDto })
   async create(@Body() createSessionDto: CreateSessionDto) {
     const sessionData = await this.sessionsService.create(createSessionDto);
-    return {
-      type: 'success',
-      data: {
-        sessionId: sessionData.sessionId,
-      },
-    };
+    return { sessionId: sessionData.sessionId };
   }
 }
