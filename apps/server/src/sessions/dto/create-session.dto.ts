@@ -4,9 +4,8 @@ export class CreateSessionDto {
   @IsOptional()
   session_id: string;
 
-  @IsNotEmpty()
-  @IsString()
-  create_user_id: string;
+  //로그인 기능 구현 시 @IsNotEmpty() 추가
+  create_user_id: number;
 
   @IsNotEmpty()
   @IsString()
