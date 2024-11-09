@@ -4,7 +4,6 @@ import { SessionsController } from './sessions.controller';
 import { SessionRepository } from './sessions.repository';
 import { SessionsService } from './sessions.service';
 import { PrismaModule } from '../prisma/prisma.module';
-
 @Module({
   imports: [PrismaModule],
   controllers: [SessionsController],

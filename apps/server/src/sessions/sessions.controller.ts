@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { CreateSessionDto } from './dto/create-session.dto';
 import { SessionsService } from './sessions.service';
@@ -10,10 +10,11 @@ import { CreateSessionSwagger } from './swagger/create-session.swagger';
 export class SessionsController {
   constructor(private readonly sessionsService: SessionsService) {}
 
+  @Post()
   @CreateSessionSwagger.ApiOperation
   @CreateSessionSwagger.ApiResponse201
   @CreateSessionSwagger.ApiResponse400
-  @Post()
+  @ApiBody({ type: CreateSessionDto })
   async create(@Body() createSessionDto: CreateSessionDto) {
     const data = await this.sessionsService.create(createSessionDto);
     return {
