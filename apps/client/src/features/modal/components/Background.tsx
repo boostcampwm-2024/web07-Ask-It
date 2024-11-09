@@ -20,7 +20,9 @@ function Background({ children }: PropsWithChildren) {
   return (
     <button
       type='button'
-      onClick={closeModal}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) closeModal();
+      }}
       onKeyDown={(e) => {
         if (e.key === ' ') {
           e.preventDefault();
