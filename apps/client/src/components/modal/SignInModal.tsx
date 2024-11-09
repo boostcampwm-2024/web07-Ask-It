@@ -1,19 +1,15 @@
-import { useState } from 'react';
-
 import Button from '../Button';
 
 import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
 import { useModalContext } from '@/features/modal';
+import { useSignInForm } from '@/features/session';
 
 function SignInModal() {
   const { closeModal } = useModalContext();
 
-  const [email, setEmail] = useState('');
-
-  const [password, setPassword] = useState('');
-
-  const [isLoginFailed] = useState(false);
+  const { email, setEmail, password, setPassword, isLoginFailed } =
+    useSignInForm();
 
   return (
     <Modal>
@@ -28,24 +24,15 @@ function SignInModal() {
           onChange={setEmail}
           placeholder='example@gmail.com'
         />
-        <div>
-          <InputField
-            label='비밀번호'
-            type='password'
-            value={password}
-            onChange={setPassword}
-            placeholder='비밀번호를 입력해주세요'
-          />
-          {isLoginFailed && (
-            <div
-              className={`w-[411px] text-right font-['Pretendard'] text-sm font-medium text-[#ff0808] transition-all duration-500 ease-in-out ${
-                isLoginFailed ? 'max-h-10 opacity-100' : 'max-h-0 opacity-0'
-              } overflow-hidden`}
-            >
-              로그인에 실패했습니다.
-            </div>
-          )}
-        </div>
+        <InputField
+          label='비밀번호'
+          type='password'
+          value={password}
+          onChange={setPassword}
+          placeholder='비밀번호를 입력해주세요'
+          validationStatus={isLoginFailed ? 'INVALID' : 'PENDING'}
+          invalidMessage='이메일 또는 비밀번호가 일치하지 않습니다.'
+        />
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button
             className='bg-indigo-600'

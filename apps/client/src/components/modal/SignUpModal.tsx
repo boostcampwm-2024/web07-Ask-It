@@ -1,23 +1,23 @@
-import { useState } from 'react';
-
 import Button from '../Button';
 
 import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
 import { useModalContext } from '@/features/modal';
+import { useSignUpForm } from '@/features/session';
 
 function SignUpModal() {
   const { closeModal } = useModalContext();
 
-  const [email, setEmail] = useState('');
-
-  const [nickname, setNickname] = useState('');
-
-  const [password, setPassword] = useState('');
-
-  const [isDuplicateEmail] = useState(false);
-
-  const [isDuplicateNickname] = useState(false);
+  const {
+    email,
+    setEmail,
+    nickname,
+    setNickname,
+    password,
+    setPassword,
+    emailValidationStatus,
+    nicknameValidationStatus,
+  } = useSignUpForm();
 
   return (
     <Modal>
@@ -25,38 +25,26 @@ function SignUpModal() {
         <p className="font-['Pretendard'] text-2xl font-bold text-indigo-600">
           Ask-It
         </p>
-        <div>
-          <InputField
-            label='이메일'
-            type='email'
-            value={email}
-            onChange={setEmail}
-            placeholder='example@gmail.com'
-          />
-          <div
-            className={`w-[411px] text-right font-['Pretendard'] text-sm font-medium text-[#ff0808] transition-all duration-500 ease-in-out ${
-              isDuplicateEmail ? 'max-h-10 opacity-100' : 'max-h-0 opacity-0'
-            } overflow-hidden`}
-          >
-            중복된 이메일입니다.
-          </div>
-        </div>
-        <div>
-          <InputField
-            label='닉네임'
-            type='text'
-            value={nickname}
-            onChange={setNickname}
-            placeholder='닉네임을 입력해주세요'
-          />
-          <div
-            className={`w-[411px] text-right font-['Pretendard'] text-sm font-medium text-[#ff0808] transition-all duration-500 ease-in-out ${
-              isDuplicateNickname ? 'max-h-10 opacity-100' : 'max-h-0 opacity-0'
-            } overflow-hidden`}
-          >
-            중복된 닉네임이 있습니다.
-          </div>
-        </div>
+        <InputField
+          label='이메일'
+          type='email'
+          value={email}
+          onChange={setEmail}
+          placeholder='example@gmail.com'
+          validationStatus={emailValidationStatus}
+          validMessage='사용 가능한 이메일입니다.'
+          invalidMessage='이미 사용 중인 이메일입니다.'
+        />
+        <InputField
+          label='닉네임'
+          type='text'
+          value={nickname}
+          onChange={setNickname}
+          placeholder='닉네임을 입력해주세요'
+          validationStatus={nicknameValidationStatus}
+          validMessage='사용 가능한 닉네임입니다.'
+          invalidMessage='이미 사용 중인 닉네임입니다.'
+        />
         <InputField
           label='비밀번호'
           type='password'

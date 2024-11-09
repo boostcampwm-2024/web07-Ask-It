@@ -12,7 +12,7 @@ function CreateSessionModal() {
 
   return (
     <Modal>
-      <div className='flex h-[118px] flex-col items-center justify-start gap-4 self-stretch rounded p-4'>
+      <div className='flex h-fit flex-col items-center justify-start gap-4 self-stretch rounded p-4'>
         <div className="font-['Pretendard'] text-2xl font-bold text-indigo-600">
           Ask-It
         </div>
