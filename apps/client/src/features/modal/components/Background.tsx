@@ -18,8 +18,8 @@ function Background({ children }: PropsWithChildren) {
   }, [closeModal]);
 
   return (
-    <button
-      type='button'
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    <div
       onClick={(e) => {
         if (e.target === e.currentTarget) closeModal();
       }}
@@ -31,7 +31,7 @@ function Background({ children }: PropsWithChildren) {
       className='fixed left-0 top-0 z-10 flex h-dvh w-dvw cursor-auto items-center justify-center bg-[#808080]/20 backdrop-blur-sm'
     >
       {children}
-    </button>
+    </div>
   );
 }
 
