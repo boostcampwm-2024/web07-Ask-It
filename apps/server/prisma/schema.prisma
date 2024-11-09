@@ -16,7 +16,7 @@ model User {
 }
 
 model Session {
-  session_id String @id
+  session_id String @id @default(uuid())
   create_user_id Int
   title String
   expired_at DateTime

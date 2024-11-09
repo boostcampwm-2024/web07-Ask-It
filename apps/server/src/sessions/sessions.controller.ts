@@ -16,11 +16,11 @@ export class SessionsController {
   @CreateSessionSwagger.ApiResponse400
   @ApiBody({ type: CreateSessionDto })
   async create(@Body() createSessionDto: CreateSessionDto) {
-    const data = await this.sessionsService.create(createSessionDto);
+    const sessionData = await this.sessionsService.create(createSessionDto);
     return {
       type: 'success',
       data: {
-        sessionId: data.sessionId,
+        sessionId: sessionData.sessionId,
       },
     };
   }

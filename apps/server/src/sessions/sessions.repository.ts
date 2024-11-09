@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateSessionDto } from './dto/create-session.dto';
 
 @Injectable()
 export class SessionRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: CreateSessionDto) {
-    await this.prisma.session.create({ data });
+  async create(data: Prisma.SessionCreateInput) {
+    return await this.prisma.session.create({ data });
   }
 }

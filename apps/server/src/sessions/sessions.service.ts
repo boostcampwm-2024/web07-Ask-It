@@ -1,22 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 
 import { CreateSessionDto } from './dto/create-session.dto';
 import { SessionRepository } from './sessions.repository';
+
+const SESSION_EXPIRATION_TIME = 30 * (60 * 1000);
+
 @Injectable()
 export class SessionsService {
   constructor(private readonly sessionRepository: SessionRepository) {}
 
   async create(data: CreateSessionDto) {
-    const sessionId = (await bcrypt.hash(new Date().toISOString(), 10)).slice(0, 21);
-    const expiredAt = new Date(new Date().getTime() + 30 * 60 * 1000);
+    const expired_at = new Date(Date.now() + SESSION_EXPIRATION_TIME);
 
-    await this.sessionRepository.create({
+    const sessionData = {
       ...data,
-      session_id: sessionId,
-      expired_at: expiredAt,
+      expired_at: expired_at,
       create_user_id: 123,
-    });
-    return { sessionId };
+    };
+    const createdSession = await this.sessionRepository.create(sessionData);
+    return { sessionId: createdSession.session_id };
   }
 }

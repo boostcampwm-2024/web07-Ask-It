@@ -16,7 +16,4 @@ export class CreateSessionDto {
   @IsNotEmpty({ message: 'title이 입력되어야 합니다' })
   @IsString()
   title: string;
-
-  @IsOptional()
-  expired_at: Date;
 }
