@@ -34,7 +34,8 @@
     "prisma": "^5.21.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.0.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

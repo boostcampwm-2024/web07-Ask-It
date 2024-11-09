@@ -22,3 +22,9 @@ model Session {
   expired_at DateTime
   created_at DateTime @default(now())
 }
+
+model UserSessionToken {
+  token String @id @default(uuid())
+  user_id String
+  session_id String
+}
