@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Query, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from './dto/create-user.dto';
@@ -6,8 +6,10 @@ import { ValidateUserDto } from './dto/validate-user.dto';
 import { CheckDuplicationSwagger } from './swagger/check-duplication.swagger';
 import { CreateUserSwagger } from './swagger/create-user.swagger';
 import { UsersService } from './users.service';
+import { TransformInterceptor } from '../common/interceptor/transform.interceptor';
 
 @ApiTags('Users')
+@UseInterceptors(TransformInterceptor)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

@@ -1,11 +1,13 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { CreateSessionDto } from './dto/create-session.dto';
 import { SessionsService } from './sessions.service';
 import { CreateSessionSwagger } from './swagger/create-session.swagger';
+import { TransformInterceptor } from '../common/interceptor/transform.interceptor';
 
 @ApiTags('Sessions')
+@UseInterceptors(TransformInterceptor)
 @Controller('sessions')
 export class SessionsController {
   constructor(private readonly sessionsService: SessionsService) {}
