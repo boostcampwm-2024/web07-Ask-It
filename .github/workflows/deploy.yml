@@ -1,76 +1,77 @@
 name: Deploy to Development Server
 
 on:
-  push:
-    branches:
-      - main  # main 브랜치에 변경 사항이 푸시될 때만 실행
+    push:
+        branches:
+            - main # main 브랜치에 변경 사항이 푸시될 때만 실행
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+    deploy:
+        runs-on: ubuntu-latest
 
-    steps:
-      # 1. Node.js 및 pnpm 설치
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'  # 원하는 Node.js 버전으로 설정
+        steps:
+            # 1. Node.js 및 pnpm 설치
+            - name: Set up Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '18' # 원하는 Node.js 버전으로 설정
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+            - name: Install pnpm
+              run: npm install -g pnpm
 
-      # 2. Repository Checkout
-      - name: Checkout repository
-        uses: actions/checkout@v2
+            # 2. Repository Checkout
+            - name: Checkout repository
+              uses: actions/checkout@v2
 
-      # 3. Build Project
-      - name: Install dependencies and build project
-        run: |
-          pnpm install
-          cd apps/client
-          pnpm run build
+            # 3. Build Project
+            - name: Install dependencies and build project
+              run: |
+                  pnpm install
+                  cd apps/client
+                  pnpm run build
 
-      # 4. Upload static files to Object Storage
-      - name: Upload to Object Storage
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: "kr-standard"  # 리전 설정
-        run: |
-          # AWS CLI 설치 확인 및 설정
-          sudo apt-get update && sudo apt-get install -y awscli
-          
-          # 빌드된 정적 파일을 오브젝트 스토리지로 업로드
-          aws --endpoint-url=https://kr.object.ncloudstorage.com s3 sync ./apps/client/dist s3://ask-it-static/dist --acl public-read
+            # 4. Upload static files to Object Storage
+            - name: Upload to Object Storage
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  AWS_DEFAULT_REGION: 'kr-standard' # 리전 설정
+              run: |
+                  # AWS CLI 설치 확인 및 설정
+                  sudo apt-get update && sudo apt-get install -y awscli
 
-      # 5. Deploy Code and Start Server
-      - name: Deploy to Development Server
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: ${{ secrets.WEB_SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.NCP_SERVER_RSA_PRIVATE_KEY }}
-          script: |
-            # NVM 설정 로드
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            
-            # 전역 패키지 설치
-            npm install -g pnpm
-            npm install -g pm2
-            
-            # 프로젝트 디렉토리 이동 및 최신 코드 가져오기
-            cd ~/web07-Ask-It
-            git pull origin main
-            pnpm install
-            
-            # 서버 디렉토리로 이동하여 환경 변수 설정
-            cd apps/server
-            echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" > .env
-            
-            # pm2로 기존 프로세스 종료 및 새 프로세스 시작
-            pm2 stop ask-it || true
-            pm2 delete ask-it || true
-            pnpx prisma generate
-            pnpm build
-            pm2 start pnpm --name "ask-it" -- run start:prod
+                  # 빌드된 정적 파일을 오브젝트 스토리지로 업로드
+                  aws --endpoint-url=https://kr.object.ncloudstorage.com s3 sync ./apps/client/dist s3://ask-it-static/dist --acl public-read
+
+            # 5. Deploy Code and Start Server
+            - name: Deploy to Development Server
+              uses: appleboy/ssh-action@v0.1.4
+              with:
+                  host: ${{ secrets.WEB_SERVER_IP }}
+                  username: ${{ secrets.SERVER_USER }}
+                  key: ${{ secrets.NCP_SERVER_RSA_PRIVATE_KEY }}
+                  script: |
+                      # NVM 설정 로드
+                      export NVM_DIR="$HOME/.nvm"
+                      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+                      # 전역 패키지 설치
+                      npm install -g pnpm
+                      npm install -g pm2
+
+                      # 프로젝트 디렉토리 이동 및 최신 코드 가져오기
+                      cd ~/web07-Ask-It
+                      git pull origin main
+                      pnpm install
+
+                      # 서버 디렉토리로 이동하여 환경 변수 설정
+                      cd apps/server
+                      echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" > .env
+
+                      # pm2로 기존 프로세스 종료 및 새 프로세스 시작
+                      pm2 stop ask-it || true
+                      pm2 delete ask-it || true
+                      pnpx prisma generate
+                      pnpx prisma migrate deploy
+                      pnpm build
+                      pm2 start pnpm --name "ask-it" -- run start:prod
