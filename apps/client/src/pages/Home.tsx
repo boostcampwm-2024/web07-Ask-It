@@ -10,16 +10,16 @@ function Home() {
     <>
       <div className='flex h-full w-full flex-col'>
         <div className='inline-flex h-2/5 min-h-[327px] flex-col items-center justify-center gap-4 px-4 py-20 md:px-40'>
-          <div className="self-stretch text-center font-['Pretendard'] text-2xl font-bold text-black sm:text-3xl md:text-[32px]">
+          <div className='self-stretch text-center text-2xl font-bold text-black sm:text-3xl md:text-[32px]'>
             질문과 답변을 넘어,
             <br />
             함께 만드는 인사이트
           </div>
-          <div className="self-stretch text-center font-['Pretendard'] text-base font-medium text-gray-600 sm:text-lg md:text-xl">
+          <div className='self-stretch text-center text-base font-medium text-gray-600 sm:text-lg md:text-xl'>
             실시간 Q&A와 소통을 위한 최적의 플랫폼
           </div>
           <Button className='bg-indigo-600' onClick={openCreateSessionModal}>
-            <div className="font-['Pretendard'] text-base font-bold text-white">
+            <div className='text-base font-bold text-white'>
               새로운 세션 만들기
             </div>
           </Button>

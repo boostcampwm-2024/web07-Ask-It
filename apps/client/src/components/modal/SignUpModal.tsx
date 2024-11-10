@@ -22,9 +22,7 @@ function SignUpModal() {
   return (
     <Modal>
       <div className='flex flex-col items-center justify-center gap-4 p-4'>
-        <p className="font-['Pretendard'] text-2xl font-bold text-indigo-600">
-          Ask-It
-        </p>
+        <p className='text-2xl font-bold text-indigo-600'>Ask-It</p>
         <InputField
           label='이메일'
           type='email'
@@ -60,12 +58,12 @@ function SignUpModal() {
               closeModal();
             }}
           >
-            <div className="w-[150px] font-['Pretendard'] text-sm font-medium text-white">
+            <div className='w-[150px] text-sm font-medium text-white'>
               회원 가입
             </div>
           </Button>
           <Button className='bg-gray-500' onClick={closeModal}>
-            <div className="w-[150px] font-['Pretendard'] text-sm font-medium text-white">
+            <div className='w-[150px] text-sm font-medium text-white'>
               취소하기
             </div>
           </Button>

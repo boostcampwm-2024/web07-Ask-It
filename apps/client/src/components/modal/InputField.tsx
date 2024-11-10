@@ -30,22 +30,20 @@ function InputField({
   return (
     <div className='flex w-full flex-col items-center'>
       <div className='gap-4r flex w-full flex-row items-center justify-start'>
-        <div className="w-[60px] font-['Pretendard'] text-sm font-medium text-black">
-          {label}
-        </div>
+        <div className='w-[60px] text-sm font-medium text-black'>{label}</div>
         <div className='flex h-[41px] shrink grow basis-0 items-center justify-start rounded-md border border-gray-200 bg-white p-3'>
           <input
             type={type}
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full font-['Pretendard'] text-sm font-medium text-gray-500 focus:outline-none"
+            className='w-full text-sm font-medium text-gray-500 focus:outline-none'
             placeholder={placeholder}
             aria-label={label}
           />
         </div>
       </div>
       <div
-        className={`w-full text-right font-['Pretendard'] text-sm font-medium transition-all duration-500 ease-in-out ${
+        className={`w-full text-right text-sm font-medium transition-all duration-500 ease-in-out ${
           validationStyle[validationStatus ?? 'PENDING']
         } overflow-hidden`}
       >

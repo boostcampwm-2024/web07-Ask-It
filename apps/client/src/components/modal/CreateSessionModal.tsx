@@ -13,9 +13,7 @@ function CreateSessionModal() {
   return (
     <Modal>
       <div className='flex h-fit flex-col items-center justify-start gap-4 self-stretch rounded p-4'>
-        <div className="font-['Pretendard'] text-2xl font-bold text-indigo-600">
-          Ask-It
-        </div>
+        <div className='text-2xl font-bold text-indigo-600'>Ask-It</div>
         <InputField
           label='세션 이름'
           type='text'
@@ -32,12 +30,12 @@ function CreateSessionModal() {
             closeModal();
           }}
         >
-          <div className="w-[150px] font-['Pretendard'] text-sm font-medium text-white">
+          <div className='w-[150px] text-sm font-medium text-white'>
             세션 생성하기
           </div>
         </Button>
         <Button className='bg-gray-500' onClick={closeModal}>
-          <div className="w-[150px] font-['Pretendard'] text-sm font-medium text-white">
+          <div className='w-[150px] text-sm font-medium text-white'>
             취소하기
           </div>
         </Button>
