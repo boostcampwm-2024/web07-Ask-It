@@ -15,7 +15,9 @@ export class SessionsService {
     const sessionData = {
       ...data,
       expired_at: expired_at,
-      create_user_id: 123,
+      user: {
+        connect: { user_id: 1 },
+      },
     };
     const createdSession = await this.sessionRepository.create(sessionData);
     return { sessionId: createdSession.session_id };

@@ -12,6 +12,7 @@ export class SessionsAuthRepository {
     const newUserSessionToken = await this.prisma.userSessionToken.create({
       data: {
         ...data,
+        user_id: data.user_id ? Number(data.user_id) : null,
         token: uuid4(),
       },
     });
@@ -25,13 +26,14 @@ export class SessionsAuthRepository {
     return newToken;
   }
 
-  async findToken(user_id: string | null, session_id: string, token: string) {
+  async findToken(user_id: number | null, session_id: string, token: string) {
+    const whereClause: any = {
+      session_id,
+    };
+    if (user_id != null) whereClause.user_id = Number(user_id);
+    if (token) whereClause.token = token;
     const findedToken = await this.prisma.userSessionToken.findFirst({
-      where: {
-        session_id,
-        ...(user_id ? { user_id } : {}),
-        ...(token ? { token } : {}),
-      },
+      where: whereClause,
       select: {
         token: true,
       },

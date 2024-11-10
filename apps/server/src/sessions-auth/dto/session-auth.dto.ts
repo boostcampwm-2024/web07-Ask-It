@@ -3,12 +3,12 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class SessionAuthDto {
   @ApiProperty({
-    example: 'jangnanGGuruki',
+    example: '291',
     description: '유저의 id',
     required: false,
   })
   @IsOptional()
-  user_id: string;
+  user_id: number;
 
   @ApiProperty({
     example: 'ew9sqwe3dsf9xcv08xcv',
