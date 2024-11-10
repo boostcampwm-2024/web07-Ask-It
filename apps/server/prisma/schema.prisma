@@ -13,6 +13,8 @@ model User {
   password   String
   nickname   String   @unique
   created_at DateTime @default(now())
+  sessions Session[] @relation("UserSessions")
+  userSessionTokens UserSessionToken[] @relation("UserTokens")
 }
 
 model Session {
@@ -21,10 +23,16 @@ model Session {
   title String
   expired_at DateTime
   created_at DateTime @default(now())
+
+  user              User              @relation("UserSessions", fields: [create_user_id], references: [user_id])
+  userSessionTokens UserSessionToken[] @relation("SessionTokens")
 }
 
 model UserSessionToken {
   token String @id @default(uuid())
-  user_id String?
+  user_id Int?
   session_id String
+
+  user    User?       @relation("UserTokens", fields: [user_id], references: [user_id])
+  session Session     @relation("SessionTokens", fields: [session_id], references: [session_id])
 }
