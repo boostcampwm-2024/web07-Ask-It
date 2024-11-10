@@ -12,10 +12,10 @@ export class SessionsAuthService {
 
     if (!token) {
       const result = user_id ? await this.sessionsAuthRepository.findToken(user_id, session_id, token) : null;
-      return result || (await this.sessionsAuthRepository.generateTokenForNotLogined({ ...data }));
+      return result || (await this.sessionsAuthRepository.generateTokenForNotLoggedin({ ...data }));
     } else {
       const result = await this.sessionsAuthRepository.findToken(user_id, session_id, token);
-      return result ? result : await this.sessionsAuthRepository.generateTokenForLogined({ ...data });
+      return result ? result : await this.sessionsAuthRepository.generateTokenForLoggedin({ ...data });
     }
   }
 }
