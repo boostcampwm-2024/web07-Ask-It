@@ -4,7 +4,7 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateSessionDto } from './dto/create-session.dto';
 import { SessionsService } from './sessions.service';
 import { CreateSessionSwagger } from './swagger/create-session.swagger';
-import { TransformInterceptor } from '../common/interceptor/transform.interceptor';
+import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
 @ApiTags('Sessions')
 @UseInterceptors(TransformInterceptor)

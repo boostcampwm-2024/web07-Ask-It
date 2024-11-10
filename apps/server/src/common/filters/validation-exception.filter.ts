@@ -9,12 +9,14 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
     const exceptionResponse = exception.getResponse();
 
-    const errorMessage = typeof exceptionResponse === 'string' ? exceptionResponse : (exceptionResponse as any).message;
+    const message = typeof exceptionResponse === 'string' ? exceptionResponse : (exceptionResponse as any).message;
+
+    const errorMessages = typeof message === 'string' ? [message] : message;
 
     response.status(status).json({
       type: 'fail',
       error: {
-        messages: [...errorMessage],
+        messages: errorMessages,
       },
     });
   }

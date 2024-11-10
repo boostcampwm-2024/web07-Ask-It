@@ -6,7 +6,7 @@ import { ValidateUserDto } from './dto/validate-user.dto';
 import { CheckDuplicationSwagger } from './swagger/check-duplication.swagger';
 import { CreateUserSwagger } from './swagger/create-user.swagger';
 import { UsersService } from './users.service';
-import { TransformInterceptor } from '../common/interceptor/transform.interceptor';
+import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
 @ApiTags('Users')
 @UseInterceptors(TransformInterceptor)

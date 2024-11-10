@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
-import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
+import { DomainExceptionFilter } from './common/filters/domain-exception.filter';
 import { ValidationExceptionFilter } from './common/filters/validation-exception.filter';
 
 async function bootstrap() {
@@ -13,8 +13,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
 
-  app.useGlobalFilters(new ValidationExceptionFilter());
-  app.useGlobalFilters(new PrismaExceptionFilter());
+  app.useGlobalFilters(new ValidationExceptionFilter(), new DomainExceptionFilter());
 
   const config = new DocumentBuilder().setTitle('API Documentation').setDescription('NestJs API documentation').setVersion('1.0').build();
 
