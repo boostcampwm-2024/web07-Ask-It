@@ -8,7 +8,7 @@ import { SessionAuthDto } from './dto/session-auth.dto';
 export class SessionsAuthRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async generateTokenForNotLoggedin(data: SessionAuthDto) {
+  async generateToken(data: SessionAuthDto) {
     const newUserSessionToken = await this.prisma.userSessionToken.create({
       data: {
         ...data,
@@ -21,7 +21,7 @@ export class SessionsAuthRepository {
   async generateTokenForLoggedin(data: SessionAuthDto) {
     const result = await this.findToken(data.user_id, data.session_id, null);
     if (result) return result;
-    const newToken = await this.generateTokenForNotLoggedin(data);
+    const newToken = await this.generateToken(data);
     return newToken;
   }
 

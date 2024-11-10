@@ -25,6 +25,6 @@ model Session {
 
 model UserSessionToken {
   token String @id @default(uuid())
-  user_id String
+  user_id String?
   session_id String
 }
