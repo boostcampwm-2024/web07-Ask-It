@@ -27,6 +27,9 @@ model Session {
 
   user              User               @relation("UserSessions", fields: [create_user_id], references: [user_id])
   userSessionTokens UserSessionToken[] @relation("SessionTokens")
+  questions         Question[]         @relation("SessionQuestions")
+  replies           Reply[]            @relation("SessionReplies")
+  chattings         Chatting[]         @relation("SessionChattings")
 }
 
 model UserSessionToken {
@@ -34,8 +37,13 @@ model UserSessionToken {
   user_id    Int?
   session_id String
 
-  user    User?   @relation("UserTokens", fields: [user_id], references: [user_id])
-  session Session @relation("SessionTokens", fields: [session_id], references: [session_id])
+  user          User?          @relation("UserTokens", fields: [user_id], references: [user_id])
+  session       Session        @relation("SessionTokens", fields: [session_id], references: [session_id])
+  questions     Question[]     @relation("TokenQuestions")
+  questionLikes QuestionLike[] @relation("TokenQuestionLikes")
+  replies       Reply[]        @relation("TokenReplies")
+  replyLikes    ReplyLike[]    @relation("TokenReplyLikes")
+  chattings     Chatting[]     @relation("TokenChattings")
 }
 
 model Question {
@@ -46,13 +54,20 @@ model Question {
   closed            Boolean
   pinned            Boolean
   created_at        DateTime @default(now())
+
+  session         Session          @relation("SessionQuestions", fields: [session_id], references: [session_id])
+  createUserToken UserSessionToken @relation("TokenQuestions", fields: [create_user_token], references: [token])
+  questionLikes   QuestionLike[]   @relation("QuestionLikes")
+  replies         Reply[]          @relation("QuestionReplies")
 }
 
 model QuestionLike {
   question_like_id           Int    @id @default(autoincrement())
-  create_user_token          String
+  create_user_token          String 
   question_id                Int
-  question_create_user_token String
+
+  question        Question         @relation("QuestionLikes", fields: [question_id], references: [question_id])
+  createUserToken UserSessionToken @relation("TokenQuestionLikes", fields: [create_user_token], references: [token])
 }
 
 model Reply {
@@ -60,16 +75,22 @@ model Reply {
   create_user_token          String
   session_id                 String
   question_id                Int
-  question_create_user_token String
   body                       String
   created_at                 DateTime @default(now())
+
+  session         Session          @relation("SessionReplies", fields: [session_id], references: [session_id])
+  question        Question         @relation("QuestionReplies", fields: [question_id], references: [question_id])
+  createUserToken UserSessionToken @relation("TokenReplies", fields: [create_user_token], references: [token])
+  replyLikes      ReplyLike[]      @relation("ReplyLikes")
 }
 
 model ReplyLike {
   reply_like_id           Int    @id @default(autoincrement())
   create_user_token       String
   reply_id                Int
-  reply_create_user_token String
+
+  reply           Reply            @relation("ReplyLikes", fields: [reply_id], references: [reply_id])
+  createUserToken UserSessionToken @relation("TokenReplyLikes", fields: [create_user_token], references: [token])
 }
 
 model Chatting {
@@ -78,4 +99,7 @@ model Chatting {
   body              String
   created_at        DateTime @default(now())
   session_id        String
+
+  session         Session          @relation("SessionChattings", fields: [session_id], references: [session_id])
+  createUserToken UserSessionToken @relation("TokenChattings", fields: [create_user_token], references: [token])
 }
