@@ -14,9 +14,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @CreateUserSwagger.ApiOperation
-  @CreateUserSwagger.ApiResponse201
-  @CreateUserSwagger.ApiResponse400
+  @CreateUserSwagger()
   @ApiBody({ type: CreateUserDto })
   async create(@Body() createUserDto: CreateUserDto) {
     await this.usersService.create(createUserDto);
