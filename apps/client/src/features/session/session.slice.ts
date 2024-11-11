@@ -1,7 +1,7 @@
+import { QnASlice } from 'src/features/session/qna';
 import { StateCreator } from 'zustand/index';
 
 import { ChattingSlice } from '@/features/session/chatting';
-import { QASlice } from '@/features/session/qa';
 import { Session } from '@/features/session/session.type';
 
 export interface SessionSlice {
@@ -11,7 +11,7 @@ export interface SessionSlice {
 }
 
 export const createSessionSlice: StateCreator<
-  SessionSlice & QASlice & ChattingSlice,
+  SessionSlice & QnASlice & ChattingSlice,
   [],
   [],
   SessionSlice
