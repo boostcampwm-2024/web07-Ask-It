@@ -1,34 +1,63 @@
-import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+// swagger/user-validation.swagger.ts
+import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 
-export const CheckDuplicationSwagger = {
-  ApiOperation: ApiOperation({ summary: '이메일 또는 닉네임 중복 확인' }),
-  ApiQueryEmail: ApiQuery({
+export const EmailValidationSwagger = {
+  ApiOperation: ApiOperation({ summary: '이메일 중복 확인' }),
+  ApiParam: ApiParam({
     name: 'email',
-    required: false,
-    description: '중복 확인할 이메일 주소',
+    required: true,
+    description: '중복 확인할 이메일',
   }),
-  ApiQueryNickname: ApiQuery({
-    name: 'nickname',
-    required: false,
-    description: '중복 확인할 닉네임',
-  }),
-  ApiResponse200: ApiResponse({
+  ApiResponse: ApiResponse({
     status: 200,
-    description: '중복 확인 성공',
-    schema: {
-      example: { type: 'success', data: { exists: 'true || false' } },
+    content: {
+      'application/json': {
+        examples: {
+          duplicated: {
+            value: {
+              type: 'success',
+              data: { exists: true },
+            },
+            summary: '중복된 이메일',
+          },
+          available: {
+            value: {
+              type: 'success',
+              data: { exists: false },
+            },
+            summary: '사용 가능한 이메일',
+          },
+        },
+      },
     },
   }),
-  ApiResponse400: ApiResponse({
-    status: 400,
-    description: '잘못된 요청 (유효성 검사 실패)',
-    schema: {
-      example: {
-        type: 'fail',
-        error: {
-          message: {
-            errorType1: '이메일 또는 닉네임 하나만 요청해 주세요.',
-            errorType2: '올바른 이메일 형식이어야 합니다.',
+};
+
+export const NicknameValidationSwagger = {
+  ApiOperation: ApiOperation({ summary: '닉네임 중복 확인' }),
+  ApiParam: ApiParam({
+    name: 'nickname',
+    required: true,
+    description: '중복 확인할 닉네임',
+  }),
+  ApiResponse: ApiResponse({
+    status: 200,
+    content: {
+      'application/json': {
+        examples: {
+          duplicated: {
+            value: {
+              type: 'success',
+              data: { exists: true },
+            },
+            summary: '중복된 닉네임',
+          },
+          available: {
+            value: {
+              type: 'success',
+              data: { exists: false },
+            },
+            summary: '사용 가능한 닉네임',
           },
         },
       },
