@@ -13,26 +13,69 @@ model User {
   password   String
   nickname   String   @unique
   created_at DateTime @default(now())
-  sessions Session[] @relation("UserSessions")
+
+  sessions          Session[]          @relation("UserSessions")
   userSessionTokens UserSessionToken[] @relation("UserTokens")
 }
 
 model Session {
-  session_id String @id @default(uuid())
-  title String
-  expired_at DateTime
-  created_at DateTime @default(now())
+  session_id     String   @id @default(uuid())
+  title          String
+  expired_at     DateTime
+  created_at     DateTime @default(now())
+  create_user_id Int
 
-  user               User              @relation("UserSessions", fields: [created_user_id], references: [user_id]) 
-  created_user_id            Int
-  userSessionTokens  UserSessionToken[] @relation("SessionTokens")
+  user              User               @relation("UserSessions", fields: [create_user_id], references: [user_id])
+  userSessionTokens UserSessionToken[] @relation("SessionTokens")
 }
 
 model UserSessionToken {
-  token String @id @default(uuid())
-  user_id Int?
+  token      String @id @default(uuid())
+  user_id    Int?
   session_id String
 
-  user    User?       @relation("UserTokens", fields: [user_id], references: [user_id])
-  session Session     @relation("SessionTokens", fields: [session_id], references: [session_id])
+  user    User?   @relation("UserTokens", fields: [user_id], references: [user_id])
+  session Session @relation("SessionTokens", fields: [session_id], references: [session_id])
+}
+
+model Question {
+  question_id       Int      @id @default(autoincrement())
+  create_user_token String
+  session_id        String
+  body              String
+  closed            Boolean
+  pinned            Boolean
+  created_at        DateTime @default(now())
+}
+
+model QuestionLike {
+  question_like_id           Int    @id @default(autoincrement())
+  create_user_token          String
+  question_id                Int
+  question_create_user_token String
+}
+
+model Reply {
+  reply_id                   Int      @id @default(autoincrement())
+  create_user_token          String
+  session_id                 String
+  question_id                Int
+  question_create_user_token String
+  body                       String
+  created_at                 DateTime @default(now())
+}
+
+model ReplyLike {
+  reply_like_id           Int    @id @default(autoincrement())
+  create_user_token       String
+  reply_id                Int
+  reply_create_user_token String
+}
+
+model Chatting {
+  chatting_id       Int      @id @default(autoincrement())
+  create_user_token String
+  body              String
+  created_at        DateTime @default(now())
+  session_id        String
 }
