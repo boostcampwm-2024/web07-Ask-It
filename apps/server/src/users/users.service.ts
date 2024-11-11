@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { ValidateUserDto } from './dto/validate-user.dto';
 import { UserRepository } from './users.repository';
 
 @Injectable()
@@ -17,9 +16,11 @@ export class UsersService {
     });
   }
 
-  async exist(data: ValidateUserDto) {
-    if (data.email) return !!(await this.userRepository.findByEmail(data.email));
-    if (data.nickname) return !!(await this.userRepository.findByNickname(data.nickname));
-    return false;
+  async validateUniqueEmail(email: string) {
+    return !!(await this.userRepository.findByEmail(email));
+  }
+
+  async validateUniqueNickname(nickname: string) {
+    return !!(await this.userRepository.findByNickname(nickname));
   }
 }

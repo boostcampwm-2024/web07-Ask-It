@@ -1,9 +1,8 @@
-import { BadRequestException, Body, Controller, Get, Post, Query, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { ValidateUserDto } from './dto/validate-user.dto';
-import { CheckDuplicationSwagger } from './swagger/check-duplication.swagger';
+import { EmailValidationSwagger, NicknameValidationSwagger } from './swagger/check-duplication.swagger';
 import { CreateUserSwagger } from './swagger/create-user.swagger';
 import { UsersService } from './users.service';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
@@ -24,21 +23,25 @@ export class UsersController {
     return {};
   }
 
-  @Get()
-  @CheckDuplicationSwagger.ApiOperation
-  @CheckDuplicationSwagger.ApiQueryEmail
-  @CheckDuplicationSwagger.ApiQueryNickname
-  @CheckDuplicationSwagger.ApiResponse200
-  @CheckDuplicationSwagger.ApiResponse400
-  async checkDuplication(@Query() validateUserDto: ValidateUserDto) {
-    if (!validateUserDto.email && !validateUserDto.nickname) {
-      throw new BadRequestException('중복확인을 위한 email 또는 nickname을 제공해주세요.');
-    }
+  @Get('emails/:email')
+  @EmailValidationSwagger.ApiOperation
+  @EmailValidationSwagger.ApiParam
+  @EmailValidationSwagger.ApiResponse
+  async checkEmail(
+    @Param('email')
+    email: string,
+  ) {
+    return { exists: await this.usersService.validateUniqueEmail(email) };
+  }
 
-    if (validateUserDto.email && validateUserDto.nickname) {
-      throw new BadRequestException('이메일 또는 닉네임 하나만 요청해 주세요.');
-    }
-
-    return { exists: await this.usersService.exist(validateUserDto) };
+  @Get('nicknames/:nickname')
+  @NicknameValidationSwagger.ApiOperation
+  @NicknameValidationSwagger.ApiParam
+  @NicknameValidationSwagger.ApiResponse
+  async checkNickname(
+    @Param('nickname')
+    nickname: string,
+  ) {
+    return { exists: await this.usersService.validateUniqueNickname(nickname) };
   }
 }
