@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/com
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { EmailValidationSwagger, NicknameValidationSwagger } from './swagger/check-duplication.swagger';
+import { EmailValidationDocs, NicknameValidationDocs } from './swagger/check-duplication.swagger';
 import { CreateUserSwagger } from './swagger/create-user.swagger';
 import { UsersService } from './users.service';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
@@ -24,9 +24,7 @@ export class UsersController {
   }
 
   @Get('emails/:email')
-  @EmailValidationSwagger.ApiOperation
-  @EmailValidationSwagger.ApiParam
-  @EmailValidationSwagger.ApiResponse
+  @EmailValidationDocs()
   async checkEmail(
     @Param('email')
     email: string,
@@ -35,9 +33,7 @@ export class UsersController {
   }
 
   @Get('nicknames/:nickname')
-  @NicknameValidationSwagger.ApiOperation
-  @NicknameValidationSwagger.ApiParam
-  @NicknameValidationSwagger.ApiResponse
+  @NicknameValidationDocs()
   async checkNickname(
     @Param('nickname')
     nickname: string,
