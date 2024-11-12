@@ -2,8 +2,8 @@ import Button from '../Button';
 
 import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
+import { useSignInForm } from '@/features/auth';
 import { useModalContext } from '@/features/modal';
-import { useSignInForm } from '@/features/session';
 
 function SignInModal() {
   const { closeModal } = useModalContext();

@@ -1,4 +1,4 @@
-import { ValidationStatus } from '@/features/session';
+import { ValidationStatus } from '@/features/auth';
 
 interface InputFieldProps {
   label: string;
@@ -9,12 +9,14 @@ interface InputFieldProps {
   validationStatus?: ValidationStatus;
   invalidMessage?: string;
   validMessage?: string;
+  duplicateMessage?: string;
 }
 
 const validationStyle: Record<ValidationStatus, string> = {
   PENDING: 'max-h-0 opacity-0',
   VALID: 'max-h-10 text-indigo-500 opacity-100',
   INVALID: 'max-h-10 text-rose-500 opacity-100',
+  DUPLICATE: 'max-h-10 text-rose-500 opacity-100',
 };
 
 function InputField({
@@ -24,9 +26,23 @@ function InputField({
   onChange,
   placeholder,
   validationStatus,
-  invalidMessage = '유효하지 않은 입력입니다.',
-  validMessage = '유효한 입력입니다.',
+  invalidMessage,
+  validMessage,
+  duplicateMessage,
 }: InputFieldProps) {
+  const message = (() => {
+    switch (validationStatus) {
+      case 'INVALID':
+        return invalidMessage;
+      case 'VALID':
+        return validMessage;
+      case 'DUPLICATE':
+        return duplicateMessage;
+      default:
+        return '';
+    }
+  })();
+
   return (
     <div className='flex w-full flex-col items-center'>
       <div className='gap-4r flex w-full flex-row items-center justify-start'>
@@ -47,7 +63,7 @@ function InputField({
           validationStyle[validationStatus ?? 'PENDING']
         } overflow-hidden`}
       >
-        {validationStatus === 'INVALID' ? invalidMessage : validMessage}
+        {message ?? ''}
       </div>
     </div>
   );
