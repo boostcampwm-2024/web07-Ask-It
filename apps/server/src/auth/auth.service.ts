@@ -67,7 +67,7 @@ export class AuthService implements OnModuleInit {
 
   async generateAccessToken(refreshToken: string) {
     await this.validateRefreshToken(refreshToken);
-    return this.jwtService.sign(this.refreshTokens[refreshToken], { expiresIn: '1m', secret: process.env.JWT_ACCESS_SECRET });
+    return this.jwtService.sign(this.refreshTokens[refreshToken], { expiresIn: '15m', secret: process.env.JWT_ACCESS_SECRET });
   }
 
   private async validateRefreshToken(refreshToken: string) {
