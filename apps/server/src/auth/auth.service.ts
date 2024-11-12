@@ -1,10 +1,11 @@
-import { Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuid4 } from 'uuid';
 
 import { UserRepository } from '../users/users.repository';
 import { LoginDto } from './dto/login.dto';
+import { InvalidCredentialsException, RefreshTokenException } from './exceptions/auth.exception';
 
 interface RefreshTokenData {
   userId: number;
@@ -40,9 +41,8 @@ export class AuthService implements OnModuleInit {
   }
 
   private cleanupExpiredTokens() {
-    const expiredTokens = Object.entries(this.refreshTokens)
-      .filter(([_, data]) => data.expiredAt < new Date())
-      .map(([token, _]) => token);
+    const now = new Date();
+    const expiredTokens = Object.keys(this.refreshTokens).filter((token) => this.refreshTokens[token].expiredAt < now);
 
     expiredTokens.forEach((token) => {
       this.removeRefreshToken(token);
@@ -51,10 +51,10 @@ export class AuthService implements OnModuleInit {
 
   async validateUser(loginDto: LoginDto) {
     const user = await this.userRepository.findByEmail(loginDto.email);
-    if (!user) throw new UnauthorizedException('존재하지 않는 email입니다.');
+    if (!user) throw InvalidCredentialsException.invalidEmail();
 
     const match = await bcrypt.compare(loginDto.password, user.password);
-    if (!match) throw new UnauthorizedException('비밀번호가 올바르지 않습니다.');
+    if (!match) throw InvalidCredentialsException.invalidPassword();
 
     return { userId: user.user_id, nickname: user.nickname };
   }
@@ -72,12 +72,12 @@ export class AuthService implements OnModuleInit {
 
   private async validateRefreshToken(refreshToken: string) {
     const tokenData = this.refreshTokens[refreshToken];
-    if (!tokenData) throw new UnauthorizedException('유효하지 않은 리프레시 토큰입니다.');
+    if (!tokenData) throw RefreshTokenException.invalid();
 
     //FE측 cookie 만료 시간과 서버 측 만료 시간 간의 오차 대비
     if (tokenData.expiredAt < new Date()) {
       this.removeRefreshToken(refreshToken);
-      throw new UnauthorizedException('만료된 리프레시 토큰입니다.');
+      throw RefreshTokenException.expired();
     }
   }
 
