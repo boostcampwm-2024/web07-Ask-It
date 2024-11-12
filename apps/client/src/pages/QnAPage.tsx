@@ -4,7 +4,7 @@ import { ChattingList } from '@/components';
 import QuestionContent from '@/components/qna/QuestionContent';
 import { QnAContextProvider } from '@/features/session/qna';
 
-function QnA() {
+function QnAPage() {
   const sessionId = useParams({
     from: '/session/$sessionId',
     select: (params) => params.sessionId,
@@ -23,4 +23,4 @@ function QnA() {
   );
 }
 
-export default QnA;
+export default QnAPage;
