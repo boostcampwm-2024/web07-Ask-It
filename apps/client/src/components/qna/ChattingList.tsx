@@ -18,7 +18,7 @@ function ChattingList() {
 
   return (
     <div className='inline-flex h-full w-1/5 min-w-[240px] flex-col items-center justify-start rounded-lg bg-white shadow'>
-      <div className='inline-flex h-[54px] w-full items-center justify-between border-b border-gray-200 px-4 py-2'>
+      <div className='inline-flex h-[54px] w-full items-center justify-between border-b border-gray-200 px-4 py-3'>
         <div className='shrink grow basis-0 text-lg font-medium text-black'>
           실시간 채팅
         </div>
