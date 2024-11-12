@@ -9,8 +9,13 @@ export class QuestionRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateQuestionDto) {
+    const questionData = {
+      ...data,
+      pinned: false,
+      closed: false,
+    };
     try {
-      await this.prisma.question.create({ data });
+      await this.prisma.question.create({ data: questionData });
     } catch (error) {
       throw DatabaseException.create('question');
     }

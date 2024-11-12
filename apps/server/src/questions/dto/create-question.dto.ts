@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateQuestionDto {
   @ApiProperty({
@@ -28,20 +28,4 @@ export class CreateQuestionDto {
   @IsString()
   @IsNotEmpty({ message: '질문 본문은 필수입니다.' })
   body: string;
-
-  @ApiProperty({
-    example: false,
-    description: '질문이 종료된 상태인지 여부',
-    required: true,
-  })
-  @IsBoolean()
-  closed: boolean;
-
-  @ApiProperty({
-    example: false,
-    description: '질문이 고정된 상태인지 여부',
-    required: true,
-  })
-  @IsBoolean()
-  pinned: boolean;
 }

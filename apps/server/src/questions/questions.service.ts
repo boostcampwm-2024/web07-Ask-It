@@ -11,7 +11,6 @@ export class QuestionsService {
   async createQuestion(data: CreateQuestionDto) {
     return await this.questionsRepository.create(data);
   }
-
   async getQuestionsBySession(data: GetQuestionDto) {
     const { sessionId, userToken } = data;
     const questions = await this.questionsRepository.findQuestionsWithDetails(sessionId);
