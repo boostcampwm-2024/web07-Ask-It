@@ -8,7 +8,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserConflictException } from './exceptions/user.exception';
 
 @Injectable()
-export class UserRepository {
+export class UsersRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateUserDto) {

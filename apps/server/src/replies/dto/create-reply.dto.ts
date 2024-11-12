@@ -16,7 +16,6 @@ export class CreateReplyDto {
     description: '질문 id',
     required: true,
   })
-  @IsInt()
   @IsNotEmpty()
   question_id: number;
 
