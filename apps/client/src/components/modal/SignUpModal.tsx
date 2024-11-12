@@ -32,8 +32,6 @@ function SignUpModal() {
           onChange={setEmail}
           placeholder='example@gmail.com'
           validationStatus={emailValidationStatus}
-          validMessage='사용 가능한 이메일입니다.'
-          duplicateMessage='이미 사용 중인 이메일입니다.'
         />
         <InputField
           label='닉네임'
@@ -42,9 +40,6 @@ function SignUpModal() {
           onChange={setNickname}
           placeholder='닉네임을 입력해주세요'
           validationStatus={nicknameValidationStatus}
-          validMessage='사용 가능한 닉네임입니다.'
-          invalidMessage='닉네임은 3-20자 사이로 입력해주세요.'
-          duplicateMessage='이미 사용 중인 닉네임입니다.'
         />
         <InputField
           label='비밀번호'
@@ -53,8 +48,6 @@ function SignUpModal() {
           onChange={setPassword}
           placeholder='비밀번호를 입력해주세요'
           validationStatus={passwordValidationStatus}
-          validMessage='사용 가능한 비밀번호입니다.'
-          invalidMessage='비밀번호는 8-20자 사이로 입력해주세요.'
         />
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button
