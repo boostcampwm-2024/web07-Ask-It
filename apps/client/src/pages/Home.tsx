@@ -8,8 +8,8 @@ function Home() {
 
   return (
     <>
-      <div className='flex h-full w-full flex-col'>
-        <div className='inline-flex h-2/5 min-h-[327px] flex-col items-center justify-center gap-4 px-4 py-20 md:px-40'>
+      <div className='flex h-full w-full flex-col overflow-y-auto'>
+        <div className='inline-flex h-2/5 min-h-[327px] flex-col items-center justify-center gap-4 px-4 md:px-40'>
           <div className='self-stretch text-center text-2xl font-bold text-black sm:text-3xl md:text-[32px]'>
             질문과 답변을 넘어,
             <br />
@@ -24,7 +24,7 @@ function Home() {
             </div>
           </Button>
         </div>
-        <div className='inline-flex h-full flex-col items-center justify-center gap-8 bg-white py-8 sm:h-3/5'>
+        <div className='inline-flex flex-grow flex-col items-center justify-center gap-8 bg-white py-8'>
           <div className='inline-flex h-fit w-2/3 flex-col items-start justify-center gap-8 sm:w-[536px] sm:flex-row'>
             <FeatureCard
               icon='💬'
