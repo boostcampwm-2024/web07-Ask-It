@@ -16,8 +16,8 @@ export class AuthController {
 
     response.cookie('refresh_token', refreshToken, {
       httpOnly: true,
-      secure: false, //https
-      maxAge: 7 * 24 * 3600 * 1000, //쿠키 만료 시간 7일
+      secure: false, //TODO : https
+      maxAge: this.authService.getRefreshTokenExpireTime(),
     });
 
     return { accessToken };
