@@ -1,9 +1,11 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res, UseInterceptors } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
+@UseInterceptors(TransformInterceptor)
 @Controller('auth')
 export class AuthController {
   private readonly REFRESH_TOKEN = 'refresh_token';
@@ -30,5 +32,13 @@ export class AuthController {
     const refreshToken = request.cookies[this.REFRESH_TOKEN];
     const accessToken = await this.authService.generateAccessToken(refreshToken);
     return { accessToken };
+  }
+
+  @Post('logout')
+  logout(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
+    const refreshToken = request.cookies[this.REFRESH_TOKEN];
+    this.authService.removeRefreshToken(refreshToken);
+    response.clearCookie(this.REFRESH_TOKEN);
+    return { message: '로그아웃 되었습니다.' };
   }
 }

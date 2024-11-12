@@ -81,7 +81,7 @@ export class AuthService implements OnModuleInit {
     }
   }
 
-  private removeRefreshToken(refreshToken: string) {
+  removeRefreshToken(refreshToken: string) {
     delete this.refreshTokens[refreshToken];
   }
 }
