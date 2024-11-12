@@ -3,7 +3,54 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { verifyEmail, verifyNickname } from '@/features/auth/index';
 
-export type ValidationStatus = 'VALID' | 'INVALID' | 'PENDING' | 'DUPLICATE';
+export type ValidationStatus = 'VALID' | 'INVALID' | 'PENDING';
+
+export interface ValidationStatusWithMessage {
+  status: ValidationStatus;
+  message?: string;
+}
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const validateEmail = (email: string): ValidationStatusWithMessage => {
+  if (!emailRegex.test(email))
+    return { status: 'INVALID', message: '이메일 형식이 올바르지 않습니다.' };
+  if (email.includes(' '))
+    return {
+      status: 'INVALID',
+      message: '이메일에 공백이 포함될 수 없습니다.',
+    };
+  return { status: 'PENDING' };
+};
+
+const validateNickname = (nickname: string): ValidationStatusWithMessage => {
+  if (nickname.length < 3 || nickname.length > 20)
+    return {
+      status: 'INVALID',
+      message: '닉네임은 3-20자 사이로 입력해주세요.',
+    };
+  if (nickname.includes(' '))
+    return {
+      status: 'INVALID',
+      message: '닉네임에 공백이 포함될 수 없습니다.',
+    };
+  return { status: 'PENDING' };
+};
+
+const validatePassword = (password: string): ValidationStatusWithMessage => {
+  if (!password) return { status: 'PENDING' };
+  if (password.length < 8 || password.length > 20)
+    return {
+      status: 'INVALID',
+      message: '비밀번호는 8-20자 사이로 입력해주세요.',
+    };
+  if (password.includes(' '))
+    return {
+      status: 'INVALID',
+      message: '비밀번호에는 공백이 포함될 수 없습니다.',
+    };
+  return { status: 'VALID', message: '사용 가능한 비밀번호입니다.' };
+};
 
 export function useSignUpForm() {
   const [email, setEmail] = useState('');
@@ -13,26 +60,31 @@ export function useSignUpForm() {
   const [password, setPassword] = useState('');
 
   const [emailValidationStatus, setEmailValidationStatus] =
-    useState<ValidationStatus>('PENDING');
+    useState<ValidationStatusWithMessage>({ status: 'PENDING' });
 
   const [nicknameValidationStatus, setNicknameValidationStatus] =
-    useState<ValidationStatus>('PENDING');
+    useState<ValidationStatusWithMessage>({ status: 'PENDING' });
 
   const [passwordValidationStatus, setPasswordValidationStatus] =
-    useState<ValidationStatus>('PENDING');
+    useState<ValidationStatusWithMessage>({ status: 'PENDING' });
 
   const isSignUpEnabled = useMemo(
     () =>
-      emailValidationStatus === 'VALID' &&
-      nicknameValidationStatus === 'VALID' &&
-      passwordValidationStatus === 'VALID',
+      emailValidationStatus.status === 'VALID' &&
+      nicknameValidationStatus.status === 'VALID' &&
+      passwordValidationStatus.status === 'VALID',
     [emailValidationStatus, nicknameValidationStatus, passwordValidationStatus],
   );
 
   const checkEmailToVerify = useCallback(
     debounce(async (emailToVerify: string) => {
       const response = await verifyEmail(emailToVerify);
-      setEmailValidationStatus(response.data.exists ? 'DUPLICATE' : 'VALID');
+
+      setEmailValidationStatus(
+        response.data.exists
+          ? { status: 'INVALID', message: '이미 사용 중인 이메일입니다.' }
+          : { status: 'VALID', message: '사용 가능한 이메일입니다.' },
+      );
     }, 500),
     [],
   );
@@ -40,43 +92,41 @@ export function useSignUpForm() {
   const checkNicknameToVerify = useCallback(
     debounce(async (nicknameToVerify) => {
       const response = await verifyNickname(nicknameToVerify);
-      setNicknameValidationStatus(response.data.exists ? 'DUPLICATE' : 'VALID');
+
+      setNicknameValidationStatus(
+        response.data.exists
+          ? { status: 'INVALID', message: '이미 사용 중인 닉네임입니다.' }
+          : { status: 'VALID', message: '사용 가능한 닉네임입니다.' },
+      );
     }, 500),
     [],
   );
 
   useEffect(() => {
-    if (!email) setEmailValidationStatus('PENDING');
-    else checkEmailToVerify(email);
+    const validationStatus = validateEmail(email);
+    setEmailValidationStatus(validationStatus);
+    if (validationStatus.status === 'PENDING') checkEmailToVerify(email);
   }, [email, checkEmailToVerify]);
 
   useEffect(() => {
-    if (!nickname) {
-      setNicknameValidationStatus('PENDING');
-      return;
-    }
-
-    if (nickname.length < 3 || nickname.length > 20) {
-      setNicknameValidationStatus('INVALID');
-      return;
-    }
-
-    checkNicknameToVerify(nickname);
+    const validationStatus = validateNickname(nickname);
+    setNicknameValidationStatus(validationStatus);
+    if (validationStatus.status === 'PENDING') checkNicknameToVerify(nickname);
   }, [nickname, checkNicknameToVerify]);
 
   useEffect(() => {
-    if (!password) {
-      setPasswordValidationStatus('PENDING');
-      return;
-    }
-
-    if (password.length < 8 || password.length > 20 || password.includes(' ')) {
-      setPasswordValidationStatus('INVALID');
-      return;
-    }
-
-    setPasswordValidationStatus('VALID');
+    setPasswordValidationStatus(validatePassword(password));
   }, [password]);
+
+  useEffect(() => {
+    if (emailValidationStatus.status === 'VALID' && email.length === 0)
+      setEmailValidationStatus({ status: 'PENDING' });
+  }, [email.length, emailValidationStatus.status]);
+
+  useEffect(() => {
+    if (nicknameValidationStatus.status === 'VALID' && nickname.length === 0)
+      setNicknameValidationStatus({ status: 'PENDING' });
+  }, [nickname.length, nicknameValidationStatus.status]);
 
   return {
     email,
