@@ -4,16 +4,16 @@ import {
   ChattingSlice,
   createChattingSlice,
 } from '@/features/session/chatting';
-import { createQASlice, QASlice } from '@/features/session/qa';
+import { createQnASlice, QnASlice } from '@/features/session/qna';
 import {
   createSessionSlice,
   SessionSlice,
 } from '@/features/session/session.slice';
 
-export type SessionStore = SessionSlice & QASlice & ChattingSlice;
+export type SessionStore = SessionSlice & QnASlice & ChattingSlice;
 
 export const useSessionStore = create<SessionStore>()((...a) => ({
-  ...createQASlice(...a),
+  ...createQnASlice(...a),
   ...createChattingSlice(...a),
   ...createSessionSlice(...a),
 }));

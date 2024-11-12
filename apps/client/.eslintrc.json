@@ -4,7 +4,8 @@
     "tailwind.config.js",
     "dist",
     "vite.config.ts",
-    "vite-env.d.ts"
+    "vite-env.d.ts",
+    "routeTree.gen.ts"
   ],
   "extends": [
     "eslint:recommended",

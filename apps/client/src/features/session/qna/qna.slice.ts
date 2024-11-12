@@ -1,8 +1,8 @@
 import { StateCreator } from 'zustand/index';
 
-import { Question, Reply } from '@/features/session/qa/qa.type';
+import { Question, Reply } from '@/features/session/qna/qna.type';
 
-export interface QASlice {
+export interface QnASlice {
   questions: Question[];
   resetQuestions: () => void;
   addQuestion: (question: Question) => void;
@@ -15,7 +15,9 @@ export interface QASlice {
   upvoteReply: (reply: Reply) => void;
 }
 
-export const createQASlice: StateCreator<QASlice, [], [], QASlice> = (set) => ({
+export const createQnASlice: StateCreator<QnASlice, [], [], QnASlice> = (
+  set,
+) => ({
   questions: [],
   resetQuestions: () => set({ questions: [] }),
   addQuestion: (question) =>
