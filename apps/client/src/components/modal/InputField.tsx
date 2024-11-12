@@ -10,7 +10,8 @@ interface InputFieldProps {
 }
 
 const validationStyle: Record<ValidationStatus, string> = {
-  PENDING: 'max-h-0 opacity-0',
+  INITIAL: 'max-h-0 opacity-0',
+  PENDING: 'max-h-10 opacity-50',
   VALID: 'max-h-10 text-indigo-500 opacity-100',
   INVALID: 'max-h-10 text-rose-500 opacity-100',
 };

@@ -8,8 +8,7 @@ import { useModalContext } from '@/features/modal';
 function SignInModal() {
   const { closeModal } = useModalContext();
 
-  const { email, setEmail, password, setPassword, isLoginFailed } =
-    useSignInForm();
+  const { email, setEmail, password, setPassword } = useSignInForm();
 
   return (
     <Modal>
@@ -28,8 +27,6 @@ function SignInModal() {
           value={password}
           onChange={setPassword}
           placeholder='비밀번호를 입력해주세요'
-          validationStatus={isLoginFailed ? 'INVALID' : 'PENDING'}
-          invalidMessage='이메일 또는 비밀번호가 일치하지 않습니다.'
         />
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button
