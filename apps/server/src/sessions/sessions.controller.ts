@@ -13,9 +13,7 @@ export class SessionsController {
   constructor(private readonly sessionsService: SessionsService) {}
 
   @Post()
-  @CreateSessionSwagger.ApiOperation
-  @CreateSessionSwagger.ApiResponse201
-  @CreateSessionSwagger.ApiResponse400
+  @CreateSessionSwagger()
   @ApiBody({ type: CreateSessionDto })
   async create(@Body() createSessionDto: CreateSessionDto) {
     const sessionData = await this.sessionsService.create(createSessionDto);
