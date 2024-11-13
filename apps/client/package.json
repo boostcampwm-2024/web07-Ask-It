@@ -18,10 +18,12 @@
     "es-toolkit": "^1.26.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-markdown": "^9.0.1",
     "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
+    "@tailwindcss/typography": "^0.5.15",
     "@tanstack/eslint-plugin-query": "^5.59.7",
     "@tanstack/router-devtools": "^1.78.3",
     "@tanstack/router-plugin": "^1.78.3",
