@@ -12,7 +12,7 @@ export class SessionsAuthService {
 
     if (!token) {
       const result = user_id ? await this.sessionsAuthRepository.findToken(user_id, session_id, token) : null;
-      return result || (await this.sessionsAuthRepository.generateToken(data));
+      return result ?? (await this.sessionsAuthRepository.generateToken(data));
     } else {
       return await this.sessionsAuthRepository.generateTokenForLoggedin(data);
     }
