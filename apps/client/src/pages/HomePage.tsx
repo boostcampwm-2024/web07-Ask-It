@@ -1,7 +1,7 @@
 import { Button, CreateSessionModal, FeatureCard } from '@/components';
 import { useModal } from '@/features/modal';
 
-function Home() {
+function HomePage() {
   const { Modal: CreateSession, openModal: openCreateSessionModal } = useModal(
     <CreateSessionModal />,
   );
@@ -56,4 +56,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default HomePage;

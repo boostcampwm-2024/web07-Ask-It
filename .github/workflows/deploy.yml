@@ -14,7 +14,7 @@ jobs:
             - name: Set up Node.js
               uses: actions/setup-node@v2
               with:
-                  node-version: '18' # 원하는 Node.js 버전으로 설정
+                  node-version: "18" # 원하는 Node.js 버전으로 설정
 
             - name: Install pnpm
               run: npm install -g pnpm
@@ -39,7 +39,7 @@ jobs:
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  AWS_DEFAULT_REGION: 'kr-standard' # 리전 설정
+                  AWS_DEFAULT_REGION: "kr-standard" # 리전 설정
               run: |
                   # AWS CLI 설치 확인 및 설정
                   sudo apt-get update && sudo apt-get install -y awscli
@@ -71,6 +71,7 @@ jobs:
                       # 서버 디렉토리로 이동하여 환경 변수 설정
                       cd apps/server
                       echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" > .env
+                      echo "JWT_ACCESS_SECRET=${{ secrets.JWT_ACCESS_SECRET }}" >> .env
 
                       # pm2로 기존 프로세스 종료 및 새 프로세스 시작
                       pm2 stop ask-it || true
