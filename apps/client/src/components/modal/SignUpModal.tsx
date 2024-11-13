@@ -2,8 +2,8 @@ import Button from '../Button';
 
 import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
+import { createUser, useSignUpForm } from '@/features/auth';
 import { useModalContext } from '@/features/modal';
-import { useSignUpForm } from '@/features/session';
 
 function SignUpModal() {
   const { closeModal } = useModalContext();
@@ -17,6 +17,8 @@ function SignUpModal() {
     setPassword,
     emailValidationStatus,
     nicknameValidationStatus,
+    passwordValidationStatus,
+    isSignUpEnabled,
   } = useSignUpForm();
 
   return (
@@ -30,8 +32,6 @@ function SignUpModal() {
           onChange={setEmail}
           placeholder='example@gmail.com'
           validationStatus={emailValidationStatus}
-          validMessage='사용 가능한 이메일입니다.'
-          invalidMessage='이미 사용 중인 이메일입니다.'
         />
         <InputField
           label='닉네임'
@@ -40,8 +40,6 @@ function SignUpModal() {
           onChange={setNickname}
           placeholder='닉네임을 입력해주세요'
           validationStatus={nicknameValidationStatus}
-          validMessage='사용 가능한 닉네임입니다.'
-          invalidMessage='이미 사용 중인 닉네임입니다.'
         />
         <InputField
           label='비밀번호'
@@ -49,13 +47,16 @@ function SignUpModal() {
           value={password}
           onChange={setPassword}
           placeholder='비밀번호를 입력해주세요'
+          validationStatus={passwordValidationStatus}
         />
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button
-            className='bg-indigo-600'
+            className={`transition-colors duration-200 ${isSignUpEnabled ? 'bg-indigo-600' : 'bg-indigo-300'}`}
             onClick={() => {
-              // TODO: 회원 가입 API 요청
-              closeModal();
+              if (isSignUpEnabled)
+                createUser({ email, nickname, password }).then(() =>
+                  closeModal(),
+                );
             }}
           >
             <div className='w-[150px] text-sm font-medium text-white'>
