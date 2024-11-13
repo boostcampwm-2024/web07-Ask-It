@@ -9,26 +9,17 @@ import { RepliesRepository } from './replies.repository';
 export class RepliesService {
   constructor(private readonly repliesRepository: RepliesRepository) {}
   async create(data: CreateReplyDto) {
-    const replyCreateData: any = { ...data };
-    replyCreateData.question_id = Number(data.question_id);
-
-    return await this.repliesRepository.create(replyCreateData);
+    return await this.repliesRepository.create(data);
   }
 
   async update(data: UpdateReplyDto) {
     //사용자 자격 검증 로직
-    const replyUpdateData: any = { ...data };
-    replyUpdateData.question_id = Number(data.question_id);
-    replyUpdateData.reply_id = Number(data.reply_id);
 
-    this.repliesRepository.update(replyUpdateData);
+    this.repliesRepository.update(data);
   }
 
   async delete(data: DeleteReplyDto) {
     //사용자 자격 검증 로직
-    const replyDeleteData: any = { ...data };
-    replyDeleteData.question_id = Number(data.question_id);
-    replyDeleteData.reply_id = Number(data.reply_id);
-    this.repliesRepository.delete(replyDeleteData);
+    this.repliesRepository.delete(data);
   }
 }

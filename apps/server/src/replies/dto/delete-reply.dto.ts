@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class DeleteReplyDto {
   @ApiProperty({
@@ -17,6 +18,8 @@ export class DeleteReplyDto {
     required: true,
   })
   @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
+  @IsInt()
   question_id: number;
 
   @ApiProperty({
@@ -25,6 +28,8 @@ export class DeleteReplyDto {
     required: true,
   })
   @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
+  @IsInt()
   reply_id: number;
 
   @ApiProperty({

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateReplyDto {
   @ApiProperty({
@@ -16,6 +17,8 @@ export class CreateReplyDto {
     description: '질문 id',
     required: true,
   })
+  @Transform(({ value }) => Number(value))
+  @IsInt()
   @IsNotEmpty()
   question_id: number;
 
