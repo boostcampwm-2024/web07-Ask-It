@@ -6,7 +6,7 @@ import {
   VerifyNicknameDTO,
 } from '@/features/auth/auth.dto';
 
-const USER_BASE_URL = `${import.meta.env.VITE_SERVER_API_URL}/users`;
+const USER_BASE_URL = `/api/users`;
 
 export const createUser = (createUserDTO: CreateUserDTO) =>
   axios.post(USER_BASE_URL, createUserDTO);

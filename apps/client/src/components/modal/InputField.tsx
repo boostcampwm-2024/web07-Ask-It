@@ -1,4 +1,4 @@
-import { ValidationStatus } from '@/features/auth';
+import { ValidationStatus, ValidationStatusWithMessage } from '@/features/auth';
 
 interface InputFieldProps {
   label: string;
@@ -6,17 +6,14 @@ interface InputFieldProps {
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
-  validationStatus?: ValidationStatus;
-  invalidMessage?: string;
-  validMessage?: string;
-  duplicateMessage?: string;
+  validationStatus?: ValidationStatusWithMessage;
 }
 
 const validationStyle: Record<ValidationStatus, string> = {
-  PENDING: 'max-h-0 opacity-0',
+  INITIAL: 'max-h-0 opacity-0',
+  PENDING: 'max-h-10 opacity-50',
   VALID: 'max-h-10 text-indigo-500 opacity-100',
   INVALID: 'max-h-10 text-rose-500 opacity-100',
-  DUPLICATE: 'max-h-10 text-rose-500 opacity-100',
 };
 
 function InputField({
@@ -26,23 +23,7 @@ function InputField({
   onChange,
   placeholder,
   validationStatus,
-  invalidMessage,
-  validMessage,
-  duplicateMessage,
 }: InputFieldProps) {
-  const message = (() => {
-    switch (validationStatus) {
-      case 'INVALID':
-        return invalidMessage;
-      case 'VALID':
-        return validMessage;
-      case 'DUPLICATE':
-        return duplicateMessage;
-      default:
-        return '';
-    }
-  })();
-
   return (
     <div className='flex w-full flex-col items-center'>
       <div className='gap-4r flex w-full flex-row items-center justify-start'>
@@ -60,10 +41,10 @@ function InputField({
       </div>
       <div
         className={`w-full text-right text-sm font-medium transition-all duration-500 ease-in-out ${
-          validationStyle[validationStatus ?? 'PENDING']
+          validationStyle[validationStatus?.status ?? 'PENDING']
         } overflow-hidden`}
       >
-        {message ?? ''}
+        {validationStatus?.message}
       </div>
     </div>
   );
