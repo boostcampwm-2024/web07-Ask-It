@@ -1,24 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateSessionDto {
-  @ApiProperty({
-    example: '세션을 만든 user의 id',
-    description: '세션을 만든 user의 id',
-    required: true,
-  })
-  @Transform(({ value }) => Number(value))
-  @IsInt()
-  @IsNotEmpty()
-  create_user_id: number;
+  @IsOptional()
+  session_id: string;
 
   @ApiProperty({
     example: 'temporary title',
     description: 'session의 title',
+    minLength: 8,
+    maxLength: 20,
     required: true,
   })
   @IsNotEmpty({ message: 'title이 입력되어야 합니다' })
-  @IsString()
+  @IsString({ message: 'title은 문자열이어야 합니다.' })
+  @MinLength(3, { message: 'title은 최소 3자 이상이어야 합니다.' })
+  @MaxLength(20, { message: 'title은 최대 20자 이하이어야 합니다.' })
   title: string;
 }

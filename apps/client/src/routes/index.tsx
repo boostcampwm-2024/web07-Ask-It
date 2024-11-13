@@ -1,8 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import Home from '@/pages/Home';
+import { HomePage } from '@/pages';
 
-// eslint-disable-next-line import/prefer-default-export
 export const Route = createFileRoute('/')({
-  component: Home,
+  component: HomePage,
 });

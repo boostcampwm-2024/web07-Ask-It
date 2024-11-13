@@ -4,7 +4,7 @@ import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength, NotContains } from
 export class CreateUserDto {
   @ApiProperty({
     example: 'john@example.com',
-    description: '사용자의 이메일 주소',
+    description: '사용자의 이메일 주소 (공백 포함 불가, 이메일 형식만 허용)',
     required: true,
   })
   @IsEmail({}, { message: '올바른 이메일 형식이 아닙니다.' })
@@ -15,7 +15,7 @@ export class CreateUserDto {
 
   @ApiProperty({
     example: 'johnny',
-    description: '사용자의 닉네임',
+    description: '사용자의 닉네임 (3-20자, 공백 포함 불가)',
     minLength: 3,
     maxLength: 20,
     required: true,
@@ -29,7 +29,7 @@ export class CreateUserDto {
 
   @ApiProperty({
     example: 'password123',
-    description: '사용자의 비밀번호 (8-20자, 공백 없음)',
+    description: '사용자의 비밀번호 (8-20자, 공백 포함 불가)',
     minLength: 8,
     maxLength: 20,
     required: true,

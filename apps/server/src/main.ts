@@ -1,19 +1,20 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
-import { DomainExceptionFilter } from './common/filters/domain-exception.filter';
-import { ValidationExceptionFilter } from './common/filters/validation-exception.filter';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.use(cookieParser());
   app.setGlobalPrefix('api');
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
 
-  app.useGlobalFilters(new ValidationExceptionFilter(), new DomainExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   const config = new DocumentBuilder().setTitle('API Documentation').setDescription('NestJs API documentation').setVersion('1.0').build();
 

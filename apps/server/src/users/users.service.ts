@@ -16,11 +16,11 @@ export class UsersService {
     });
   }
 
-  async validateUniqueEmail(email: string) {
-    return !!(await this.userRepository.findByEmail(email));
+  async hasEmail(email: string) {
+    return this.userRepository.findByEmail(email).then((user) => !!user);
   }
 
-  async validateUniqueNickname(nickname: string) {
-    return !!(await this.userRepository.findByNickname(nickname));
+  async hasNickname(nickname: string) {
+    return this.userRepository.findByNickname(nickname).then((nickname) => !!nickname);
   }
 }
