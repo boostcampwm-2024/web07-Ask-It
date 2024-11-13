@@ -14,8 +14,8 @@ export class JwtPayloadInterceptor implements NestInterceptor {
     return from(this.jwtService.verifyAsync(token, { secret: process.env.JWT_ACCESS_SECRET })).pipe(
       map((payload) => {
         const userPayload = {
-          userId: payload.userId ?? undefined,
-          nickname: payload.nickname ?? undefined,
+          userId: payload.userId ?? null,
+          nickname: payload.nickname ?? null,
           ...payload,
         };
         request['user'] = userPayload; // request 객체에 userPayload 추가
