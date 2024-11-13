@@ -25,7 +25,7 @@ function CreateQuestionModal() {
             rows={4}
           />
           <div className='inline-flex shrink grow basis-0 flex-col items-start justify-start gap-2 self-stretch overflow-y-auto rounded border border-gray-200 bg-white p-4'>
-            <Markdown className='prose prose-stone prose-img:rounded-md flex w-full flex-col gap-3'>
+            <Markdown className='prose prose-stone flex w-full flex-col gap-3 prose-img:rounded-md'>
               {body}
             </Markdown>
           </div>
