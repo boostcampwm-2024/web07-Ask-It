@@ -23,6 +23,10 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v2
 
+            # Create client .env file
+            - name: Create .env file
+              run: echo "${{ secrets.FRONT_END_ENV }}" > apps/client/.env
+
             # 3. Build Project
             - name: Install dependencies and build project
               run: |
