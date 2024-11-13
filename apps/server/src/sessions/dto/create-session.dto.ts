@@ -1,11 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateSessionDto {
-  @IsOptional()
-  session_id: string;
-
-  //로그인 기능 구현 시 @IsNotEmpty() 추가
+  @ApiProperty({
+    example: '세션을 만든 user의 id',
+    description: '세션을 만든 user의 id',
+    required: true,
+  })
+  @Transform(({ value }) => Number(value))
+  @IsInt()
+  @IsNotEmpty()
   create_user_id: number;
 
   @ApiProperty({
