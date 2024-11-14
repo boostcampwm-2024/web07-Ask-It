@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
-import { DatabaseException } from '../common/exceptions/resource.exception';
-import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
+
+import { DatabaseException } from '@common/exceptions/resource.exception';
+import { PrismaService } from '@prisma-alias/prisma.service';
 
 @Injectable()
 export class QuestionRepository {

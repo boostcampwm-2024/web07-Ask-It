@@ -27,11 +27,11 @@ export class SessionsAuthRepository {
   }
 
   async findToken(user_id: number | null, session_id: string, token: string) {
-    const whereClause: any = {
+    const whereClause = {
       session_id,
+      user_id: user_id ? Number(user_id) : null,
+      token: token,
     };
-    if (user_id != null) whereClause.user_id = Number(user_id);
-    if (token) whereClause.token = token;
     const findedToken = await this.prisma.userSessionToken.findFirst({
       where: whereClause,
       select: {

@@ -16,6 +16,16 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@src/*": ["src/*"],
+      "@users/*": ["src/user/*"],
+      "@sessions/*": ["src/sessions/*"],
+      "@sessions-auth/*": ["src/sessions-auth/*"],
+      "@questions/*": ["src/questions/*"],
+      "@common/*": ["src/common/*"],
+      "@prisma-alias/*": ["src/prisma/*"],
+      "@main/*": ["src/main/*"]
+    }
   }
 }
