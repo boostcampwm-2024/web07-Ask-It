@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
-import { DatabaseException } from '../common/exceptions/resource.exception';
+import { DatabaseException, ResourceNotFoundException } from '../common/exceptions/resource.exception';
+import { PRISMA_ERROR_CODE } from '../prisma/prisma.error';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 
@@ -83,6 +85,10 @@ export class QuestionRepository {
         },
       });
     } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError && error.code === PRISMA_ERROR_CODE.FOREIGN_KEY_CONSTRAINT_VIOLATION) {
+        if (error.message.includes('question_id')) throw new ResourceNotFoundException('question_id');
+        if (error.message.includes('create_user_token')) throw new ResourceNotFoundException('create_user_token');
+      }
       throw DatabaseException.create('questionLike');
     }
   }
