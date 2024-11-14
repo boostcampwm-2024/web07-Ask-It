@@ -1,13 +1,16 @@
 export interface BaseDto {
-  type: string;
+  type: 'success' | 'fail';
 }
 
 export interface SuccessDTO<T> extends BaseDto {
+  type: 'success';
   data: T;
 }
 
 export interface ErrorDTO extends BaseDto {
+  type: 'fail';
   error: {
-    messages: string[];
+    message?: string;
+    messages?: string[];
   };
 }
