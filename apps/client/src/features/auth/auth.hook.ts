@@ -39,6 +39,7 @@ export function useSignInForm() {
           });
         }
       }
+      throw e;
     }
   };
 
