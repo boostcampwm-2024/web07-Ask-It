@@ -21,13 +21,12 @@ function Background({ children }: PropsWithChildren) {
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
       onClick={(e) => {
+        e.stopPropagation();
         if (e.target === e.currentTarget) closeModal();
       }}
-      onKeyDown={(e) => {
-        if (e.key === ' ') {
-          e.preventDefault();
-        }
-      }}
+      onKeyDown={(e) => e.stopPropagation()}
+      onFocus={(e) => e.stopPropagation()}
+      onMouseOver={(e) => e.stopPropagation()}
       className='fixed left-0 top-0 z-10 flex h-dvh w-dvw cursor-auto items-center justify-center bg-[#808080]/20 backdrop-blur-sm'
     >
       {children}
