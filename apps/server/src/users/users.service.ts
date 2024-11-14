@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserRepository } from './users.repository';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UsersRepository) {}
 
   async create(data: CreateUserDto) {
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -16,11 +16,11 @@ export class UsersService {
     });
   }
 
-  async validateUniqueEmail(email: string) {
-    return !!(await this.userRepository.findByEmail(email));
+  async hasEmail(email: string) {
+    return this.userRepository.findByEmail(email).then((user) => !!user);
   }
 
-  async validateUniqueNickname(nickname: string) {
-    return !!(await this.userRepository.findByNickname(nickname));
+  async hasNickname(nickname: string) {
+    return this.userRepository.findByNickname(nickname).then((nickname) => !!nickname);
   }
 }

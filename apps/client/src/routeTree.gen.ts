@@ -11,10 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root';
+import { Route as MyImport } from './routes/my';
 import { Route as IndexImport } from './routes/index';
 import { Route as SessionSessionIdImport } from './routes/session.$sessionId';
 
 // Create/Update Routes
+
+const MyRoute = MyImport.update({
+  id: '/my',
+  path: '/my',
+  getParentRoute: () => rootRoute,
+} as any);
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -39,6 +46,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport;
       parentRoute: typeof rootRoute;
     };
+    '/my': {
+      id: '/my';
+      path: '/my';
+      fullPath: '/my';
+      preLoaderRoute: typeof MyImport;
+      parentRoute: typeof rootRoute;
+    };
     '/session/$sessionId': {
       id: '/session/$sessionId';
       path: '/session/$sessionId';
@@ -53,36 +67,41 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
+  '/my': typeof MyRoute;
   '/session/$sessionId': typeof SessionSessionIdRoute;
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
+  '/my': typeof MyRoute;
   '/session/$sessionId': typeof SessionSessionIdRoute;
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
   '/': typeof IndexRoute;
+  '/my': typeof MyRoute;
   '/session/$sessionId': typeof SessionSessionIdRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/session/$sessionId';
+  fullPaths: '/' | '/my' | '/session/$sessionId';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/session/$sessionId';
-  id: '__root__' | '/' | '/session/$sessionId';
+  to: '/' | '/my' | '/session/$sessionId';
+  id: '__root__' | '/' | '/my' | '/session/$sessionId';
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  MyRoute: typeof MyRoute;
   SessionSessionIdRoute: typeof SessionSessionIdRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MyRoute: MyRoute,
   SessionSessionIdRoute: SessionSessionIdRoute,
 };
 
@@ -97,11 +116,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/my",
         "/session/$sessionId"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/my": {
+      "filePath": "my.tsx"
     },
     "/session/$sessionId": {
       "filePath": "session.$sessionId.tsx"

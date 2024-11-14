@@ -121,7 +121,7 @@ export class QuestionsService {
   async updateQuestionPinned(question_id: number, updateQuestionPinnedDto: UpdateQuestionPinnedDto) {
     const { session_id, create_user_token, pinned } = updateQuestionPinnedDto;
     const session = await this.sessionRepository.findById(session_id);
-    const token = await this.sessionAuthRepository.findUserByToken(create_user_token);
+    const token = await this.sessionAuthRepository.findByToken(create_user_token);
     if (token.user_id !== session.create_user_id) {
       throw new ForbiddenException('세션 생성자만 이 작업을 수행할 수 있습니다.');
     }
@@ -134,7 +134,7 @@ export class QuestionsService {
       throw new ForbiddenException('이미 완료된 답변입니다.');
     }
     const session = await this.sessionRepository.findById(session_id);
-    const token = await this.sessionAuthRepository.findUserByToken(create_user_token);
+    const token = await this.sessionAuthRepository.findByToken(create_user_token);
     if (token.user_id !== session.create_user_id) {
       throw new ForbiddenException('세션 생성자만 이 작업을 수행할 수 있습니다.');
     }

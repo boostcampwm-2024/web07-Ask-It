@@ -7,14 +7,20 @@ import { SessionsAuthRepository } from './sessions-auth.repository';
 export class SessionsAuthService {
   constructor(private readonly sessionsAuthRepository: SessionsAuthRepository) {}
 
-  async validateOrCreateToken(data: SessionAuthDto) {
-    const { session_id, user_id, token } = data;
-
+  async validateOrCreateToken(data: SessionAuthDto, user_id: number | null) {
+    const { session_id, token } = data;
     if (!token) {
-      const result = user_id ? await this.sessionsAuthRepository.findToken(user_id, session_id, token) : null;
-      return result || (await this.sessionsAuthRepository.generateToken(data));
+      const result =
+        user_id === null
+          ? await this.sessionsAuthRepository.generateToken(user_id, session_id)
+          : await this.sessionsAuthRepository.findTokenByUserId(user_id, session_id);
+      return result ?? (await this.sessionsAuthRepository.generateToken(user_id, session_id));
     } else {
-      return await this.sessionsAuthRepository.generateTokenForLoggedin(data);
+      const result =
+        user_id === null
+          ? await this.sessionsAuthRepository.findTokenByToken(session_id, token)
+          : await this.sessionsAuthRepository.findTokenByUserIdAndToken(user_id, session_id, token);
+      return result ?? (await this.sessionsAuthRepository.generateToken(user_id, session_id));
     }
   }
 }

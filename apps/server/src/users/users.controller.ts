@@ -27,7 +27,7 @@ export class UsersController {
     @Param('email')
     email: string,
   ) {
-    return { exists: await this.usersService.validateUniqueEmail(email) };
+    return { exists: await this.usersService.hasEmail(email) };
   }
 
   @Get('nicknames/:nickname')
@@ -36,6 +36,6 @@ export class UsersController {
     @Param('nickname')
     nickname: string,
   ) {
-    return { exists: await this.usersService.validateUniqueNickname(nickname) };
+    return { exists: await this.usersService.hasNickname(nickname) };
   }
 }
