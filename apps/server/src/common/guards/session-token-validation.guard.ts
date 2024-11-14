@@ -10,7 +10,7 @@ export class SessionTokenValidationGuard implements CanActivate {
     private readonly sessionsAuthRepository: SessionsAuthRepository,
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
     const session_id = request.body?.session_id || request.query?.session_id;
     const create_user_token = request.body?.create_user_token || request.query?.create_user_token;
@@ -29,8 +29,8 @@ export class SessionTokenValidationGuard implements CanActivate {
       throw new ForbiddenException('세션이 만료되었습니다.');
     }
 
-    const token = await this.sessionsAuthRepository.findTokenByToken(session_id, create_user_token);
-    if (!token) {
+    const token = await this.sessionsAuthRepository.findByToken(create_user_token);
+    if (!token || token.session_id !== session_id) {
       throw new ForbiddenException('해당 세션에 접근할 권한이 없습니다.');
     }
 
