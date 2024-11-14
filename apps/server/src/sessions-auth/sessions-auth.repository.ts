@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { v4 as uuid4 } from 'uuid';
 
 import { PrismaService } from '../prisma/prisma.service';
-import { SessionAuthDto } from './dto/session-auth.dto';
 
 @Injectable()
 export class SessionsAuthRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async generateToken(user_id: number | null, session_id: string, token: string) {
+  async generateToken(user_id: number | null, session_id: string) {
     const newUserSessionToken = await this.prisma.userSessionToken.create({
       data: {
         session_id: session_id,
