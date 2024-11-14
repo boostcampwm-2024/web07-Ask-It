@@ -115,7 +115,6 @@ export function useSignUpForm() {
 
   useEffect(() => {
     const validationStatus = validateNickname(nickname);
-    console.log(validationStatus);
     setNicknameValidationStatus(validationStatus);
     if (validationStatus.status === 'PENDING') checkNicknameToVerify(nickname);
     else checkNicknameToVerify.cancel();

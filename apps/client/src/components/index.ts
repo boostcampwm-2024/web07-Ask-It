@@ -7,3 +7,4 @@ export { default as CreateSessionModal } from './modal/CreateSessionModal';
 export { default as QuestionList } from '@/components/qna/QuestionList';
 export { default as QuestionDetail } from '@/components/qna/QuestionDetail';
 export { default as ChattingList } from '@/components/qna/ChattingList';
+export { default as CreateQuestionModal } from '@/components/modal/CreateQuestionModal';
