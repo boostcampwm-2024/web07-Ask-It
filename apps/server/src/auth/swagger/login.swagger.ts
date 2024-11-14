@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 export const LoginSwagger = () =>
   applyDecorators(
@@ -62,18 +62,7 @@ export const LoginSwagger = () =>
 export const TokenRefreshSwagger = () =>
   applyDecorators(
     ApiOperation({ summary: 'Access Token 갱신' }),
-    ApiBody({
-      schema: {
-        type: 'object',
-        properties: {
-          refreshToken: {
-            type: 'string',
-            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-          },
-        },
-        required: ['refreshToken'],
-      },
-    }),
+    ApiCookieAuth('refresh_token'),
     ApiResponse({
       status: 200,
       description: '토큰 갱신 성공',
