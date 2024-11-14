@@ -8,6 +8,7 @@ import { UpdateReplyDto } from './dto/update-reply.dto';
 import { RepliesService } from './replies.service';
 import { CreateReplySwagger } from './swagger/create-reply.swagger';
 import { DeleteReplySwagger } from './swagger/delete-reply.swagger';
+import { ToggleReplyLikeSwagger } from './swagger/toggle-reply.swagger';
 import { UpdateReplySwagger } from './swagger/update-reply.swagger';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
@@ -41,6 +42,7 @@ export class RepliesController {
   }
 
   @Post(':id/likes')
+  @ToggleReplyLikeSwagger()
   async toggleLike(@Param('id', ParseIntPipe) replyId: number, @Body() toggleReplyLikeDto: ToggleReplyLikeDto) {
     const { liked } = await this.repliesService.toggleLike(replyId, toggleReplyLikeDto.create_user_token);
     const likesCount = await this.repliesService.getLikesCount(replyId);
