@@ -100,7 +100,6 @@ export class QuestionRepository {
         where: { question_id: question_id },
       });
     } catch (error) {
-      console.log(error);
       throw DatabaseException.delete('question');
     }
   }
