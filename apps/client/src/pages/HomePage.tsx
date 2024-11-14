@@ -1,7 +1,10 @@
 import { Button, CreateSessionModal, FeatureCard } from '@/components';
+import { useAuthStore } from '@/features/auth';
 import { useModal } from '@/features/modal';
 
 function HomePage() {
+  const { isLogin } = useAuthStore();
+
   const { Modal: CreateSession, openModal: openCreateSessionModal } = useModal(
     <CreateSessionModal />,
   );
@@ -18,11 +21,21 @@ function HomePage() {
           <div className='self-stretch text-center text-base font-medium text-gray-600 sm:text-lg md:text-xl'>
             실시간 Q&A와 소통을 위한 최적의 플랫폼
           </div>
-          <Button className='bg-indigo-600' onClick={openCreateSessionModal}>
-            <div className='text-base font-bold text-white'>
-              새로운 세션 만들기
-            </div>
-          </Button>
+          <div className='group relative flex'>
+            <Button
+              className={`${isLogin() ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
+              onClick={isLogin() ? openCreateSessionModal : undefined}
+            >
+              <div className='text-base font-bold text-white'>
+                새로운 세션 만들기
+              </div>
+            </Button>
+            {isLogin() ? undefined : (
+              <span className='absolute top-1/2 flex w-full translate-y-full items-center justify-center rounded-md bg-indigo-600 p-1 text-sm font-bold text-white opacity-0 transition-opacity group-hover:opacity-100'>
+                로그인 후 이용 가능
+              </span>
+            )}
+          </div>
         </div>
         <div className='inline-flex flex-grow flex-col items-center justify-center gap-8 bg-white py-8'>
           <div className='inline-flex h-fit w-2/3 flex-col items-start justify-center gap-8 sm:w-[536px] sm:flex-row'>

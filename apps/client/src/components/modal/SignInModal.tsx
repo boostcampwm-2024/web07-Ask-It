@@ -2,15 +2,21 @@ import Button from '../Button';
 
 import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
-import { login, useAuthStore, useSignInForm } from '@/features/auth';
+import { useSignInForm } from '@/features/auth';
 import { useModalContext } from '@/features/modal';
 
 function SignInModal() {
-  const { setAccessToken } = useAuthStore();
-
   const { closeModal } = useModalContext();
 
-  const { email, setEmail, password, setPassword } = useSignInForm();
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    isLoginEnabled,
+    handleLogin,
+    loginFailed,
+  } = useSignInForm();
 
   return (
     <Modal>
@@ -29,18 +35,12 @@ function SignInModal() {
           value={password}
           onChange={setPassword}
           placeholder='비밀번호를 입력해주세요'
+          validationStatus={loginFailed}
         />
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button
-            className='bg-indigo-600'
-            onClick={() => {
-              login({ email, password }).then((response) => {
-                if (response.type === 'success') {
-                  setAccessToken(response.data.accessToken);
-                  closeModal();
-                }
-              });
-            }}
+            className={`transition-colors duration-200 ${isLoginEnabled ? 'bg-indigo-600' : 'bg-indigo-300'}`}
+            onClick={() => handleLogin().then(() => closeModal())}
           >
             <div className='w-[150px] text-sm font-medium text-white'>
               로그인

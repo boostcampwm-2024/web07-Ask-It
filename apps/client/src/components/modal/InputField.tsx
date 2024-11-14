@@ -1,7 +1,4 @@
-import {
-  ValidationStatus,
-  ValidationStatusWithMessage,
-} from 'src/features/user';
+import { ValidationStatus, ValidationStatusWithMessage } from '@/shared';
 
 interface InputFieldProps {
   label: string;
