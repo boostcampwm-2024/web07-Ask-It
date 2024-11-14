@@ -4,6 +4,8 @@ import { v4 as uuid4 } from 'uuid';
 import { PrismaService } from '../prisma/prisma.service';
 import { SessionAuthDto } from './dto/session-auth.dto';
 
+import { DatabaseException } from '@common/exceptions/resource.exception';
+
 @Injectable()
 export class SessionsAuthRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -29,7 +31,7 @@ export class SessionsAuthRepository {
   async findToken(user_id: number | null, session_id: string, token: string) {
     const whereClause = {
       session_id,
-      user_id: user_id ? Number(user_id) : null,
+      user_id: user_id,
       token: token,
     };
     const findedToken = await this.prisma.userSessionToken.findFirst({
@@ -39,6 +41,14 @@ export class SessionsAuthRepository {
       },
     });
     return findedToken?.token || null;
+  }
+
+  async findUserByToken(token: string) {
+    try {
+      return await this.prisma.userSessionToken.findUnique({ where: { token: token } });
+    } catch (error) {
+      throw DatabaseException.read('token');
+    }
   }
 
   async deleteToken(token: string) {
