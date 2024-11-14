@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Patch, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Param, ParseIntPipe, Patch, Post, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { DeleteReplyDto } from './dto/delete-reply.dto';
+import { ToggleReplyLikeDto } from './dto/toggle-reply-like.dto';
 import { UpdateReplyDto } from './dto/update-reply.dto';
 import { RepliesService } from './replies.service';
 import { CreateReplySwagger } from './swagger/create-reply.swagger';
@@ -37,5 +38,12 @@ export class RepliesController {
   async delete(@Body() deleteReplyDto: DeleteReplyDto) {
     await this.repliesService.delete(deleteReplyDto);
     return {};
+  }
+
+  @Post(':id/likes')
+  async toggleLike(@Param('id', ParseIntPipe) replyId: number, @Body() toggleReplyLikeDto: ToggleReplyLikeDto) {
+    const { liked } = await this.repliesService.toggleLike(replyId, toggleReplyLikeDto.create_user_token);
+    const likesCount = await this.repliesService.getLikesCount(replyId);
+    return { liked, likesCount };
   }
 }

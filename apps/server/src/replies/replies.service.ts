@@ -22,4 +22,15 @@ export class RepliesService {
     //사용자 자격 검증 로직
     this.repliesRepository.delete(data);
   }
+
+  async toggleLike(replyId: number, createUserToken: string) {
+    const exist = await this.repliesRepository.findLike(replyId, createUserToken);
+    if (exist) await this.repliesRepository.deleteLike(exist.reply_like_id);
+    else await this.repliesRepository.createLike(replyId, createUserToken);
+    return { liked: !exist };
+  }
+
+  async getLikesCount(replyId: number) {
+    return this.repliesRepository.getLikesCount(replyId);
+  }
 }
