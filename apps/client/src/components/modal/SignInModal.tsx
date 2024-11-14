@@ -33,6 +33,12 @@ function SignInModal() {
           label='비밀번호'
           type='password'
           value={password}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.stopPropagation();
+              handleLogin().then(() => closeModal());
+            }
+          }}
           onChange={setPassword}
           placeholder='비밀번호를 입력해주세요'
           validationStatus={loginFailed}
