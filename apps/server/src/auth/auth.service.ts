@@ -61,13 +61,20 @@ export class AuthService implements OnModuleInit {
 
   generateRefreshToken(userId: number, nickname: string) {
     const token = uuid4();
-    this.refreshTokens[token] = { userId, nickname, expiredAt: new Date(Date.now() + this.REFRESH_TOKEN_CONFIG.EXPIRE_INTERVAL) };
+    this.refreshTokens[token] = {
+      userId,
+      nickname,
+      expiredAt: new Date(Date.now() + this.REFRESH_TOKEN_CONFIG.EXPIRE_INTERVAL),
+    };
     return token;
   }
 
   async generateAccessToken(refreshToken: string) {
     await this.validateRefreshToken(refreshToken);
-    return this.jwtService.sign(this.refreshTokens[refreshToken], { expiresIn: '2d', secret: process.env.JWT_ACCESS_SECRET });
+    return this.jwtService.sign(this.refreshTokens[refreshToken], {
+      expiresIn: '2d',
+      secret: process.env.JWT_ACCESS_SECRET,
+    });
   }
 
   private async validateRefreshToken(refreshToken: string) {
@@ -82,7 +89,9 @@ export class AuthService implements OnModuleInit {
   }
 
   hasValidRefreshToken(userId: number, nickname: string) {
-    return Object.values(this.refreshTokens).some((data) => data.userId === userId && data.nickname === nickname && data.expiredAt > new Date());
+    return Object.values(this.refreshTokens).some(
+      (data) => data.userId === userId && data.nickname === nickname && data.expiredAt > new Date(),
+    );
   }
 
   removeRefreshToken(refreshToken: string) {

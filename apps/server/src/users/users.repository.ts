@@ -15,7 +15,10 @@ export class UsersRepository {
     try {
       await this.prisma.user.create({ data });
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError && error.code === PRISMA_ERROR_CODE.UNIQUE_CONSTRAINT_VIOLATION) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === PRISMA_ERROR_CODE.UNIQUE_CONSTRAINT_VIOLATION
+      ) {
         const [field] = (error.meta?.target as string[]) || [];
         throw UserConflictException.duplicateField(field);
       }
