@@ -59,4 +59,15 @@ export class QuestionsService {
       };
     });
   }
+
+  async toggleLike(questionId: number, createUserToken: string) {
+    const exist = await this.questionsRepository.findLike(questionId, createUserToken);
+    if (exist) await this.questionsRepository.deleteLike(exist.question_like_id);
+    else await this.questionsRepository.createLike(questionId, createUserToken);
+    return { liked: !exist };
+  }
+
+  async getLikesCount(questionId: number) {
+    return this.questionsRepository.getLikesCount(questionId);
+  }
 }

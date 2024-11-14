@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post, Query, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { GetQuestionDto } from './dto/get-question.dto';
+import { ToggleQuestionLikeDto } from './dto/toggle-question-like.dto';
 import { QuestionsService } from './questions.service';
 import { CreateQuestionSwagger } from './swagger/create-question.swagger';
 import { GetQuestionSwagger } from './swagger/get-question.swagger';
@@ -27,5 +28,12 @@ export class QuestionsController {
   async getQuestionsBySession(@Query() getQuestionDto: GetQuestionDto) {
     const questions = await this.questionsService.getQuestionsBySession(getQuestionDto);
     return { questions: questions };
+  }
+
+  @Post(':id/likes')
+  async toggleLike(@Param('id', ParseIntPipe) questionId: number, @Body() toggleQuestionLikeDto: ToggleQuestionLikeDto) {
+    const { liked } = await this.questionsService.toggleLike(questionId, toggleQuestionLikeDto.create_user_token);
+    const likesCount = await this.questionsService.getLikesCount(questionId);
+    return { liked, likesCount };
   }
 }

@@ -60,4 +60,50 @@ export class QuestionRepository {
       throw DatabaseException.read('question');
     }
   }
+
+  async findLike(questionId: number, createUserToken: string) {
+    try {
+      return await this.prisma.questionLike.findFirst({
+        where: {
+          question_id: questionId,
+          create_user_token: createUserToken,
+        },
+      });
+    } catch (error) {
+      throw DatabaseException.read('questionLike');
+    }
+  }
+
+  async createLike(questionId: number, createUserToken: string) {
+    try {
+      await this.prisma.questionLike.create({
+        data: {
+          question_id: questionId,
+          create_user_token: createUserToken,
+        },
+      });
+    } catch (error) {
+      throw DatabaseException.create('questionLike');
+    }
+  }
+
+  async deleteLike(questionLikeId: number) {
+    try {
+      await this.prisma.questionLike.delete({
+        where: { question_like_id: questionLikeId },
+      });
+    } catch (error) {
+      throw DatabaseException.delete('questionLike');
+    }
+  }
+
+  async getLikesCount(questionId: number) {
+    try {
+      return await this.prisma.questionLike.count({
+        where: { question_id: questionId },
+      });
+    } catch (error) {
+      throw DatabaseException.read('questionLike');
+    }
+  }
 }
