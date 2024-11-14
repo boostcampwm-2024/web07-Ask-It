@@ -1,17 +1,17 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export const AuthSessionsSwagger = () =>
+export const CreateReplySwagger = () =>
   applyDecorators(
-    ApiOperation({ summary: '세션에 대한 사용자 검증' }),
+    ApiOperation({ summary: '새 답글 생성' }),
     ApiResponse({
-      status: 200,
-      description: '세션 auth 요청 성공',
+      status: 201,
+      description: '답글 생성 성공',
       schema: {
         example: {
           type: 'success',
           data: {
-            token: '21dad221-f42c-4edf-b1ca-e63e2360f943',
+            reply_id: '생성한 reply의 id',
           },
         },
       },

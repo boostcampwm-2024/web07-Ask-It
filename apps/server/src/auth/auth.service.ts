@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuid4 } from 'uuid';
 
-import { UserRepository } from '../users/users.repository';
+import { UsersRepository } from '../users/users.repository';
 import { LoginDto } from './dto/login.dto';
 import { InvalidCredentialsException, RefreshTokenException } from './exceptions/auth.exception';
 
@@ -23,7 +23,7 @@ export class AuthService implements OnModuleInit {
 
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userRepository: UserRepository,
+    private readonly usersRepository: UsersRepository,
   ) {}
 
   getRefreshTokenExpireTime() {
@@ -50,7 +50,7 @@ export class AuthService implements OnModuleInit {
   }
 
   async validateUser(loginDto: LoginDto) {
-    const user = await this.userRepository.findByEmail(loginDto.email);
+    const user = await this.usersRepository.findByEmail(loginDto.email);
     if (!user) throw InvalidCredentialsException.invalidEmail();
 
     const match = await bcrypt.compare(loginDto.password, user.password);

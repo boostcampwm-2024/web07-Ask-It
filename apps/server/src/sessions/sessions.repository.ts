@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 
+import { SessionCreateData } from './interface/session-create-data.interface';
 import { DatabaseException } from '../common/exceptions/resource.exception';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -8,7 +8,7 @@ import { PrismaService } from '../prisma/prisma.service';
 export class SessionRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: Prisma.SessionCreateInput) {
+  async create(data: SessionCreateData) {
     try {
       return await this.prisma.session.create({ data });
     } catch (error) {
