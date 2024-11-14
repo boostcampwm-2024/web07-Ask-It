@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Param, ParseIntPipe, Patch, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Param, ParseIntPipe, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { SessionTokenValidationGuard } from '@src/common/guards/session-token-validation.guard';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { DeleteReplyDto } from './dto/delete-reply.dto';
@@ -21,6 +22,7 @@ export class RepliesController {
   @Post()
   @CreateReplySwagger()
   @ApiBody({ type: CreateReplyDto })
+  @UseGuards(SessionTokenValidationGuard)
   async create(@Body() createReplyDto: CreateReplyDto) {
     return { reply_id: await this.repliesService.create(createReplyDto) };
   }
@@ -28,6 +30,7 @@ export class RepliesController {
   @Patch()
   @UpdateReplySwagger()
   @ApiBody({ type: UpdateReplyDto })
+  @UseGuards(SessionTokenValidationGuard)
   async update(@Body() updateReplyDto: UpdateReplyDto) {
     await this.repliesService.update(updateReplyDto);
     return {};
@@ -36,6 +39,7 @@ export class RepliesController {
   @Delete()
   @DeleteReplySwagger()
   @ApiBody({ type: DeleteReplyDto })
+  @UseGuards(SessionTokenValidationGuard)
   async delete(@Body() deleteReplyDto: DeleteReplyDto) {
     await this.repliesService.delete(deleteReplyDto);
     return {};
@@ -43,6 +47,7 @@ export class RepliesController {
 
   @Post(':id/likes')
   @ToggleReplyLikeSwagger()
+  @UseGuards(SessionTokenValidationGuard)
   async toggleLike(@Param('id', ParseIntPipe) replyId: number, @Body() toggleReplyLikeDto: ToggleReplyLikeDto) {
     const { liked } = await this.repliesService.toggleLike(replyId, toggleReplyLikeDto.create_user_token);
     const likesCount = await this.repliesService.getLikesCount(replyId);

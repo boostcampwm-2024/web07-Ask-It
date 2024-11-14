@@ -16,7 +16,7 @@ export class SessionsAuthController {
   @Get()
   @AuthSessionsSwagger()
   async checkToken(@Query() sessionAuthDto: SessionAuthDto, @Req() request: Request) {
-    const user_id = request['user'].userId ? Number(request['user'].userId) : null;
+    const user_id = request['user']?.userId ? Number(request['user'].userId) : null;
     return { token: await this.sessionsAuthService.validateOrCreateToken(sessionAuthDto, user_id) };
   }
 }

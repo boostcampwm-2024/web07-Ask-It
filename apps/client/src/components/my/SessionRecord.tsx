@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 
-import { formatDate } from '@/shared/date.utils';
+import { formatDate } from '@/shared';
 
 interface SessionRecordProps {
   sessionName: string;

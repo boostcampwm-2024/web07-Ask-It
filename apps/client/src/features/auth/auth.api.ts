@@ -1,22 +1,23 @@
 import axios from 'axios';
 
 import {
-  CreateUserDTO,
-  VerifyEmailDTO,
-  VerifyNicknameDTO,
+  LoginRequestDTO,
+  LoginResponseDTO,
+  RefreshResponseDTO,
 } from '@/features/auth/auth.dto';
 
-const USER_BASE_URL = `/api/users`;
+const AUTH_BASE_URL = '/api/auth';
 
-export const createUser = (createUserDTO: CreateUserDTO) =>
-  axios.post(USER_BASE_URL, createUserDTO);
-
-export const verifyEmail = (email: string) =>
+export const login = (loginDTO: LoginRequestDTO) =>
   axios
-    .get<VerifyEmailDTO>(`${USER_BASE_URL}/emails/${email}`)
+    .post<LoginResponseDTO>(`${AUTH_BASE_URL}/login`, loginDTO)
     .then((res) => res.data);
 
-export const verifyNickname = (nickname: string) =>
+export const logout = () => axios.post(`${AUTH_BASE_URL}/logout`);
+
+export const refresh = () =>
   axios
-    .get<VerifyNicknameDTO>(`${USER_BASE_URL}/nicknames/${nickname}`)
+    .post<RefreshResponseDTO>(`${AUTH_BASE_URL}/token`, undefined, {
+      withCredentials: true,
+    })
     .then((res) => res.data);

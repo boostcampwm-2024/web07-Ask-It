@@ -2,8 +2,8 @@ import Button from '../Button';
 
 import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
-import { createUser, useSignUpForm } from '@/features/auth';
 import { useModalContext } from '@/features/modal';
+import { createUser, useSignUpForm } from '@/features/user';
 
 function SignUpModal() {
   const { closeModal } = useModalContext();

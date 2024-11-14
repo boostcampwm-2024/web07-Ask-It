@@ -1,14 +1,24 @@
+import { DatabaseException, ResourceNotFoundException } from '@common/exceptions/resource.exception';
 import { Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { PrismaService } from '@prisma-alias/prisma.service';
 
-import { DatabaseException, ResourceNotFoundException } from '../common/exceptions/resource.exception';
 import { PRISMA_ERROR_CODE } from '../prisma/prisma.error';
-import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 
 @Injectable()
 export class QuestionRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findById(question_id: number) {
+    try {
+      return await this.prisma.question.findUnique({
+        where: { question_id: question_id },
+      });
+    } catch (error) {
+      throw DatabaseException.read('question');
+    }
+  }
 
   async create(data: CreateQuestionDto) {
     const questionData = {
@@ -17,7 +27,18 @@ export class QuestionRepository {
       closed: false,
     };
     try {
-      await this.prisma.question.create({ data: questionData });
+      return await this.prisma.question.create({
+        data: questionData,
+        include: {
+          createUserToken: {
+            select: {
+              user: {
+                select: { nickname: true },
+              },
+            },
+          },
+        },
+      });
     } catch (error) {
       throw DatabaseException.create('question');
     }
@@ -63,6 +84,49 @@ export class QuestionRepository {
     }
   }
 
+  async updateBody(question_id: number, body: string) {
+    try {
+      return await this.prisma.question.update({
+        where: { question_id },
+        data: { body },
+      });
+    } catch (error) {
+      throw DatabaseException.update('question');
+    }
+  }
+
+  async deleteQuestion(question_id: number) {
+    try {
+      return await this.prisma.question.delete({
+        where: { question_id: question_id },
+      });
+    } catch (error) {
+      throw DatabaseException.delete('question');
+    }
+  }
+
+  async updatePinned(question_id: number, pinned: boolean) {
+    try {
+      return await this.prisma.question.update({
+        where: { question_id },
+        data: { pinned },
+      });
+    } catch (error) {
+      throw DatabaseException.update('question');
+    }
+  }
+
+  async updateClosed(question_id: number, closed: boolean) {
+    try {
+      return await this.prisma.question.update({
+        where: { question_id },
+        data: { closed },
+      });
+    } catch (error) {
+      throw DatabaseException.update('question');
+    }
+  }
+
   async findLike(questionId: number, createUserToken: string) {
     try {
       return await this.prisma.questionLike.findFirst({
@@ -85,7 +149,10 @@ export class QuestionRepository {
         },
       });
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError && error.code === PRISMA_ERROR_CODE.FOREIGN_KEY_CONSTRAINT_VIOLATION) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === PRISMA_ERROR_CODE.FOREIGN_KEY_CONSTRAINT_VIOLATION
+      ) {
         if (error.message.includes('question_id')) throw new ResourceNotFoundException('question_id');
         if (error.message.includes('create_user_token')) throw new ResourceNotFoundException('create_user_token');
       }

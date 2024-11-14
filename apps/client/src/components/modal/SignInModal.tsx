@@ -8,7 +8,15 @@ import { useModalContext } from '@/features/modal';
 function SignInModal() {
   const { closeModal } = useModalContext();
 
-  const { email, setEmail, password, setPassword } = useSignInForm();
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    isLoginEnabled,
+    handleLogin,
+    loginFailed,
+  } = useSignInForm();
 
   return (
     <Modal>
@@ -27,14 +35,12 @@ function SignInModal() {
           value={password}
           onChange={setPassword}
           placeholder='비밀번호를 입력해주세요'
+          validationStatus={loginFailed}
         />
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button
-            className='bg-indigo-600'
-            onClick={() => {
-              // TODO: 로그인 API 요청
-              closeModal();
-            }}
+            className={`transition-colors duration-200 ${isLoginEnabled ? 'bg-indigo-600' : 'bg-indigo-300'}`}
+            onClick={() => handleLogin().then(() => closeModal())}
           >
             <div className='w-[150px] text-sm font-medium text-white'>
               로그인

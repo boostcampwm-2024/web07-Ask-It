@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client';
 
 import './index.css';
 import { routeTree } from './routeTree.gen';
+import '@/shared/axios.config';
 
 const router = createRouter({ routeTree });
 

@@ -9,7 +9,16 @@ import { SessionsModule } from './sessions/sessions.module';
 import { SessionsAuthModule } from './sessions-auth/sessions-auth.module';
 import { UsersModule } from './users/users.module';
 @Module({
-  imports: [UsersModule, PrismaModule, SessionsModule, SessionsAuthModule, SessionsAuthModule, QuestionsModule, RepliesModule, AuthModule],
+  imports: [
+    UsersModule,
+    PrismaModule,
+    SessionsModule,
+    SessionsAuthModule,
+    SessionsAuthModule,
+    QuestionsModule,
+    RepliesModule,
+    AuthModule,
+  ],
   controllers: [],
   providers: [PrismaService],
 })
