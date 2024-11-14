@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 
 import { Button, SignInModal, SignUpModal } from '@/components';
 import { logout, useAuthStore } from '@/features/auth';
@@ -26,9 +26,9 @@ function Header() {
     <>
       <div className='h-16 w-full bg-white px-4 py-4 shadow'>
         <div className='mx-auto flex h-full w-full max-w-[1194px] items-center justify-between px-4'>
-          <button className='text-2xl font-bold text-indigo-600' type='button'>
+          <Link to='/' className='text-2xl font-bold text-indigo-600'>
             Ask-It
-          </button>
+          </Link>
           <div className='flex items-center justify-center gap-2.5'>
             <Button
               className='hover:bg-gray-200 hover:text-white hover:transition-all'
