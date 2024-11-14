@@ -18,6 +18,14 @@ function SignInModal() {
     loginFailed,
   } = useSignInForm();
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleLogin().then(() => closeModal());
+    } else if (e.key === 'Escape') {
+      closeModal();
+    }
+  };
+
   return (
     <Modal>
       <div className='flex flex-col items-center justify-center gap-4 p-4'>
@@ -26,6 +34,7 @@ function SignInModal() {
           label='이메일'
           type='email'
           value={email}
+          onKeyDown={handleKeyDown}
           onChange={setEmail}
           placeholder='example@gmail.com'
         />
@@ -33,6 +42,7 @@ function SignInModal() {
           label='비밀번호'
           type='password'
           value={password}
+          onKeyDown={handleKeyDown}
           onChange={setPassword}
           placeholder='비밀번호를 입력해주세요'
           validationStatus={loginFailed}

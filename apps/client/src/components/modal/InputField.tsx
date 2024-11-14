@@ -4,6 +4,7 @@ interface InputFieldProps {
   label: string;
   type: string;
   value: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onChange: (value: string) => void;
   placeholder: string;
   validationStatus?: ValidationStatusWithMessage;
@@ -20,6 +21,7 @@ function InputField({
   label,
   type,
   value,
+  onKeyDown,
   onChange,
   placeholder,
   validationStatus,
@@ -32,6 +34,7 @@ function InputField({
           <input
             type={type}
             value={value}
+            onKeyDown={(e) => onKeyDown?.(e)}
             onChange={(e) => onChange(e.target.value)}
             className='w-full text-sm font-medium text-gray-500 focus:outline-none'
             placeholder={placeholder}

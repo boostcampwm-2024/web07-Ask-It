@@ -13,6 +13,8 @@ import { ToggleReplyLikeSwagger } from './swagger/toggle-reply.swagger';
 import { UpdateReplySwagger } from './swagger/update-reply.swagger';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
+import { SessionTokenValidationGuard } from '@src/common/guards/session-token-validation.guard';
+
 @ApiTags('Replies')
 @UseInterceptors(TransformInterceptor)
 @Controller('replies')

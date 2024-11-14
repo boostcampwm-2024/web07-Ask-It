@@ -72,7 +72,11 @@ export class RepliesRepository {
         },
       });
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError && error.code === PRISMA_ERROR_CODE.FOREIGN_KEY_CONSTRAINT_VIOLATION) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === PRISMA_ERROR_CODE.FOREIGN_KEY_CONSTRAINT_VIOLATION
+      ) {
+
         if (error.message.includes('reply_id')) throw new ResourceNotFoundException('reply_id');
         if (error.message.includes('create_user_token')) throw new ResourceNotFoundException('create_user_token');
       }
