@@ -22,7 +22,6 @@ function CreateQuestionModal() {
             value={body}
             onChange={(e) => setBody(e.target.value)}
             placeholder='질문을 입력해주세요'
-            rows={4}
           />
           <div className='inline-flex shrink grow basis-0 flex-col items-start justify-start gap-2 self-stretch overflow-y-auto rounded border border-gray-200 bg-white p-4'>
             <Markdown className='prose prose-stone flex w-full flex-col gap-3 prose-img:rounded-md'>
@@ -33,10 +32,10 @@ function CreateQuestionModal() {
         <div className='flex h-fit flex-col items-end justify-center gap-2.5 self-stretch'>
           <div className='inline-flex items-center justify-center gap-2.5'>
             <Button className='bg-indigo-600'>
-              <div className='text-xs font-bold text-white'>생성하기</div>
+              <div className='text-sm font-bold text-white'>생성하기</div>
             </Button>
             <Button className='bg-gray-500' onClick={closeModal}>
-              <div className='text-xs font-bold text-white'>취소하기</div>
+              <div className='text-sm font-bold text-white'>취소하기</div>
             </Button>
           </div>
         </div>
