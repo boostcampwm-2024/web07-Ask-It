@@ -7,6 +7,7 @@ import { ToggleQuestionLikeDto } from './dto/toggle-question-like.dto';
 import { QuestionsService } from './questions.service';
 import { CreateQuestionSwagger } from './swagger/create-question.swagger';
 import { GetQuestionSwagger } from './swagger/get-question.swagger';
+import { ToggleQuestionLikeSwagger } from './swagger/toggle-question.swagger';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
 @ApiTags('Questions')
@@ -31,6 +32,7 @@ export class QuestionsController {
   }
 
   @Post(':id/likes')
+  @ToggleQuestionLikeSwagger()
   async toggleLike(@Param('id', ParseIntPipe) questionId: number, @Body() toggleQuestionLikeDto: ToggleQuestionLikeDto) {
     const { liked } = await this.questionsService.toggleLike(questionId, toggleQuestionLikeDto.create_user_token);
     const likesCount = await this.questionsService.getLikesCount(questionId);
