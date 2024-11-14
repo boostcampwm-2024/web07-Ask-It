@@ -20,6 +20,16 @@ export class QuestionRepository {
     }
   }
 
+  async findByIdAndSession(question_id: number, session_id: string) {
+    try {
+      return await this.prisma.question.findUnique({
+        where: { question_id: question_id, session_id: session_id },
+      });
+    } catch (error) {
+      throw DatabaseException.read('question');
+    }
+  }
+
   async create(data: CreateQuestionDto) {
     const questionData = {
       ...data,

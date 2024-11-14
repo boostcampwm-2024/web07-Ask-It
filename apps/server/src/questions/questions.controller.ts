@@ -108,11 +108,11 @@ export class QuestionsController {
     return { question: updatedQuestion };
   }
 
-  @Post(':id/likes')
+  @Post(':questionId/likes')
   @ToggleQuestionLikeSwagger()
-  @UseGuards(SessionTokenValidationGuard)
+  @UseGuards(SessionTokenValidationGuard, QuestionExistenceGuard)
   async toggleLike(
-    @Param('id', ParseIntPipe) questionId: number,
+    @Param('questionId', ParseIntPipe) questionId: number,
     @Body() toggleQuestionLikeDto: ToggleQuestionLikeDto,
   ) {
     const { liked } = await this.questionsService.toggleLike(questionId, toggleQuestionLikeDto.create_user_token);
