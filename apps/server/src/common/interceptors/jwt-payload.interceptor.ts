@@ -9,7 +9,9 @@ export class JwtPayloadInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest<Request>();
-    const token = request.headers.authorization?.startsWith('Bearer ') ? request.headers.authorization.split(' ')[1] : undefined;
+    const token = request.headers.authorization?.startsWith('Bearer ')
+      ? request.headers.authorization.split(' ')[1]
+      : undefined;
 
     return from(this.jwtService.verifyAsync(token, { secret: process.env.JWT_ACCESS_SECRET })).pipe(
       map((payload) => {

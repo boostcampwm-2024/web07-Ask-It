@@ -16,7 +16,11 @@ async function bootstrap() {
 
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  const config = new DocumentBuilder().setTitle('API Documentation').setDescription('NestJs API documentation').setVersion('1.0').build();
+  const config = new DocumentBuilder()
+    .setTitle('API Documentation')
+    .setDescription('NestJs API documentation')
+    .setVersion('1.0')
+    .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
