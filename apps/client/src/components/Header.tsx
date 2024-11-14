@@ -1,7 +1,12 @@
+import { useNavigate } from '@tanstack/react-router';
+
 import { Button, SignInModal, SignUpModal } from '@/components';
+import { logout, useAuthStore } from '@/features/auth';
 import { useModal } from '@/features/modal';
 
 function Header() {
+  const { isLogin, clearAccessToken } = useAuthStore();
+
   const { Modal: SignUp, openModal: openSignUpModal } = useModal(
     <SignUpModal />,
   );
@@ -9,6 +14,13 @@ function Header() {
   const { Modal: SignIn, openModal: openSignInModal } = useModal(
     <SignInModal />,
   );
+
+  const navigate = useNavigate();
+
+  const handleLogout = () =>
+    logout().then(() => {
+      clearAccessToken();
+    });
 
   return (
     <>
@@ -20,12 +32,21 @@ function Header() {
           <div className='flex items-center justify-center gap-2.5'>
             <Button
               className='hover:bg-gray-200 hover:text-white hover:transition-all'
-              onClick={openSignInModal}
+              onClick={isLogin() ? handleLogout : openSignInModal}
             >
-              <p className='text-base font-bold text-black'>로그인</p>
+              <p className='text-base font-bold text-black'>
+                {isLogin() ? '로그아웃' : '로그인'}
+              </p>
             </Button>
-            <Button className='bg-indigo-600' onClick={openSignUpModal}>
-              <p className='text-base font-bold text-white'>회원 가입</p>
+            <Button
+              className='bg-indigo-600'
+              onClick={
+                isLogin() ? () => navigate({ to: '/my' }) : openSignUpModal
+              }
+            >
+              <p className='text-base font-bold text-white'>
+                {isLogin() ? '세션 기록' : '회원가입'}
+              </p>
             </Button>
           </div>
         </div>

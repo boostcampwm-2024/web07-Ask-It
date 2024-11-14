@@ -2,10 +2,12 @@ import Button from '../Button';
 
 import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
-import { useSignInForm } from '@/features/auth';
+import { login, useAuthStore, useSignInForm } from '@/features/auth';
 import { useModalContext } from '@/features/modal';
 
 function SignInModal() {
+  const { setAccessToken } = useAuthStore();
+
   const { closeModal } = useModalContext();
 
   const { email, setEmail, password, setPassword } = useSignInForm();
@@ -32,8 +34,12 @@ function SignInModal() {
           <Button
             className='bg-indigo-600'
             onClick={() => {
-              // TODO: 로그인 API 요청
-              closeModal();
+              login({ email, password }).then((response) => {
+                if (response.type === 'success') {
+                  setAccessToken(response.data.accessToken);
+                  closeModal();
+                }
+              });
             }}
           >
             <div className='w-[150px] text-sm font-medium text-white'>
