@@ -1,5 +1,4 @@
 import { CanActivate, ExecutionContext, Injectable, NotFoundException } from '@nestjs/common';
-
 import { QuestionRepository } from '@questions/questions.repository';
 
 @Injectable()

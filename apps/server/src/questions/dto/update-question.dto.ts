@@ -1,8 +1,8 @@
+import { BaseDto } from '@common/base.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
-import { BaseDto } from '@common/base.dto';
 export class UpdateQuestionBodyDto extends BaseDto {
   @ApiProperty({
     example: '이것은 질문의 수정된 내용입니다.',

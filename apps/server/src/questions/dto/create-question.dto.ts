@@ -1,7 +1,6 @@
+import { BaseDto } from '@common/base.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
-
-import { BaseDto } from '@common/base.dto';
 
 export class CreateQuestionDto extends BaseDto {
   @ApiProperty({
