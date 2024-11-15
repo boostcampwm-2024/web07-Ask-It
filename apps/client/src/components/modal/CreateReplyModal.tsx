@@ -1,31 +1,35 @@
 import { useState } from 'react';
 import Markdown from 'react-markdown';
 
-import { Button } from '@/components';
+import Button from '@/components/Button';
 import Modal from '@/components/modal/Modal';
 import { useModalContext } from '@/features/modal';
 
-function CreateQuestionModal() {
+interface CreateReplyModalProps {
+  questionBody: string;
+}
+
+function CreateReplyModal({ questionBody }: CreateReplyModalProps) {
   const { closeModal } = useModalContext();
 
-  const [body, setBody] = useState('');
+  const [reply, setReply] = useState('');
 
   return (
     <Modal>
       <div className='inline-flex h-fit w-[600px] flex-col items-center justify-center gap-2.5'>
         <div className='inline-flex items-center justify-start gap-2.5 self-stretch border-b border-gray-200 pb-1'>
-          <div className='text-lg font-semibold text-black'>질문하기</div>
+          <div className='text-lg font-semibold text-black'>답변하기</div>
         </div>
         <div className='inline-flex min-h-[550px] shrink grow basis-0 items-center justify-center gap-2.5 self-stretch'>
           <textarea
             className='shrink grow basis-0 resize-none flex-col items-start justify-start gap-2 self-stretch whitespace-pre-wrap rounded border border-gray-200 bg-white p-4 focus:outline-none'
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
+            value={reply}
+            onChange={(e) => setReply(e.target.value)}
             placeholder='질문을 입력해주세요'
           />
           <div className='inline-flex shrink grow basis-0 flex-col items-start justify-start gap-2 self-stretch overflow-y-auto rounded border border-gray-200 bg-white p-4'>
             <Markdown className='prose prose-stone flex w-full flex-col gap-3 prose-img:rounded-md'>
-              {body}
+              {questionBody}
             </Markdown>
           </div>
         </div>
@@ -44,4 +48,4 @@ function CreateQuestionModal() {
   );
 }
 
-export default CreateQuestionModal;
+export default CreateReplyModal;
