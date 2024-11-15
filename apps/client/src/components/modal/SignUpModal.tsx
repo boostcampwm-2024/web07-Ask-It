@@ -51,7 +51,7 @@ function SignUpModal() {
         />
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button
-            className={`transition-colors duration-200 ${isSignUpEnabled ? 'bg-indigo-600' : 'bg-indigo-300'}`}
+            className={`transition-colors duration-200 ${isSignUpEnabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
             onClick={() => {
               if (isSignUpEnabled)
                 createUser({ email, nickname, password }).then(() =>
