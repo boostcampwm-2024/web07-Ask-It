@@ -26,4 +26,18 @@ export class SessionRepository {
       throw DatabaseException.read('session');
     }
   }
+
+  async getSessionsById(userId: number) {
+    try {
+      const userSessions = await this.prisma.userSessionToken.findMany({
+        where: { user_id: userId },
+        select: {
+          session_id: true,
+        },
+      });
+      return userSessions.map((session) => session.session_id);
+    } catch (error) {
+      throw DatabaseException.read('UserSessionToken');
+    }
+  }
 }

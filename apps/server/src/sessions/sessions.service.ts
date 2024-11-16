@@ -24,4 +24,7 @@ export class SessionsService {
     const createdSession = await this.sessionRepository.create(sessionCreateData);
     return { sessionId: createdSession.session_id };
   }
+  async getSessionsById(userId: number) {
+    return await this.sessionRepository.getSessionsById(userId);
+  }
 }

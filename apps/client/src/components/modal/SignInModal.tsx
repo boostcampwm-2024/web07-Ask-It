@@ -19,7 +19,7 @@ function SignInModal() {
   } = useSignInForm();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && isLoginEnabled) {
       handleLogin().then(() => closeModal());
     } else if (e.key === 'Escape') {
       closeModal();
@@ -49,8 +49,10 @@ function SignInModal() {
         />
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button
-            className={`transition-colors duration-200 ${isLoginEnabled ? 'bg-indigo-600' : 'bg-indigo-300'}`}
-            onClick={() => handleLogin().then(() => closeModal())}
+            className={`transition-colors duration-200 ${isLoginEnabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
+            onClick={() => {
+              if (isLoginEnabled) handleLogin().then(() => closeModal());
+            }}
           >
             <div className='w-[150px] text-sm font-medium text-white'>
               로그인
