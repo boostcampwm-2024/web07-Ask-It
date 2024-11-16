@@ -25,6 +25,23 @@ export class SessionsService {
     return { sessionId: createdSession.session_id };
   }
   async getSessionsById(userId: number) {
-    return await this.sessionRepository.getSessionsById(userId);
+    const sessionData = await this.sessionRepository.getSessionsById(userId);
+
+    const transformedSessions = sessionData.map((session) => {
+      const createdDate = new Date(session.created_at);
+      const formattedCreatedAt = {
+        year: createdDate.getFullYear(),
+        month: createdDate.getMonth() + 1,
+        dat: createdDate.getDate(),
+      };
+
+      return {
+        session_id: session.session_id,
+        title: session.title,
+        created_at: formattedCreatedAt,
+        expired: session.expired_at < new Date(),
+      };
+    });
+    return transformedSessions;
   }
 }

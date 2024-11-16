@@ -10,9 +10,28 @@ export const GetSessionSwagger = () =>
       schema: {
         example: {
           type: 'success',
-          data: {
-            sessionId: '[user_id에 해당하는 sessionId]',
-          },
+          data: [
+            {
+              session_id: 'session1',
+              title: 'Session 1',
+              created_at: {
+                year: 2024,
+                month: 11,
+                day: 1,
+              },
+              expired: true,
+            },
+            {
+              session_id: 'session2',
+              title: 'Session 2',
+              created_at: {
+                year: 2024,
+                month: 11,
+                day: 5,
+              },
+              expired: false,
+            },
+          ],
         },
       },
     }),
