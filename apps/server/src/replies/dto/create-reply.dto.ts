@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BaseDto } from '@src/common/base.dto';
 import { Transform } from 'class-transformer';
 import { IsInt, IsNotEmpty } from 'class-validator';
+
+import { BaseDto } from '@src/common/base.dto';
 
 export class CreateReplyDto extends BaseDto {
   @ApiProperty({
