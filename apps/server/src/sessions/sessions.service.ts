@@ -4,7 +4,7 @@ import { CreateSessionDto } from './dto/create-session.dto';
 import { SessionCreateData } from './interface/session-create-data.interface';
 import { SessionRepository } from './sessions.repository';
 
-const SESSION_EXPIRATION_TIME = 30 * (60 * 1000);
+const SESSION_EXPIRATION_TIME = 7 * (24 * 60 * 60 * 1000); //일주일
 
 @Injectable()
 export class SessionsService {
