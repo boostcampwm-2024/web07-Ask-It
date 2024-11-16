@@ -1,9 +1,8 @@
+import { DatabaseException } from '@common/exceptions/resource.exception';
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '@prisma-alias/prisma.service';
 
 import { SessionCreateData } from './interface/session-create-data.interface';
-
-import { DatabaseException } from '@common/exceptions/resource.exception';
-import { PrismaService } from '@prisma-alias/prisma.service';
 
 @Injectable()
 export class SessionRepository {
@@ -24,6 +23,20 @@ export class SessionRepository {
       });
     } catch (error) {
       throw DatabaseException.read('session');
+    }
+  }
+
+  async getSessionsById(userId: number) {
+    try {
+      const userSessions = await this.prisma.userSessionToken.findMany({
+        where: { user_id: userId },
+        select: {
+          session_id: true,
+        },
+      });
+      return userSessions.map((session) => session.session_id);
+    } catch (error) {
+      throw DatabaseException.read('UserSessionToken');
     }
   }
 }
