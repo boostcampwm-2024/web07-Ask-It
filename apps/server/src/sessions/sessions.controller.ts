@@ -28,7 +28,7 @@ export class SessionsController {
   @GetSessionSwagger()
   async getSessionsById(@Req() request: Request) {
     const userId = request['user'].userId;
-    const sessionIds = await this.sessionsService.getSessionsById(userId);
-    return { sessionId: sessionIds };
+    const sessionData = await this.sessionsService.getSessionsById(userId);
+    return { sessionData: sessionData };
   }
 }
