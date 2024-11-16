@@ -1,8 +1,9 @@
-import { DatabaseException } from '@common/exceptions/resource.exception';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@prisma-alias/prisma.service';
 
 import { SessionCreateData } from './interface/session-create-data.interface';
+
+import { DatabaseException } from '@common/exceptions/resource.exception';
+import { PrismaService } from '@prisma-alias/prisma.service';
 
 @Injectable()
 export class SessionRepository {
