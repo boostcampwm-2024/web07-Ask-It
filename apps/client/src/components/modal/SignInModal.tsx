@@ -4,8 +4,11 @@ import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
 import { useSignInForm } from '@/features/auth';
 import { useModalContext } from '@/features/modal';
+import { useToastStore } from '@/features/toast';
 
 function SignInModal() {
+  const addToast = useToastStore((state) => state.addToast);
+
   const { closeModal } = useModalContext();
 
   const {
@@ -18,9 +21,20 @@ function SignInModal() {
     loginFailed,
   } = useSignInForm();
 
+  const login = () =>
+    isLoginEnabled &&
+    handleLogin().then(() => {
+      closeModal();
+      addToast({
+        type: 'SUCCESS',
+        message: '로그인 되었습니다.',
+        duration: 3000,
+      });
+    });
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && isLoginEnabled) {
-      handleLogin().then(() => closeModal());
+    if (e.key === 'Enter') {
+      login();
     } else if (e.key === 'Escape') {
       closeModal();
     }
@@ -50,9 +64,7 @@ function SignInModal() {
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button
             className={`transition-colors duration-200 ${isLoginEnabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
-            onClick={() => {
-              if (isLoginEnabled) handleLogin().then(() => closeModal());
-            }}
+            onClick={login}
           >
             <div className='w-[150px] text-sm font-medium text-white'>
               로그인

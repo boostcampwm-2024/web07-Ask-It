@@ -8,6 +8,8 @@ import { RepliesModule } from './replies/replies.module';
 import { SessionsModule } from './sessions/sessions.module';
 import { SessionsAuthModule } from './sessions-auth/sessions-auth.module';
 import { UsersModule } from './users/users.module';
+
+import { UploadModule } from '@src/upload/upload.module';
 @Module({
   imports: [
     UsersModule,
@@ -18,6 +20,7 @@ import { UsersModule } from './users/users.module';
     QuestionsModule,
     RepliesModule,
     AuthModule,
+    UploadModule,
   ],
   controllers: [],
   providers: [PrismaService],
