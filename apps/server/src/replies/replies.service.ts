@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { SessionsService } from '@src/sessions/sessions.service';
+import { SessionsAuthRepository } from '@src/sessions-auth/sessions-auth.repository';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { DeleteReplyDto } from './dto/delete-reply.dto';
@@ -7,7 +9,12 @@ import { RepliesRepository } from './replies.repository';
 
 @Injectable()
 export class RepliesService {
-  constructor(private readonly repliesRepository: RepliesRepository) {}
+  constructor(
+    private readonly repliesRepository: RepliesRepository,
+    private readonly sessionService: SessionsService,
+    private readonly sessionAuthRepository: SessionsAuthRepository,
+  ) {}
+
   async create(data: CreateReplyDto) {
     return await this.repliesRepository.create(data);
   }
@@ -21,6 +28,12 @@ export class RepliesService {
   async delete(data: DeleteReplyDto) {
     //사용자 자격 검증 로직
     this.repliesRepository.delete(data);
+  }
+
+  async validateHost(sessionId: string, createUserToken: string) {
+    const userId = await this.sessionAuthRepository.findUserByToken(createUserToken);
+    if (!userId) return false;
+    return await this.sessionService.checkSessionHost(sessionId, userId);
   }
 
   async toggleLike(replyId: number, createUserToken: string) {

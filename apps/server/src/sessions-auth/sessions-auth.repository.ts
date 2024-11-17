@@ -1,9 +1,8 @@
+import { DatabaseException } from '@common/exceptions/resource.exception';
 import { Injectable } from '@nestjs/common';
 import { v4 as uuid4 } from 'uuid';
 
 import { PrismaService } from '../prisma/prisma.service';
-
-import { DatabaseException } from '@common/exceptions/resource.exception';
 
 @Injectable()
 export class SessionsAuthRepository {
@@ -53,6 +52,22 @@ export class SessionsAuthRepository {
           token: token,
         },
       });
+    } catch (error) {
+      throw DatabaseException.read('sessions-auth');
+    }
+  }
+
+  async findUserByToken(token: string) {
+    try {
+      const record = await this.prisma.userSessionToken.findFirst({
+        where: {
+          token: token,
+        },
+        select: {
+          user_id: true,
+        },
+      });
+      return record?.user_id || null;
     } catch (error) {
       throw DatabaseException.read('sessions-auth');
     }

@@ -12,6 +12,7 @@ export const CreateReplySwagger = () =>
           type: 'success',
           data: {
             reply_id: '생성한 reply의 id',
+            is_host: true,
           },
         },
       },

@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Param, ParseIntPipe, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { SessionTokenValidationGuard } from '@src/common/guards/session-token-validation.guard';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { DeleteReplyDto } from './dto/delete-reply.dto';
@@ -12,8 +13,6 @@ import { ToggleReplyLikeSwagger } from './swagger/toggle-reply.swagger';
 import { UpdateReplySwagger } from './swagger/update-reply.swagger';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
-import { SessionTokenValidationGuard } from '@src/common/guards/session-token-validation.guard';
-
 @ApiTags('Replies')
 @UseInterceptors(TransformInterceptor)
 @Controller('replies')
@@ -25,7 +24,10 @@ export class RepliesController {
   @ApiBody({ type: CreateReplyDto })
   @UseGuards(SessionTokenValidationGuard)
   async create(@Body() createReplyDto: CreateReplyDto) {
-    return { reply_id: await this.repliesService.create(createReplyDto) };
+    return {
+      reply_id: await this.repliesService.create(createReplyDto),
+      is_host: await this.repliesService.validateHost(createReplyDto.session_id, createReplyDto.create_user_token),
+    };
   }
 
   @Patch()

@@ -1,9 +1,8 @@
+import { DatabaseException } from '@common/exceptions/resource.exception';
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '@prisma-alias/prisma.service';
 
 import { SessionCreateData } from './interface/session-create-data.interface';
-
-import { DatabaseException } from '@common/exceptions/resource.exception';
-import { PrismaService } from '@prisma-alias/prisma.service';
 
 @Injectable()
 export class SessionRepository {
@@ -49,6 +48,16 @@ export class SessionRepository {
       return sessions;
     } catch (error) {
       throw DatabaseException.read('UserSessionToken');
+    }
+  }
+
+  async findBySessionIdAndUser(sessionId: string, userId: number) {
+    try {
+      return await this.prisma.session.findFirst({
+        where: { session_id: sessionId, create_user_id: userId },
+      });
+    } catch (error) {
+      throw DatabaseException.read('session');
     }
   }
 }
