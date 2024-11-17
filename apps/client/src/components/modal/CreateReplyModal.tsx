@@ -16,11 +16,11 @@ function CreateReplyModal({ questionBody }: CreateReplyModalProps) {
 
   return (
     <Modal>
-      <div className='inline-flex h-fit w-[600px] flex-col items-center justify-center gap-2.5'>
+      <div className='inline-flex h-[40dvh] w-[600px] flex-col items-center justify-center gap-2.5'>
         <div className='inline-flex items-center justify-start gap-2.5 self-stretch border-b border-gray-200 pb-1'>
           <div className='text-lg font-semibold text-black'>답변하기</div>
         </div>
-        <div className='inline-flex min-h-[550px] shrink grow basis-0 items-center justify-center gap-2.5 self-stretch'>
+        <div className='inline-flex h-[40dvh] shrink grow basis-0 items-center justify-center gap-2.5 self-stretch'>
           <textarea
             className='shrink grow basis-0 resize-none flex-col items-start justify-start gap-2 self-stretch whitespace-pre-wrap rounded border border-gray-200 bg-white p-4 focus:outline-none'
             value={reply}
