@@ -24,10 +24,11 @@ export class RepliesController {
   @ApiBody({ type: CreateReplyDto })
   @UseGuards(SessionTokenValidationGuard)
   async create(@Body() createReplyDto: CreateReplyDto) {
-    return {
-      reply_id: await this.repliesService.create(createReplyDto),
-      is_host: await this.repliesService.validateHost(createReplyDto.session_id, createReplyDto.create_user_token),
-    };
+    const [reply_id, is_host] = await Promise.all([
+      this.repliesService.create(createReplyDto),
+      this.repliesService.validateHost(createReplyDto.session_id, createReplyDto.create_user_token),
+    ]);
+    return { reply_id, is_host };
   }
 
   @Patch()
