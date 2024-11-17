@@ -3,9 +3,12 @@ import Button from '../Button';
 import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
 import { useModalContext } from '@/features/modal';
+import { useToastStore } from '@/features/toast';
 import { createUser, useSignUpForm } from '@/features/user';
 
 function SignUpModal() {
+  const addToast = useToastStore((state) => state.addToast);
+
   const { closeModal } = useModalContext();
 
   const {
@@ -20,6 +23,17 @@ function SignUpModal() {
     passwordValidationStatus,
     isSignUpEnabled,
   } = useSignUpForm();
+
+  const signUp = () =>
+    isSignUpEnabled &&
+    createUser({ email, nickname, password }).then(() => {
+      closeModal();
+      addToast({
+        type: 'SUCCESS',
+        message: '회원가입 되었습니다.',
+        duration: 3000,
+      });
+    });
 
   return (
     <Modal>
@@ -52,12 +66,7 @@ function SignUpModal() {
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button
             className={`transition-colors duration-200 ${isSignUpEnabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
-            onClick={() => {
-              if (isSignUpEnabled)
-                createUser({ email, nickname, password }).then(() =>
-                  closeModal(),
-                );
-            }}
+            onClick={signUp}
           >
             <div className='w-[150px] text-sm font-medium text-white'>
               회원 가입
