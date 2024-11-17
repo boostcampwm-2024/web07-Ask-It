@@ -72,6 +72,8 @@ jobs:
                       cd apps/server
                       echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" > .env
                       echo "JWT_ACCESS_SECRET=${{ secrets.JWT_ACCESS_SECRET }}" >> .env
+                      echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+                      echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
 
                       # pm2로 기존 프로세스 종료 및 새 프로세스 시작
                       pm2 stop ask-it || true

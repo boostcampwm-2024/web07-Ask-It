@@ -1,6 +1,7 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 
 import { Header } from '@/components';
+import { ToastContainer } from '@/features/toast';
 
 export const Route = createRootRoute({
   component: () => (
@@ -9,6 +10,7 @@ export const Route = createRootRoute({
       <main className='flex flex-grow items-center justify-center overflow-y-hidden'>
         <Outlet />
       </main>
+      <ToastContainer />
     </div>
   ),
 });

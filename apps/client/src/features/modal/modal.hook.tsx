@@ -1,7 +1,7 @@
 import { ReactNode, useContext, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import Background from '@/features/modal/components/Background';
+import Background from '@/features/modal/Background';
 import { ModalContext } from '@/features/modal/modal.context';
 
 export const useModal = (children: ReactNode) => {

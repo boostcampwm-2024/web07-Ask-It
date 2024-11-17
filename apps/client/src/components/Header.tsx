@@ -3,9 +3,12 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import { Button, SignInModal, SignUpModal } from '@/components';
 import { logout, useAuthStore } from '@/features/auth';
 import { useModal } from '@/features/modal';
+import { useToastStore } from '@/features/toast';
 
 function Header() {
   const { isLogin, clearAccessToken } = useAuthStore();
+
+  const addToast = useToastStore((state) => state.addToast);
 
   const { Modal: SignUp, openModal: openSignUpModal } = useModal(
     <SignUpModal />,
@@ -20,6 +23,11 @@ function Header() {
   const handleLogout = () =>
     logout().then(() => {
       clearAccessToken();
+      addToast({
+        type: 'SUCCESS',
+        message: '로그아웃 되었습니다.',
+        duration: 3000,
+      });
     });
 
   return (
