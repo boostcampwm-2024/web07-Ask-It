@@ -1,17 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
 
-export class UpdateReplyDto {
-  @ApiProperty({
-    example: 'xcv90sdfskjwqjewq2',
-    description: '참여한 세션의 id',
-    required: true,
-  })
-  @IsString()
-  @IsNotEmpty()
-  session_id: string;
+import { BaseDto } from '@src/common/base.dto';
 
+export class UpdateReplyDto extends BaseDto {
   @ApiProperty({
     example: '199',
     description: '질문 id',
@@ -31,15 +24,6 @@ export class UpdateReplyDto {
   @Transform(({ value }) => Number(value))
   @IsInt()
   reply_id: number;
-
-  @ApiProperty({
-    example: 'dsf89vc89sfsdjkh3',
-    description: 'reply 수정을 요청한 유저의 토큰',
-    required: true,
-  })
-  @IsString()
-  @IsNotEmpty()
-  user_token: string;
 
   @ApiProperty({
     example: '대지호님의 답변입니다!',
