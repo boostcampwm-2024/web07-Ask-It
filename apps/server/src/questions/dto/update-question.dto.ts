@@ -1,7 +1,8 @@
-import { BaseDto } from '@common/base.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+
+import { BaseDto } from '@common/base.dto';
 
 export class UpdateQuestionBodyDto extends BaseDto {
   @ApiProperty({
