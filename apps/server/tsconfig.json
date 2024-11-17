@@ -26,6 +26,6 @@
       "@common/*": ["src/common/*"],
       "@prisma-alias/*": ["src/prisma/*"],
       "@main/*": ["src/main/*"]
-    }
+    },
   }
 }
