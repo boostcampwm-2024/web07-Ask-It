@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Param, ParseIntPipe, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { SessionTokenValidationGuard } from '@src/common/guards/session-token-validation.guard';
-import { QuestionExistenceGuard } from '@src/questions/guards/question-existence.guard';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { DeleteReplyDto } from './dto/delete-reply.dto';
@@ -27,7 +26,7 @@ export class RepliesController {
   @ApiBody({ type: CreateReplyDto })
   @UseGuards(SessionTokenValidationGuard)
   async create(@Body() createReplyDto: CreateReplyDto) {
-    return { reply_id: await this.repliesService.create(createReplyDto) };
+    return { reply_id: await this.repliesService.createReply(createReplyDto) };
   }
 
   @Patch()
@@ -35,7 +34,7 @@ export class RepliesController {
   @ApiBody({ type: UpdateReplyDto })
   @UseGuards(SessionTokenValidationGuard, ReplyExistenceGuard, ReplyOwnershipGuard)
   async update(@Body() updateReplyDto: UpdateReplyDto) {
-    await this.repliesService.update(updateReplyDto);
+    await this.repliesService.updateReply(updateReplyDto);
     return {};
   }
 
@@ -44,7 +43,7 @@ export class RepliesController {
   @ApiBody({ type: DeleteReplyDto })
   @UseGuards(SessionTokenValidationGuard, ReplyExistenceGuard, ReplyOwnershipGuard)
   async delete(@Body() deleteReplyDto: DeleteReplyDto) {
-    await this.repliesService.delete(deleteReplyDto);
+    await this.repliesService.deleteReply(deleteReplyDto);
     return {};
   }
 

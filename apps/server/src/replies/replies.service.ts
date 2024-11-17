@@ -8,16 +8,16 @@ import { RepliesRepository } from './replies.repository';
 @Injectable()
 export class RepliesService {
   constructor(private readonly repliesRepository: RepliesRepository) {}
-  async create(data: CreateReplyDto) {
-    return await this.repliesRepository.create(data);
+  async createReply(data: CreateReplyDto) {
+    return await this.repliesRepository.createReply(data);
   }
 
-  async update(data: UpdateReplyDto) {
-    this.repliesRepository.update(data);
+  async updateReply(data: UpdateReplyDto) {
+    this.repliesRepository.updateReply(data);
   }
 
-  async delete(data: DeleteReplyDto) {
-    this.repliesRepository.delete(data);
+  async deleteReply(data: DeleteReplyDto) {
+    this.repliesRepository.deleteReply(data);
   }
 
   async toggleLike(replyId: number, createUserToken: string) {
