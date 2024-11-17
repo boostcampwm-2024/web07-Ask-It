@@ -1,4 +1,5 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
+
 import { SessionRepository } from '@sessions/sessions.repository';
 import { SessionsAuthRepository } from '@sessions-auth/sessions-auth.repository';
 
