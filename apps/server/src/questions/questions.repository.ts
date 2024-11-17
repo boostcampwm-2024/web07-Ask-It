@@ -1,14 +1,13 @@
+import { DatabaseException, ResourceNotFoundException } from '@common/exceptions/resource.exception';
 import { Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { PrismaService } from '@prisma-alias/prisma.service';
 
 import { PRISMA_ERROR_CODE } from '../prisma/prisma.error';
 import { CreateQuestionDto } from './dto/create-question.dto';
 
-import { DatabaseException, ResourceNotFoundException } from '@common/exceptions/resource.exception';
-import { PrismaService } from '@prisma-alias/prisma.service';
-
 @Injectable()
-export class QuestionRepository {
+export class QuestionsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findById(question_id: number) {

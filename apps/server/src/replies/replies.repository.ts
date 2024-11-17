@@ -32,7 +32,7 @@ export class RepliesRepository {
         },
       });
     } catch (error) {
-      throw DatabaseException.delete('reply');
+      throw DatabaseException.update('reply');
     }
   }
 
@@ -100,6 +100,15 @@ export class RepliesRepository {
       });
     } catch (error) {
       throw DatabaseException.read('replyLike');
+    }
+  }
+  async findByIdAndSession(reply_id: number, question_id: number, session_id: string) {
+    try {
+      return await this.prisma.reply.findFirst({
+        where: { reply_id: reply_id, question_id: question_id, session_id: session_id },
+      });
+    } catch (error) {
+      throw DatabaseException.read('reply');
     }
   }
 }

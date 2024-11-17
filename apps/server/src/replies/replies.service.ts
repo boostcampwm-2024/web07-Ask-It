@@ -13,13 +13,10 @@ export class RepliesService {
   }
 
   async update(data: UpdateReplyDto) {
-    //사용자 자격 검증 로직
-
     this.repliesRepository.update(data);
   }
 
   async delete(data: DeleteReplyDto) {
-    //사용자 자격 검증 로직
     this.repliesRepository.delete(data);
   }
 

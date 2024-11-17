@@ -32,7 +32,7 @@ export class SessionsService {
       const formattedCreatedAt = {
         year: createdDate.getFullYear(),
         month: createdDate.getMonth() + 1,
-        dat: createdDate.getDate(),
+        date: createdDate.getDate(),
       };
 
       return {

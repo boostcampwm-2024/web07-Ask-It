@@ -1,18 +1,20 @@
 import { Body, Controller, Delete, Param, ParseIntPipe, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { SessionTokenValidationGuard } from '@src/common/guards/session-token-validation.guard';
+import { QuestionExistenceGuard } from '@src/questions/guards/question-existence.guard';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { DeleteReplyDto } from './dto/delete-reply.dto';
 import { ToggleReplyLikeDto } from './dto/toggle-reply-like.dto';
 import { UpdateReplyDto } from './dto/update-reply.dto';
+import { ReplyExistenceGuard } from './guards/reply-existence.guard';
+import { ReplyOwnershipGuard } from './guards/reply-ownership.guard';
 import { RepliesService } from './replies.service';
 import { CreateReplySwagger } from './swagger/create-reply.swagger';
 import { DeleteReplySwagger } from './swagger/delete-reply.swagger';
 import { ToggleReplyLikeSwagger } from './swagger/toggle-reply.swagger';
 import { UpdateReplySwagger } from './swagger/update-reply.swagger';
 import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
-
-import { SessionTokenValidationGuard } from '@src/common/guards/session-token-validation.guard';
 
 @ApiTags('Replies')
 @UseInterceptors(TransformInterceptor)
@@ -31,7 +33,7 @@ export class RepliesController {
   @Patch()
   @UpdateReplySwagger()
   @ApiBody({ type: UpdateReplyDto })
-  @UseGuards(SessionTokenValidationGuard)
+  @UseGuards(SessionTokenValidationGuard, ReplyExistenceGuard, ReplyOwnershipGuard)
   async update(@Body() updateReplyDto: UpdateReplyDto) {
     await this.repliesService.update(updateReplyDto);
     return {};
@@ -40,7 +42,7 @@ export class RepliesController {
   @Delete()
   @DeleteReplySwagger()
   @ApiBody({ type: DeleteReplyDto })
-  @UseGuards(SessionTokenValidationGuard)
+  @UseGuards(SessionTokenValidationGuard, ReplyExistenceGuard, ReplyOwnershipGuard)
   async delete(@Body() deleteReplyDto: DeleteReplyDto) {
     await this.repliesService.delete(deleteReplyDto);
     return {};

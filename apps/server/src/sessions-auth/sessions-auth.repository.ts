@@ -1,9 +1,8 @@
+import { DatabaseException } from '@common/exceptions/resource.exception';
 import { Injectable } from '@nestjs/common';
 import { v4 as uuid4 } from 'uuid';
 
 import { PrismaService } from '../prisma/prisma.service';
-
-import { DatabaseException } from '@common/exceptions/resource.exception';
 
 @Injectable()
 export class SessionsAuthRepository {
@@ -71,5 +70,14 @@ export class SessionsAuthRepository {
     });
     if (record === null) return await this.findTokenByUserId(user_id, session_id);
     return record?.token || null;
+  }
+  async findByIdAndSession(reply_id: number, session_id: string) {
+    try {
+      return await this.prisma.reply.findUnique({
+        where: { reply_id: reply_id, session_id: session_id },
+      });
+    } catch (error) {
+      throw DatabaseException.read('reply');
+    }
   }
 }

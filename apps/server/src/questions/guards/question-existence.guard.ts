@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable, NotFoundException } from '@nestjs/common';
-import { QuestionRepository } from '@questions/questions.repository';
+import { QuestionsRepository } from '@questions/questions.repository';
 
 @Injectable()
 export class QuestionExistenceGuard implements CanActivate {
-  constructor(private readonly questionRepository: QuestionRepository) {}
+  constructor(private readonly questionRepository: QuestionsRepository) {}
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
