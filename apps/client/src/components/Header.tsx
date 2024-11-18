@@ -23,6 +23,7 @@ function Header() {
   const handleLogout = () =>
     logout().then(() => {
       clearAccessToken();
+      navigate({ to: '/' });
       addToast({
         type: 'SUCCESS',
         message: '로그아웃 되었습니다.',
