@@ -1,6 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+
 import { SessionRecord } from '@/components/my';
+import { getSessions } from '@/features/session';
 
 function MyPage() {
+  const { data } = useQuery({ queryKey: ['/sessions'], queryFn: getSessions });
+
+  const sessions = data?.data.sessionData;
+
   return (
     <div className='inline-flex h-full w-full items-center justify-center gap-4 overflow-hidden px-4 py-4 md:max-w-[1194px]'>
       <div className='inline-flex shrink grow basis-0 flex-col items-center justify-start gap-4 self-stretch rounded-lg bg-white shadow'>
@@ -9,16 +16,21 @@ function MyPage() {
           <div className='rounded-md px-3 py-2' />
         </div>
         <div className='flex shrink grow basis-0 flex-col items-start justify-start gap-4 self-stretch overflow-y-auto px-8 pb-4'>
-          <SessionRecord
-            sessionName='못말리는 장난꾸러기의 세션'
-            createdAt={new Date()}
-            closed
-          />
-          <SessionRecord
-            sessionName='못말리는 장난꾸러기의 세션'
-            createdAt={new Date()}
-            closed={false}
-          />
+          {sessions?.map((session) => (
+            <SessionRecord
+              key={session.session_id}
+              sessionId={session.session_id}
+              sessionName={session.title}
+              closed={session.expired}
+              createdAt={
+                new Date(
+                  session.created_at.year,
+                  session.created_at.month,
+                  session.created_at.date,
+                )
+              }
+            />
+          ))}
         </div>
       </div>
     </div>

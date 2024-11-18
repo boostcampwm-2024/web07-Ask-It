@@ -3,12 +3,18 @@ import { Link } from '@tanstack/react-router';
 import { formatDate } from '@/shared';
 
 interface SessionRecordProps {
+  sessionId: string;
   sessionName: string;
   closed: boolean;
   createdAt: Date;
 }
 
-function SessionRecord({ sessionName, createdAt, closed }: SessionRecordProps) {
+function SessionRecord({
+  sessionId,
+  sessionName,
+  createdAt,
+  closed,
+}: SessionRecordProps) {
   return (
     <div className='flex h-fit flex-col items-start justify-start gap-4 self-stretch border-b border-gray-200 px-2.5 pb-4 pt-2.5'>
       <div className='flex h-fit flex-col items-start justify-center gap-2.5 self-stretch'>
@@ -27,10 +33,7 @@ function SessionRecord({ sessionName, createdAt, closed }: SessionRecordProps) {
         )}
       </div>
       <div className='inline-flex items-start justify-between self-stretch px-1'>
-        <Link
-          to='/session/$sessionId'
-          params={{ sessionId: 'hello-session-1' }}
-        >
+        <Link to='/session/$sessionId' params={{ sessionId }}>
           <div className='text-base font-medium leading-normal text-black'>
             {sessionName}
           </div>
