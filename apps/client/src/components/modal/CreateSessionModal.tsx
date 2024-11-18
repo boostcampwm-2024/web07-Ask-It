@@ -1,14 +1,36 @@
+import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import Button from '@/components/Button';
 import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
 import { useModalContext } from '@/features/modal';
+import { createSession } from '@/features/session/session.api';
+import { useToastStore } from '@/features/toast';
 
 function CreateSessionModal() {
+  const addToast = useToastStore((state) => state.addToast);
+
   const { closeModal } = useModalContext();
 
   const [sessionName, setSessionName] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleCreateSession = () =>
+    sessionName.length > 0 &&
+    createSession({ title: sessionName }).then((res) => {
+      closeModal();
+      addToast({
+        type: 'SUCCESS',
+        message: `세션( ${sessionName} )이 생성되었습니다.`,
+        duration: 3000,
+      });
+      navigate({
+        to: '/session/$sessionId',
+        params: { sessionId: res.data.sessionId },
+      });
+    });
 
   return (
     <Modal>
@@ -23,13 +45,7 @@ function CreateSessionModal() {
         />
       </div>
       <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
-        <Button
-          className='bg-indigo-600'
-          onClick={() => {
-            // TODO: 세션 생성 API 요청 후, 세션 화면으로 이동
-            closeModal();
-          }}
-        >
+        <Button className='bg-indigo-600' onClick={handleCreateSession}>
           <div className='w-[150px] text-sm font-medium text-white'>
             세션 생성하기
           </div>
