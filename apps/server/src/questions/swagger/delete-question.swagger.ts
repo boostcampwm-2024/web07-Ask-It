@@ -26,8 +26,7 @@ export const DeleteQuestionSwagger = () =>
       status: 200,
       description: '질문 삭제 성공',
       schema: {
-        example: {
-        },
+        example: {},
       },
     }),
   );

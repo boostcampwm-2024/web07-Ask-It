@@ -4,13 +4,13 @@ import { Question } from '@prisma/client';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { GetQuestionDto } from './dto/get-question.dto';
 import { QuestionsRepository } from './questions.repository';
-import { RepliesRepository } from '@replies/replies.repository';
 
 import {
   UpdateQuestionBodyDto,
   UpdateQuestionClosedDto,
   UpdateQuestionPinnedDto,
 } from '@questions/dto/update-question.dto';
+import { RepliesRepository } from '@replies/replies.repository';
 import { SessionRepository } from '@sessions/sessions.repository';
 import { SessionsAuthRepository } from '@sessions-auth/sessions-auth.repository';
 

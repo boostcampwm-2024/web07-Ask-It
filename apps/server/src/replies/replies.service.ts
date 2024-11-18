@@ -18,8 +18,8 @@ export class RepliesService {
   ) {}
 
   async createReply(data: CreateReplyDto) {
-    const {replyId, body, createdAt, createUserTokenEntity} =  await this.repliesRepository.createReply(data);
-    return { 
+    const { replyId, body, createdAt, createUserTokenEntity } = await this.repliesRepository.createReply(data);
+    return {
       replyId,
       body,
       createdAt,
@@ -30,8 +30,8 @@ export class RepliesService {
     };
   }
 
-  async updateBody(replyId:number, updateReplyBodyDto: UpdateReplyBodyDto) {
-    const {body} = updateReplyBodyDto;
+  async updateBody(replyId: number, updateReplyBodyDto: UpdateReplyBodyDto) {
+    const { body } = updateReplyBodyDto;
     return await this.repliesRepository.updateBody(replyId, body);
   }
 
