@@ -27,7 +27,7 @@ export const getSessionToken = (sessionId: string) => {
   return axios
     .get<GetSessionTokenResponseDTO>(`/api/sessions-auth`, {
       params: {
-        session_id: sessionId,
+        sessionId,
         token,
       },
     })
