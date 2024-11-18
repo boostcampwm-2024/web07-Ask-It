@@ -16,15 +16,13 @@ export const EmailValidationDocs = () =>
           examples: {
             duplicated: {
               value: {
-                type: 'success',
-                data: { exists: true },
+                exists: true,
               },
               summary: '중복된 이메일',
             },
             available: {
               value: {
-                type: 'success',
-                data: { exists: false },
+                exists: false,
               },
               summary: '사용 가능한 이메일',
             },
@@ -49,15 +47,13 @@ export const NicknameValidationDocs = () =>
           examples: {
             duplicated: {
               value: {
-                type: 'success',
-                data: { exists: true },
+                exists: true,
               },
               summary: '중복된 닉네임',
             },
             available: {
               value: {
-                type: 'success',
-                data: { exists: false },
+                exists: false,
               },
               summary: '사용 가능한 닉네임',
             },

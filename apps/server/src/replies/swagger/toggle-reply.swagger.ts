@@ -36,22 +36,16 @@ export const ToggleReplyLikeSwagger = () =>
               summary: '좋아요 활성화',
               description: '답글 좋아요가 활성화된 경우',
               value: {
-                type: 'success',
-                data: {
-                  liked: true,
-                  likesCount: 1,
-                },
+                liked: true,
+                likesCount: 1,
               },
             },
             unlikeSuccess: {
               summary: '좋아요 비활성화',
               description: '답글 좋아요가 비활성화된 경우',
               value: {
-                type: 'success',
-                data: {
-                  liked: false,
-                  likesCount: 0,
-                },
+                liked: false,
+                likesCount: 0,
               },
             },
           },
@@ -68,20 +62,14 @@ export const ToggleReplyLikeSwagger = () =>
               summary: '답글을 찾을 수 없음',
               description: '해당 ID의 답글이 존재하지 않는 경우',
               value: {
-                type: 'fail',
-                error: {
-                  message: 'reply_id를 찾을 수 없습니다.',
-                },
+                message: 'reply_id를 찾을 수 없습니다.',
               },
             },
             tokenNotFound: {
               summary: '사용자 토큰을 찾을 수 없음',
               description: '유효하지 않은 사용자 토큰인 경우',
               value: {
-                type: 'fail',
-                error: {
-                  message: 'create_user_token를 찾을 수 없습니다.',
-                },
+                message: 'create_user_token를 찾을 수 없습니다.',
               },
             },
           },

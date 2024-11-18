@@ -6,10 +6,7 @@ export class TransformInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<object> {
     return next.handle().pipe(
       map((data) => {
-        return {
-          type: 'success',
-          data: data || {},
-        };
+        return data;
       }),
     );
   }

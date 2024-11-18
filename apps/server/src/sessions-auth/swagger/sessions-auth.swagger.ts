@@ -9,10 +9,7 @@ export const AuthSessionsSwagger = () =>
       description: '세션 auth 요청 성공',
       schema: {
         example: {
-          type: 'success',
-          data: {
-            token: '21dad221-f42c-4edf-b1ca-e63e2360f943',
-          },
+          token: '21dad221-f42c-4edf-b1ca-e63e2360f943',
         },
       },
     }),

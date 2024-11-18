@@ -27,17 +27,14 @@ export const DeleteQuestionSwagger = () =>
       description: '질문 삭제 성공',
       schema: {
         example: {
-          type: 'success',
-          data: {
-            question: {
-              question_id: 7,
-              create_user_token: '8d9a6b17-f4f6-47c2-b080-9abf792b4c76',
-              session_id: '672e1c17-dcd4-8010-927c-84369a530f29',
-              body: 'Nest와 Next는 다른건가요?',
-              closed: false,
-              pinned: false,
-              created_at: '2024-11-14T05:49:29.856Z',
-            },
+          question: {
+            question_id: 7,
+            create_user_token: '8d9a6b17-f4f6-47c2-b080-9abf792b4c76',
+            session_id: '672e1c17-dcd4-8010-927c-84369a530f29',
+            body: 'Nest와 Next는 다른건가요?',
+            closed: false,
+            pinned: false,
+            created_at: '2024-11-14T05:49:29.856Z',
           },
         },
       },

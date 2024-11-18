@@ -22,10 +22,7 @@ export const UploadImageSwagger = () =>
       description: '이미지 업로드 성공',
       schema: {
         example: {
-          type: 'success',
-          data: {
-            url: 'https://ask-it-static.kr.object.ncloudstorage.com/uploads/1731848073193-1000000618.jpg',
-          },
+          url: 'https://ask-it-static.kr.object.ncloudstorage.com/uploads/1731848073193-1000000618.jpg',
         },
       },
     }),

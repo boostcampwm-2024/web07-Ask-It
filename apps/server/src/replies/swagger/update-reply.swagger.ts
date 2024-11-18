@@ -8,7 +8,7 @@ export const UpdateReplySwagger = () =>
       status: 200,
       description: '답글 수정 성공',
       schema: {
-        example: { type: 'success', data: {} },
+        example: {  },
       },
     }),
     ApiResponse({
@@ -16,10 +16,7 @@ export const UpdateReplySwagger = () =>
       description: '답글 수정 권한 없음',
       schema: {
         example: {
-          type: 'success',
-          data: {
-            forbidden: true,
-          },
+          forbidden: true,
         },
       },
     }),

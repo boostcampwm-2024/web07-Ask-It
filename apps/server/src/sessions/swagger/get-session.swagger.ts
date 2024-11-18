@@ -9,8 +9,7 @@ export const GetSessionSwagger = () =>
       description: '세션 조회 성공',
       schema: {
         example: {
-          type: 'success',
-          data: [
+          sessionData: [
             {
               session_id: 'session1',
               title: 'Session 1',

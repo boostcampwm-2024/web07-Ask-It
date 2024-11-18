@@ -25,11 +25,8 @@ export const LoginSwagger = () =>
       description: '로그인 성공',
       schema: {
         example: {
-          type: 'success',
-          data: {
-            accessToken:
-              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1LCJuaWNrbmFtZSI6InVzZXIyIiwiZXhwaXJlZEF0IjoiMjAyNC0xMS0xOVQxOTowNzoxOC41ODdaIiwiaWF0IjoxNzMxNDM4NDQ0LCJleHAiOjE3MzE0MzkzNDR9.yqTC5TMMzfSiSiT1OGZCSjH7LjNZ4VPHSv5m_9VGGf4',
-          },
+          accessToken:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1LCJuaWNrbmFtZSI6InVzZXIyIiwiZXhwaXJlZEF0IjoiMjAyNC0xMS0xOVQxOTowNzoxOC41ODdaIiwiaWF0IjoxNzMxNDM4NDQ0LCJleHAiOjE3MzE0MzkzNDR9.yqTC5TMMzfSiSiT1OGZCSjH7LjNZ4VPHSv5m_9VGGf4',
         },
       },
     }),
@@ -38,14 +35,11 @@ export const LoginSwagger = () =>
       description: '잘못된 요청 (유효성 검사 실패)',
       schema: {
         example: {
-          type: 'fail',
-          error: {
-            messages: [
-              '올바른 이메일 형식이 아닙니다.',
-              '이메일은 필수 입력 항목입니다.',
-              '비밀번호는 필수 입력 항목입니다.',
-            ],
-          },
+          messages: [
+            '올바른 이메일 형식이 아닙니다.',
+            '이메일은 필수 입력 항목입니다.',
+            '비밀번호는 필수 입력 항목입니다.',
+          ],
         },
       },
     }),
@@ -54,10 +48,7 @@ export const LoginSwagger = () =>
       description: '인증 실패',
       schema: {
         example: {
-          type: 'fail',
-          error: {
-            message: '이메일 또는 비밀번호가 일치하지 않습니다.',
-          },
+          message: '이메일 또는 비밀번호가 일치하지 않습니다.',
         },
       },
     }),
@@ -72,10 +63,7 @@ export const TokenRefreshSwagger = () =>
       description: '토큰 갱신 성공',
       schema: {
         example: {
-          type: 'success',
-          data: {
-            accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-          },
+          accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
         },
       },
     }),
@@ -84,10 +72,7 @@ export const TokenRefreshSwagger = () =>
       description: 'Refresh Token 만료 또는 유효하지 않음',
       schema: {
         example: {
-          type: 'fail',
-          error: {
-            message: 'Refresh token이 만료되었습니다.',
-          },
+          message: 'Refresh token이 만료되었습니다.',
         },
       },
     }),
@@ -101,10 +86,7 @@ export const LogoutSwagger = () =>
       description: '로그아웃 성공',
       schema: {
         example: {
-          type: 'success',
-          data: {
-            message: '로그아웃 되었습니다.',
-          },
+          message: '로그아웃 되었습니다.',
         },
       },
     }),

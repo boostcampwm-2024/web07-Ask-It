@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
-import { CreateQuestionDto } from './dto/create-qestion.dto';
+import { CreateQuestionDto } from './dto/create-question.dto';
 
 import { DatabaseException, ResourceNotFoundException } from '@common/exceptions/resource.exception';
 import { PRISMA_ERROR_CODE } from '@prisma-alias/prisma.error';

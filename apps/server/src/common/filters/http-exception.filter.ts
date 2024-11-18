@@ -15,18 +15,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
       const errorMessages = typeof message === 'string' ? [message] : message;
 
       return response.status(status).json({
-        type: 'fail',
-        error: {
-          messages: errorMessages,
-        },
+        messages: errorMessages,
       });
     }
 
     return response.status(status).json({
-      type: 'fail',
-      error: {
-        message: exception.message,
-      },
+      message: exception.message,
     });
   }
 }

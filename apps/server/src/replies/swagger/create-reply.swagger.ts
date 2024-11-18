@@ -9,11 +9,8 @@ export const CreateReplySwagger = () =>
       description: '답글 생성 성공',
       schema: {
         example: {
-          type: 'success',
-          data: {
-            reply_id: '생성한 reply의 id',
-            is_host: true,
-          },
+          reply_id: '생성한 reply의 id',
+          is_host: true,
         },
       },
     }),
