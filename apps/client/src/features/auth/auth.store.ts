@@ -1,7 +1,5 @@
 import { create } from 'zustand';
 
-import { refresh } from '@/features/auth/auth.api';
-
 interface AuthStore {
   accessToken: string | null;
   isLogin: () => boolean;
@@ -15,8 +13,3 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   setAccessToken: (accessToken) => set({ accessToken }),
   clearAccessToken: () => set({ accessToken: null }),
 }));
-
-refresh().then((res) => {
-  if (res.type === 'success')
-    useAuthStore.getState().setAccessToken(res.data.accessToken);
-});
