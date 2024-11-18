@@ -12,8 +12,7 @@ import { UpdateReplyBodyDto } from './dto/update-reply.dto';
 export class RepliesRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createReply(data: CreateReplyDto) {
-    const { questionId, token: createUserToken, sessionId, body } = data;
+  async createReply({ questionId, token: createUserToken, sessionId, body }: CreateReplyDto) {
     const replyData = {
       questionId,
       createUserToken,
