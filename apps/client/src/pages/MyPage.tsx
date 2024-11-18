@@ -18,15 +18,15 @@ function MyPage() {
         <div className='flex shrink grow basis-0 flex-col items-start justify-start gap-4 self-stretch overflow-y-auto px-8 py-2'>
           {sessions?.map((session) => (
             <SessionRecord
-              key={session.session_id}
-              sessionId={session.session_id}
+              key={session.sessionId}
+              sessionId={session.sessionId}
               sessionName={session.title}
               closed={session.expired}
               createdAt={
                 new Date(
-                  session.created_at.year,
-                  session.created_at.month - 1,
-                  session.created_at.date,
+                  session.createdAt.year,
+                  session.createdAt.month - 1,
+                  session.createdAt.date,
                 )
               }
             />

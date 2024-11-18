@@ -8,9 +8,9 @@ export interface CreateSessionResponseDTO {
 
 export interface GetSessionsResponseDTO {
   sessionData: Array<{
-    session_id: string;
+    sessionId: string;
     title: string;
-    created_at: {
+    createdAt: {
       year: number;
       month: number;
       date: number;
