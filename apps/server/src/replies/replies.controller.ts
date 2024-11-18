@@ -4,7 +4,7 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { DeleteReplyDto } from './dto/delete-reply.dto';
 import { ToggleReplyLikeDto } from './dto/toggle-reply-like.dto';
-import { UpdateReplyDto } from './dto/update-reply.dto';
+import { UpdateReplyBodyDto } from './dto/update-reply.dto';
 import { ReplyExistenceGuard } from './guards/reply-existence.guard';
 import { ReplyOwnershipGuard } from './guards/reply-ownership.guard';
 import { RepliesService } from './replies.service';
@@ -27,36 +27,35 @@ export class RepliesController {
   @ApiBody({ type: CreateReplyDto })
   @UseGuards(SessionTokenValidationGuard)
   async create(@Body() createReplyDto: CreateReplyDto) {
-    const [reply_id, is_host] = await Promise.all([
+    const [reply, isHost] = await Promise.all([
       this.repliesService.createReply(createReplyDto),
-      this.repliesService.validateHost(createReplyDto.session_id, createReplyDto.create_user_token),
+      this.repliesService.validateHost(createReplyDto.sessionId, createReplyDto.token),
     ]);
-    return { reply_id, is_host };
+    return { reply: { ...reply, isHost } };
   }
 
-  @Patch()
+  @Patch(':replyId/body')
   @UpdateReplySwagger()
-  @ApiBody({ type: UpdateReplyDto })
+  @ApiBody({ type: UpdateReplyBodyDto })
   @UseGuards(SessionTokenValidationGuard, ReplyExistenceGuard, ReplyOwnershipGuard)
-  async update(@Body() updateReplyDto: UpdateReplyDto) {
-    await this.repliesService.updateReply(updateReplyDto);
-    return {};
+  async update(@Param('replyId', ParseIntPipe) replyId: number, @Body() updateReplyBodyDto: UpdateReplyBodyDto) {
+    const updatedReply = await this.repliesService.updateBody(replyId, updateReplyBodyDto);
+    return { reply: updatedReply };
   }
 
-  @Delete()
+  @Delete(':replyId')
   @DeleteReplySwagger()
-  @ApiBody({ type: DeleteReplyDto })
   @UseGuards(SessionTokenValidationGuard, ReplyExistenceGuard, ReplyOwnershipGuard)
-  async delete(@Body() deleteReplyDto: DeleteReplyDto) {
-    await this.repliesService.deleteReply(deleteReplyDto);
+  async delete(@Param('replyId', ParseIntPipe) replyId: number) {
+    await this.repliesService.deleteReply(replyId);
     return {};
   }
 
-  @Post(':id/likes')
+  @Post(':replyId/likes')
   @ToggleReplyLikeSwagger()
   @UseGuards(SessionTokenValidationGuard)
-  async toggleLike(@Param('id', ParseIntPipe) replyId: number, @Body() toggleReplyLikeDto: ToggleReplyLikeDto) {
-    const { liked } = await this.repliesService.toggleLike(replyId, toggleReplyLikeDto.create_user_token);
+  async toggleLike(@Param('replyId', ParseIntPipe) replyId: number, @Body() toggleReplyLikeDto: ToggleReplyLikeDto) {
+    const { liked } = await this.repliesService.toggleLike(replyId, toggleReplyLikeDto.token);
     const likesCount = await this.repliesService.getLikesCount(replyId);
     return { liked, likesCount };
   }

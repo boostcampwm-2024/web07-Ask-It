@@ -11,9 +11,9 @@ export const GetSessionSwagger = () =>
         example: {
           sessionData: [
             {
-              session_id: 'session1',
+              sessionId: 'session1',
               title: 'Session 1',
-              created_at: {
+              createdAt: {
                 year: 2024,
                 month: 11,
                 day: 1,
@@ -21,9 +21,9 @@ export const GetSessionSwagger = () =>
               expired: true,
             },
             {
-              session_id: 'session2',
+              sessionId: 'session2',
               title: 'Session 2',
-              created_at: {
+              createdAt: {
                 year: 2024,
                 month: 11,
                 day: 5,

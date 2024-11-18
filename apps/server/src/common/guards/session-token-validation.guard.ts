@@ -12,25 +12,25 @@ export class SessionTokenValidationGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
-    const session_id = request.body?.session_id || request.query?.session_id;
-    const create_user_token = request.body?.create_user_token || request.query?.create_user_token;
+    const sessionId = request.body?.sessionId || request.query?.sessionId;
+    const token = request.body?.token || request.query?.token;
 
-    if (!session_id || !create_user_token) {
+    if (!sessionId || !token) {
       throw new ForbiddenException('세션 ID와 사용자 토큰이 필요합니다.');
     }
 
-    const session = await this.sessionsRepository.findById(session_id);
+    const session = await this.sessionsRepository.findById(sessionId);
     if (!session) {
       throw new ForbiddenException('세션이 존재하지 않습니다.');
     }
 
     const currentTime = new Date();
-    if (session.expired_at && session.expired_at < currentTime) {
+    if (session.expiredAt && session.expiredAt < currentTime) {
       throw new ForbiddenException('세션이 만료되었습니다.');
     }
 
-    const token = await this.sessionsAuthRepository.findByToken(create_user_token);
-    if (!token || token.session_id !== session_id) {
+    const userSessionToken = await this.sessionsAuthRepository.findByToken(token);
+    if (!userSessionToken || userSessionToken.sessionId !== sessionId) {
       throw new ForbiddenException('해당 세션에 접근할 권한이 없습니다.');
     }
 

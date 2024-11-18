@@ -3,7 +3,7 @@ import { IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-va
 
 export class CreateSessionDto {
   @IsOptional()
-  session_id: string;
+  sessionId: string;
 
   @ApiProperty({
     example: 'temporary title',

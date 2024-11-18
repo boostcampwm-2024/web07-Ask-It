@@ -47,8 +47,8 @@ export class QuestionsController {
   @Get()
   @GetQuestionSwagger()
   async getQuestionsBySession(@Query() getQuestionDto: GetQuestionDto) {
-    const questions = await this.questionsService.getQuestionsBySession(getQuestionDto);
-    return { questions: questions };
+    const [questions, isHost] = await this.questionsService.getQuestionsBySession(getQuestionDto);
+    return { questions, isHost };
   }
 
   @Post()
@@ -56,8 +56,8 @@ export class QuestionsController {
   @ApiBody({ type: CreateQuestionDto })
   @UseGuards(SessionTokenValidationGuard)
   async createQuestion(@Body() createQuestionDto: CreateQuestionDto) {
-    const question = await this.questionsService.createQuestion(createQuestionDto);
-    return { question: question };
+    const createdQuestion = await this.questionsService.createQuestion(createQuestionDto);
+    return { question: createdQuestion };
   }
 
   @Patch(':questionId/body')
@@ -65,12 +65,12 @@ export class QuestionsController {
   @ApiBody({ type: UpdateQuestionBodyDto })
   @UseGuards(SessionTokenValidationGuard, QuestionExistenceGuard, QuestionOwnershipGuard)
   async updateQuestionBody(
-    @Param('questionId', ParseIntPipe) question_id: number,
+    @Param('questionId', ParseIntPipe) questionId: number,
     @Body() updateQuestionBodyDto: UpdateQuestionBodyDto,
     @Req() req: any,
   ) {
     const updatedQuestion = await this.questionsService.updateQuestionBody(
-      question_id,
+      questionId,
       updateQuestionBodyDto,
       req.question,
     );
@@ -80,8 +80,8 @@ export class QuestionsController {
   @Delete(':questionId')
   @DeleteQuestionSwagger()
   @UseGuards(SessionTokenValidationGuard, QuestionExistenceGuard, QuestionOwnershipGuard)
-  async deleteQuestion(@Param('questionId', ParseIntPipe) question_id: number, @Req() req: any) {
-    const deletedQuestion = await this.questionsService.deleteQuestion(question_id, req.question);
+  async deleteQuestion(@Param('questionId', ParseIntPipe) questionId: number, @Req() req: any) {
+    const deletedQuestion = await this.questionsService.deleteQuestion(questionId, req.question);
     return { question: deletedQuestion };
   }
 
@@ -90,10 +90,10 @@ export class QuestionsController {
   @ApiBody({ type: UpdateQuestionPinnedDto })
   @UseGuards(SessionTokenValidationGuard, QuestionExistenceGuard)
   async updateQuestionPinned(
-    @Param('questionId', ParseIntPipe) question_id: number,
+    @Param('questionId', ParseIntPipe) questionId: number,
     @Body() updateQuestionPinnedDto: UpdateQuestionPinnedDto,
   ) {
-    const updatedQuestion = await this.questionsService.updateQuestionPinned(question_id, updateQuestionPinnedDto);
+    const updatedQuestion = await this.questionsService.updateQuestionPinned(questionId, updateQuestionPinnedDto);
     return { question: updatedQuestion };
   }
 
@@ -102,10 +102,10 @@ export class QuestionsController {
   @ApiBody({ type: UpdateQuestionClosedDto })
   @UseGuards(SessionTokenValidationGuard, QuestionExistenceGuard)
   async updateQuestionClosed(
-    @Param('questionId', ParseIntPipe) question_id: number,
+    @Param('questionId', ParseIntPipe) questionId: number,
     @Body() updateQuestionClosedDto: UpdateQuestionClosedDto,
   ) {
-    const updatedQuestion = await this.questionsService.updateQuestionClosed(question_id, updateQuestionClosedDto);
+    const updatedQuestion = await this.questionsService.updateQuestionClosed(questionId, updateQuestionClosedDto);
     return { question: updatedQuestion };
   }
 
@@ -116,7 +116,7 @@ export class QuestionsController {
     @Param('questionId', ParseIntPipe) questionId: number,
     @Body() toggleQuestionLikeDto: ToggleQuestionLikeDto,
   ) {
-    const { liked } = await this.questionsService.toggleLike(questionId, toggleQuestionLikeDto.create_user_token);
+    const { liked } = await this.questionsService.toggleLike(questionId, toggleQuestionLikeDto.token);
     const likesCount = await this.questionsService.getLikesCount(questionId);
     return { liked, likesCount };
   }

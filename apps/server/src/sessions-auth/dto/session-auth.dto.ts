@@ -8,7 +8,7 @@ export class SessionAuthDto {
     required: true,
   })
   @IsNotEmpty()
-  session_id: string;
+  sessionId: string;
 
   @ApiProperty({
     example: 'wer8sdf8xcv8cxv8cxv89',

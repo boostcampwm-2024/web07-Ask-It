@@ -8,22 +8,22 @@ import { PrismaService } from '@prisma-alias/prisma.service';
 export class SessionsAuthRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async generateToken(user_id: number | null, session_id: string) {
+  async generateToken(userId: number | null, sessionId: string) {
     const newUserSessionToken = await this.prisma.userSessionToken.create({
       data: {
-        session_id: session_id,
-        user_id: user_id ? user_id : null,
+        sessionId,
+        userId: userId ? userId : null,
         token: uuid4(),
       },
     });
     return newUserSessionToken.token;
   }
 
-  async findTokenByUserId(user_id: number, session_id: string) {
+  async findTokenByUserId(userId: number, sessionId: string) {
     const record = await this.prisma.userSessionToken.findFirst({
       where: {
-        user_id: user_id,
-        session_id: session_id,
+        userId,
+        sessionId,
       },
       select: {
         token: true,
@@ -31,12 +31,12 @@ export class SessionsAuthRepository {
     });
     return record?.token || null;
   }
-  async findTokenByToken(session_id: string, token: string) {
+  async findTokenByToken(sessionId: string, token: string) {
     const record = await this.prisma.userSessionToken.findFirst({
       where: {
-        token: token,
-        session_id: session_id,
-        user_id: null,
+        token,
+        sessionId,
+        userId: null,
       },
       select: {
         token: true,
@@ -49,7 +49,7 @@ export class SessionsAuthRepository {
     try {
       return await this.prisma.userSessionToken.findFirst({
         where: {
-          token: token,
+          token,
         },
       });
     } catch (error) {
@@ -61,36 +61,36 @@ export class SessionsAuthRepository {
     try {
       const record = await this.prisma.userSessionToken.findFirst({
         where: {
-          token: token,
+          token,
         },
         select: {
-          user_id: true,
+          userId: true,
         },
       });
-      return record?.user_id || null;
+      return record?.userId || null;
     } catch (error) {
       throw DatabaseException.read('sessions-auth');
     }
   }
 
-  async findTokenByUserIdAndToken(user_id: number, session_id: string, token: string) {
+  async findTokenByUserIdAndToken(userId: number, sessionId: string, token: string) {
     const record = await this.prisma.userSessionToken.findFirst({
       where: {
-        token: token,
-        session_id: session_id,
-        user_id: user_id,
+        token,
+        sessionId,
+        userId,
       },
       select: {
         token: true,
       },
     });
-    if (record === null) return await this.findTokenByUserId(user_id, session_id);
+    if (record === null) return await this.findTokenByUserId(userId, sessionId);
     return record?.token || null;
   }
-  async findByIdAndSession(reply_id: number, session_id: string) {
+  async findByIdAndSession(replyId: number, sessionId: string) {
     try {
       return await this.prisma.reply.findUnique({
-        where: { reply_id: reply_id, session_id: session_id },
+        where: { replyId, sessionId },
       });
     } catch (error) {
       throw DatabaseException.read('reply');

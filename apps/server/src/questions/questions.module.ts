@@ -8,10 +8,10 @@ import { SessionTokenModule } from '@common/guards/session-token.module';
 import { PrismaModule } from '@prisma-alias/prisma.module';
 import { QuestionExistenceGuard } from '@questions/guards/question-existence.guard';
 import { QuestionOwnershipGuard } from '@questions/guards/question-ownership.guard';
-
+import { RepliesRepository } from '@replies/replies.repository';
 @Module({
   imports: [PrismaModule, SessionTokenModule],
   controllers: [QuestionsController],
-  providers: [QuestionsService, QuestionsRepository, QuestionExistenceGuard, QuestionOwnershipGuard],
+  providers: [QuestionsService, QuestionsRepository, QuestionExistenceGuard, QuestionOwnershipGuard, RepliesRepository],
 })
 export class QuestionsModule {}

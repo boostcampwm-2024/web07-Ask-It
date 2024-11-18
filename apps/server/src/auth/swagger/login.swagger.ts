@@ -57,7 +57,7 @@ export const LoginSwagger = () =>
 export const TokenRefreshSwagger = () =>
   applyDecorators(
     ApiOperation({ summary: 'Access Token 갱신' }),
-    ApiCookieAuth('refresh_token'),
+    ApiCookieAuth('refreshToken'),
     ApiResponse({
       status: 200,
       description: '토큰 갱신 성공',

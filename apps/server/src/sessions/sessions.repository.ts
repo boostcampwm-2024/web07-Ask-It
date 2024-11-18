@@ -17,10 +17,10 @@ export class SessionRepository {
     }
   }
 
-  async findById(session_id: string) {
+  async findById(sessionId: string) {
     try {
       return await this.prisma.session.findUnique({
-        where: { session_id },
+        where: { sessionId },
       });
     } catch (error) {
       throw DatabaseException.read('session');
@@ -30,20 +30,20 @@ export class SessionRepository {
   async getSessionsById(userId: number) {
     try {
       const userSessions = await this.prisma.userSessionToken.findMany({
-        where: { user_id: userId },
+        where: { userId },
         select: {
-          session_id: true,
+          sessionId: true,
         },
       });
-      const sessionIds = userSessions.map((session) => session.session_id);
+      const sessionIds = userSessions.map((session) => session.sessionId);
 
       const sessions = await this.prisma.session.findMany({
-        where: { session_id: { in: sessionIds } },
+        where: { sessionId: { in: sessionIds } },
         select: {
-          session_id: true,
+          sessionId: true,
           title: true,
-          expired_at: true,
-          created_at: true,
+          expiredAt: true,
+          createdAt: true,
         },
       });
       return sessions;
@@ -55,7 +55,7 @@ export class SessionRepository {
   async findBySessionIdAndUser(sessionId: string, userId: number) {
     try {
       return await this.prisma.session.findFirst({
-        where: { session_id: sessionId, create_user_id: userId },
+        where: { sessionId, createUserId: userId },
       });
     } catch (error) {
       throw DatabaseException.read('session');

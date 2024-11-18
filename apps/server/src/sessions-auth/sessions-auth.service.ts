@@ -7,20 +7,20 @@ import { SessionsAuthRepository } from './sessions-auth.repository';
 export class SessionsAuthService {
   constructor(private readonly sessionsAuthRepository: SessionsAuthRepository) {}
 
-  async validateOrCreateToken(data: SessionAuthDto, user_id: number | null) {
-    const { session_id, token } = data;
+  async validateOrCreateToken(data: SessionAuthDto, userId: number | null) {
+    const { sessionId, token } = data;
     if (!token) {
       const result =
-        user_id === null
-          ? await this.sessionsAuthRepository.generateToken(user_id, session_id)
-          : await this.sessionsAuthRepository.findTokenByUserId(user_id, session_id);
-      return result ?? (await this.sessionsAuthRepository.generateToken(user_id, session_id));
+        userId === null
+          ? await this.sessionsAuthRepository.generateToken(userId, sessionId)
+          : await this.sessionsAuthRepository.findTokenByUserId(userId, sessionId);
+      return result ?? (await this.sessionsAuthRepository.generateToken(userId, sessionId));
     } else {
       const result =
-        user_id === null
-          ? await this.sessionsAuthRepository.findTokenByToken(session_id, token)
-          : await this.sessionsAuthRepository.findTokenByUserIdAndToken(user_id, session_id, token);
-      return result ?? (await this.sessionsAuthRepository.generateToken(user_id, session_id));
+        userId === null
+          ? await this.sessionsAuthRepository.findTokenByToken(sessionId, token)
+          : await this.sessionsAuthRepository.findTokenByUserIdAndToken(userId, sessionId, token);
+      return result ?? (await this.sessionsAuthRepository.generateToken(userId, sessionId));
     }
   }
 }

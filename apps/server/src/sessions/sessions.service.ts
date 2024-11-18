@@ -11,25 +11,25 @@ export class SessionsService {
   constructor(private readonly sessionRepository: SessionRepository) {}
 
   async create(data: CreateSessionDto, userId: number) {
-    const expired_at = new Date(Date.now() + SESSION_EXPIRATION_TIME);
+    const expiredAt = new Date(Date.now() + SESSION_EXPIRATION_TIME);
 
     const sessionCreateData: SessionCreateData = {
       ...data,
-      expired_at: expired_at,
+      expiredAt: expiredAt,
       user: {
-        connect: { user_id: userId },
+        connect: { userId },
       },
     };
 
     const createdSession = await this.sessionRepository.create(sessionCreateData);
-    return { sessionId: createdSession.session_id };
+    return { sessionId: createdSession.sessionId };
   }
 
   async getSessionsById(userId: number) {
     const sessionData = await this.sessionRepository.getSessionsById(userId);
 
     const transformedSessions = sessionData.map((session) => {
-      const createdDate = new Date(session.created_at);
+      const createdDate = new Date(session.createdAt);
       const formattedCreatedAt = {
         year: createdDate.getFullYear(),
         month: createdDate.getMonth() + 1,
@@ -37,10 +37,10 @@ export class SessionsService {
       };
 
       return {
-        session_id: session.session_id,
+        sessionId: session.sessionId,
         title: session.title,
-        created_at: formattedCreatedAt,
-        expired: session.expired_at < new Date(),
+        createdAt: formattedCreatedAt,
+        expired: session.expiredAt < new Date(),
       };
     });
     return transformedSessions;

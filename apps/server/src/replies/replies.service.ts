@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { Reply } from '@prisma/client';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { DeleteReplyDto } from './dto/delete-reply.dto';
-import { UpdateReplyDto } from './dto/update-reply.dto';
+import { UpdateReplyBodyDto } from './dto/update-reply.dto';
 import { RepliesRepository } from './replies.repository';
 
 import { SessionsService } from '@sessions/sessions.service';
@@ -17,15 +18,25 @@ export class RepliesService {
   ) {}
 
   async createReply(data: CreateReplyDto) {
-    return await this.repliesRepository.createReply(data);
+    const {replyId, body, createdAt, createUserTokenEntity} =  await this.repliesRepository.createReply(data);
+    return { 
+      replyId,
+      body,
+      createdAt,
+      isOwner: true,
+      likesCount: 0,
+      liked: false,
+      nickname: createUserTokenEntity?.user?.nickname || '익명',
+    };
   }
 
-  async updateReply(data: UpdateReplyDto) {
-    return await this.repliesRepository.updateReply(data);
+  async updateBody(replyId:number, updateReplyBodyDto: UpdateReplyBodyDto) {
+    const {body} = updateReplyBodyDto;
+    return await this.repliesRepository.updateBody(replyId, body);
   }
 
-  async deleteReply(data: DeleteReplyDto) {
-    return await this.repliesRepository.deleteReply(data);
+  async deleteReply(replyId: number) {
+    return await this.repliesRepository.deleteReply(replyId);
   }
 
   async validateHost(sessionId: string, createUserToken: string) {
@@ -36,7 +47,7 @@ export class RepliesService {
 
   async toggleLike(replyId: number, createUserToken: string) {
     const exist = await this.repliesRepository.findLike(replyId, createUserToken);
-    if (exist) await this.repliesRepository.deleteLike(exist.reply_like_id);
+    if (exist) await this.repliesRepository.deleteLike(exist.replyLikeId);
     else await this.repliesRepository.createLike(replyId, createUserToken);
     return { liked: !exist };
   }

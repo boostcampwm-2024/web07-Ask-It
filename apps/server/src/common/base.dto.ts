@@ -4,12 +4,12 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class BaseDto {
   @ApiProperty({
     example: 'user_token_123',
-    description: '질문을 작성한 사용자의 토큰',
+    description: '사용자의 토큰',
     required: true,
   })
   @IsString()
-  @IsNotEmpty({ message: '작성자 토큰은 필수입니다.' })
-  create_user_token: string;
+  @IsNotEmpty({ message: '사용자 토큰은 필수입니다.' })
+  token: string;
 
   @ApiProperty({
     example: 'session_456',
@@ -18,5 +18,5 @@ export class BaseDto {
   })
   @IsString()
   @IsNotEmpty({ message: '세션 ID는 필수입니다.' })
-  session_id: string;
+  sessionId: string;
 }

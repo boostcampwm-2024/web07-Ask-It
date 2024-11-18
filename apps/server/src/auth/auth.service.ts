@@ -57,7 +57,7 @@ export class AuthService implements OnModuleInit {
     const match = await bcrypt.compare(loginDto.password, user.password);
     if (!match) throw InvalidCredentialsException.invalidPassword();
 
-    return { userId: user.user_id, nickname: user.nickname };
+    return { userId: user.userId, nickname: user.nickname };
   }
 
   generateRefreshToken(userId: number, nickname: string) {

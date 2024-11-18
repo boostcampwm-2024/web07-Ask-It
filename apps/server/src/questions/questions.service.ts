@@ -4,6 +4,7 @@ import { Question } from '@prisma/client';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { GetQuestionDto } from './dto/get-question.dto';
 import { QuestionsRepository } from './questions.repository';
+import { RepliesRepository } from '@replies/replies.repository';
 
 import {
   UpdateQuestionBodyDto,
@@ -19,131 +20,143 @@ export class QuestionsService {
     private readonly questionRepository: QuestionsRepository,
     private readonly sessionRepository: SessionRepository,
     private readonly sessionAuthRepository: SessionsAuthRepository,
+    private readonly repliesRepository: RepliesRepository,
   ) {}
 
   async createQuestion(data: CreateQuestionDto) {
     const newQuestion = await this.questionRepository.create(data);
-
+    const { createUserTokenEntity, ...questionWithoutTokenEntity } = newQuestion;
+    const nickname = createUserTokenEntity?.user?.nickname || '익명';
     return {
-      question_id: newQuestion.question_id,
-      session_id: newQuestion.session_id,
-      body: newQuestion.body,
-      closed: newQuestion.closed,
-      pinned: newQuestion.pinned,
-      created_at: newQuestion.created_at,
+      ...questionWithoutTokenEntity,
       isOwner: true,
       likesCount: 0,
-      hasLiked: false,
-      nickname: newQuestion.createUserToken?.user?.nickname || '익명',
+      liked: false,
+      nickname,
       replies: [],
     };
   }
 
   async getQuestionsBySession(data: GetQuestionDto) {
-    const { sessionId, userToken } = data;
+    const { sessionId, token } = data;
     const questions = await this.questionRepository.findQuestionsWithDetails(sessionId);
+    const session = await this.sessionRepository.findById(sessionId);
+    const sessionHostToken = await this.sessionAuthRepository.findTokenByUserId(session.createUserId, sessionId);
+    const isHost = sessionHostToken === token;
 
     const mapLikesAndOwnership = <
       T extends {
-        create_user_token: string;
-        likes: { create_user_token: string }[];
-        createUserToken?: { user?: { nickname?: string } };
+        createUserToken: string;
+        likes: { createUserToken: string }[];
+        createUserTokenEntity?: { user?: { nickname?: string } };
       },
     >(
       item: T,
-      userToken: string,
+      token: string,
     ) => {
-      const isOwner = item.create_user_token === userToken;
+      const isOwner = item.createUserToken === token;
+      const isHost = item.createUserToken === sessionHostToken;
       const likesCount = item.likes.length;
-      const hasLiked = item.likes.some((like) => like.create_user_token === userToken);
-      const nickname = item.createUserToken?.user?.nickname || '익명';
+      const liked = item.likes.some((like) => like.createUserToken === token);
+      const nickname = item.createUserTokenEntity?.user?.nickname || '익명';
 
-      return { isOwner, likesCount, hasLiked, nickname };
+      return { isOwner, likesCount, liked, nickname, isHost };
     };
 
-    return questions.map((question) => {
-      const {
-        questionLikes,
-        replies,
-        question_id,
-        create_user_token,
-        body,
-        closed,
-        pinned,
-        created_at,
-        session_id,
-        createUserToken,
-      } = question;
+    return [
+      questions.map((question) => {
+        const {
+          questionLikes,
+          replies,
+          questionId,
+          createUserToken,
+          body,
+          closed,
+          pinned,
+          createdAt,
+          sessionId,
+          createUserTokenEntity,
+        } = question;
 
-      const questionInfo = {
-        question_id,
-        session_id,
-        body,
-        closed,
-        pinned,
-        created_at,
-        ...mapLikesAndOwnership({ create_user_token, likes: questionLikes, createUserToken }, userToken),
-      };
+        const questionInfo = {
+          questionId,
+          sessionId,
+          body,
+          closed,
+          pinned,
+          createdAt,
+          ...mapLikesAndOwnership({ createUserToken, likes: questionLikes, createUserTokenEntity }, token),
+        };
 
-      const replyInfo = replies.map((reply) => {
-        const { reply_id, create_user_token, body, created_at, createUserToken, replyLikes } = reply;
+        const replyInfo = replies.map((reply) => {
+          const { replyId, createUserToken, body, createdAt, createUserTokenEntity, replyLikes } = reply;
+
+          return {
+            replyId,
+            body,
+            createdAt,
+            ...mapLikesAndOwnership({ createUserToken, likes: replyLikes, createUserTokenEntity }, token),
+          };
+        });
 
         return {
-          reply_id,
-          body,
-          created_at,
-          ...mapLikesAndOwnership({ create_user_token, likes: replyLikes, createUserToken }, userToken),
+          ...questionInfo,
+          replies: replyInfo,
         };
-      });
-
-      return {
-        ...questionInfo,
-        replies: replyInfo,
-      };
-    });
+      }),
+      isHost,
+    ];
   }
 
-  async updateQuestionBody(question_id: number, updateQuestionBodyDto: UpdateQuestionBodyDto, question: Question) {
+  async updateQuestionBody(questionId: number, updateQuestionBodyDto: UpdateQuestionBodyDto, question: Question) {
     const { body } = updateQuestionBodyDto;
-    if (question.closed) {
-      throw new ForbiddenException('이미 완료된 답변은 수정 할 수 없습니다.');
+    const isReplied = await this.repliesRepository.findReplyByQuestionId(questionId);
+    if (isReplied) {
+      throw new ForbiddenException('답변이 달린 질문은 수정할 수 없습니다.');
     }
-    return await this.questionRepository.updateBody(question_id, body);
+    if (question.closed) {
+      throw new ForbiddenException('이미 완료된 답변은 수정할 수 없습니다.');
+    }
+    return await this.questionRepository.updateBody(questionId, body);
   }
 
-  async deleteQuestion(question_id: number, question: Question) {
-    if (question.closed) {
-      throw new ForbiddenException('이미 완료된 답변은 삭제 할 수 없습니다.');
+  async deleteQuestion(questionId: number, question: Question) {
+    const isReplied = await this.repliesRepository.findReplyByQuestionId(questionId);
+    if (isReplied) {
+      throw new ForbiddenException('답변이 달린 질문은 삭제할 수 없습니다.');
     }
-    return await this.questionRepository.deleteQuestion(question_id);
+    if (question.closed) {
+      throw new ForbiddenException('이미 완료된 답변은 삭제할 수 없습니다.');
+    }
+    return await this.questionRepository.deleteQuestion(questionId);
   }
 
-  async updateQuestionPinned(question_id: number, updateQuestionPinnedDto: UpdateQuestionPinnedDto) {
-    const { session_id, create_user_token, pinned } = updateQuestionPinnedDto;
-    const session = await this.sessionRepository.findById(session_id);
-    const token = await this.sessionAuthRepository.findByToken(create_user_token);
-    if (token.user_id !== session.create_user_id) {
+  async updateQuestionPinned(questionId: number, updateQuestionPinnedDto: UpdateQuestionPinnedDto) {
+    const { sessionId, token, pinned } = updateQuestionPinnedDto;
+    const session = await this.sessionRepository.findById(sessionId);
+    const foundToken = await this.sessionAuthRepository.findByToken(token);
+    if (foundToken.userId !== session.createUserId) {
       throw new ForbiddenException('세션 생성자만 이 작업을 수행할 수 있습니다.');
     }
-    return await this.questionRepository.updatePinned(question_id, pinned);
+    return await this.questionRepository.updatePinned(questionId, pinned);
   }
 
-  async updateQuestionClosed(question_id: number, updateQuestionClosedDto: UpdateQuestionClosedDto) {
-    const { session_id, create_user_token, closed } = updateQuestionClosedDto;
+  async updateQuestionClosed(questionId: number, updateQuestionClosedDto: UpdateQuestionClosedDto) {
+    const { sessionId, token, closed } = updateQuestionClosedDto;
     if (!closed) {
       throw new ForbiddenException('이미 완료된 답변입니다.');
     }
-    const session = await this.sessionRepository.findById(session_id);
-    const token = await this.sessionAuthRepository.findByToken(create_user_token);
-    if (token.user_id !== session.create_user_id) {
+    const session = await this.sessionRepository.findById(sessionId);
+    const foundToken = await this.sessionAuthRepository.findByToken(token);
+    if (foundToken.userId !== session.createUserId) {
       throw new ForbiddenException('세션 생성자만 이 작업을 수행할 수 있습니다.');
     }
-    return await this.questionRepository.updateClosed(question_id, closed);
+    return await this.questionRepository.updateClosed(questionId, closed);
   }
 
   async toggleLike(questionId: number, createUserToken: string) {
     const exist = await this.questionRepository.findLike(questionId, createUserToken);
-    if (exist) await this.questionRepository.deleteLike(exist.question_like_id);
+    if (exist) await this.questionRepository.deleteLike(exist.questionLikeId);
     else await this.questionRepository.createLike(questionId, createUserToken);
     return { liked: !exist };
   }

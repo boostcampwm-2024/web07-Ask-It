@@ -7,7 +7,7 @@ import { AuthSessionsSwagger } from './swagger/sessions-auth.swagger';
 
 import { JwtPayloadInterceptor } from '@common/interceptors/jwt-payload.interceptor';
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
-@ApiTags('session-auth')
+@ApiTags('sessions-auth')
 @UseInterceptors(TransformInterceptor)
 @UseInterceptors(JwtPayloadInterceptor)
 @Controller('sessions-auth')
@@ -17,7 +17,7 @@ export class SessionsAuthController {
   @Get()
   @AuthSessionsSwagger()
   async checkToken(@Query() sessionAuthDto: SessionAuthDto, @Req() request: Request) {
-    const user_id = request['user']?.userId ? Number(request['user'].userId) : null;
-    return { token: await this.sessionsAuthService.validateOrCreateToken(sessionAuthDto, user_id) };
+    const userId = request['user']?.userId ? Number(request['user'].userId) : null;
+    return { token: await this.sessionsAuthService.validateOrCreateToken(sessionAuthDto, userId) };
   }
 }

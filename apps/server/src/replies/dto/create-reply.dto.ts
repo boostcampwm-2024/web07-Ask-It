@@ -13,7 +13,7 @@ export class CreateReplyDto extends BaseDto {
   @Transform(({ value }) => Number(value))
   @IsInt()
   @IsNotEmpty()
-  question_id: number;
+  questionId: number;
 
   @ApiProperty({
     example: '대지호님의 답변입니다!',

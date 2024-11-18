@@ -11,22 +11,22 @@ import { PrismaService } from '@prisma-alias/prisma.service';
 export class QuestionsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findById(question_id: number) {
+  async findById(questionId: number) {
     try {
       return await this.prisma.question.findUnique({
-        where: { question_id: question_id },
+        where: { questionId },
       });
     } catch (error) {
       throw DatabaseException.read('question');
     }
   }
 
-  async findByIdAndSession(question_id: number, session_id: string) {
+  async findByIdAndSession(questionId: number, sessionId: string) {
     try {
       return await this.prisma.question.findUnique({
         where: {
-          question_id,
-          session_id,
+          questionId,
+          sessionId,
         },
       });
     } catch (error) {
@@ -35,8 +35,11 @@ export class QuestionsRepository {
   }
 
   async create(data: CreateQuestionDto) {
+    const { sessionId, token: createUserToken, body } = data;
     const questionData = {
-      ...data,
+      createUserToken,
+      sessionId,
+      body,
       pinned: false,
       closed: false,
     };
@@ -44,7 +47,7 @@ export class QuestionsRepository {
       return await this.prisma.question.create({
         data: questionData,
         include: {
-          createUserToken: {
+          createUserTokenEntity: {
             select: {
               user: {
                 select: { nickname: true },
@@ -61,14 +64,14 @@ export class QuestionsRepository {
   async findQuestionsWithDetails(sessionId: string) {
     try {
       return await this.prisma.question.findMany({
-        where: { session_id: sessionId },
+        where: { sessionId },
         include: {
           questionLikes: {
             select: {
-              create_user_token: true,
+              createUserToken: true,
             },
           },
-          createUserToken: {
+          createUserTokenEntity: {
             select: {
               user: {
                 select: { nickname: true },
@@ -77,7 +80,7 @@ export class QuestionsRepository {
           },
           replies: {
             include: {
-              createUserToken: {
+              createUserTokenEntity: {
                 select: {
                   user: {
                     select: { nickname: true },
@@ -86,7 +89,7 @@ export class QuestionsRepository {
               },
               replyLikes: {
                 select: {
-                  create_user_token: true,
+                  createUserToken: true,
                 },
               },
             },
@@ -98,10 +101,10 @@ export class QuestionsRepository {
     }
   }
 
-  async updateBody(question_id: number, body: string) {
+  async updateBody(questionId: number, body: string) {
     try {
       return await this.prisma.question.update({
-        where: { question_id },
+        where: { questionId },
         data: { body },
       });
     } catch (error) {
@@ -109,20 +112,20 @@ export class QuestionsRepository {
     }
   }
 
-  async deleteQuestion(question_id: number) {
+  async deleteQuestion(questionId: number) {
     try {
       return await this.prisma.question.delete({
-        where: { question_id: question_id },
+        where: { questionId },
       });
     } catch (error) {
       throw DatabaseException.delete('question');
     }
   }
 
-  async updatePinned(question_id: number, pinned: boolean) {
+  async updatePinned(questionId: number, pinned: boolean) {
     try {
       return await this.prisma.question.update({
-        where: { question_id },
+        where: { questionId },
         data: { pinned },
       });
     } catch (error) {
@@ -130,10 +133,10 @@ export class QuestionsRepository {
     }
   }
 
-  async updateClosed(question_id: number, closed: boolean) {
+  async updateClosed(questionId: number, closed: boolean) {
     try {
       return await this.prisma.question.update({
-        where: { question_id },
+        where: { questionId },
         data: { closed },
       });
     } catch (error) {
@@ -145,8 +148,8 @@ export class QuestionsRepository {
     try {
       return await this.prisma.questionLike.findFirst({
         where: {
-          question_id: questionId,
-          create_user_token: createUserToken,
+          questionId,
+          createUserToken,
         },
       });
     } catch (error) {
@@ -158,8 +161,8 @@ export class QuestionsRepository {
     try {
       await this.prisma.questionLike.create({
         data: {
-          question_id: questionId,
-          create_user_token: createUserToken,
+          questionId,
+          createUserToken,
         },
       });
     } catch (error) {
@@ -167,8 +170,8 @@ export class QuestionsRepository {
         error instanceof PrismaClientKnownRequestError &&
         error.code === PRISMA_ERROR_CODE.FOREIGN_KEY_CONSTRAINT_VIOLATION
       ) {
-        if (error.message.includes('question_id')) throw new ResourceNotFoundException('question_id');
-        if (error.message.includes('create_user_token')) throw new ResourceNotFoundException('create_user_token');
+        if (error.message.includes('questionId')) throw new ResourceNotFoundException('questionId');
+        if (error.message.includes('createUserToken')) throw new ResourceNotFoundException('createUserToken');
       }
       throw DatabaseException.create('questionLike');
     }
@@ -177,7 +180,7 @@ export class QuestionsRepository {
   async deleteLike(questionLikeId: number) {
     try {
       await this.prisma.questionLike.delete({
-        where: { question_like_id: questionLikeId },
+        where: { questionLikeId },
       });
     } catch (error) {
       throw DatabaseException.delete('questionLike');
@@ -187,7 +190,7 @@ export class QuestionsRepository {
   async getLikesCount(questionId: number) {
     try {
       return await this.prisma.questionLike.count({
-        where: { question_id: questionId },
+        where: { questionId },
       });
     } catch (error) {
       throw DatabaseException.read('questionLike');

@@ -4,7 +4,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { DeleteReplyDto } from './dto/delete-reply.dto';
-import { UpdateReplyDto } from './dto/update-reply.dto';
+import { UpdateReplyBodyDto } from './dto/update-reply.dto';
 
 import { DatabaseException, ResourceNotFoundException } from '@common/exceptions/resource.exception';
 import { PRISMA_ERROR_CODE } from '@prisma-alias/prisma.error';
@@ -12,38 +12,49 @@ import { PRISMA_ERROR_CODE } from '@prisma-alias/prisma.error';
 @Injectable()
 export class RepliesRepository {
   constructor(private readonly prisma: PrismaService) {}
+
   async createReply(data: CreateReplyDto) {
+    const { questionId, token: createUserToken, sessionId, body } = data;
+    const replyData = {
+      questionId,
+      createUserToken,
+      sessionId,
+      body,
+    };
     try {
-      return (await this.prisma.reply.create({ data })).reply_id;
+      return await this.prisma.reply.create({
+        data: replyData,
+        include: {
+          createUserTokenEntity: {
+            select: {
+              user: {
+                select: { nickname: true },
+              },
+            },
+          },
+        },
+      });
     } catch (error) {
       throw DatabaseException.create('Reply');
     }
   }
 
-  async updateReply(data: UpdateReplyDto) {
+  async updateBody(replyId: number, body: string) {
     try {
-      return await this.prisma.reply.updateMany({
-        where: {
-          session_id: data.session_id,
-          question_id: data.question_id,
-          reply_id: data.reply_id,
-        },
-        data: {
-          body: data.body,
-        },
+      return await this.prisma.reply.update({
+        where: { replyId },
+        data: { body },
       });
     } catch (error) {
       throw DatabaseException.update('reply');
     }
   }
 
-  async deleteReply(data: DeleteReplyDto) {
+  async deleteReply(replyId: number) {
     try {
-      return await this.prisma.reply.deleteMany({
+      return await this.prisma.reply.delete({
         where: {
-          session_id: data.session_id,
-          question_id: data.question_id,
-          reply_id: data.reply_id,
+          replyId,
         },
       });
     } catch (error) {
@@ -51,10 +62,17 @@ export class RepliesRepository {
     }
   }
 
-  async findReplyByQuestionIdAndSession(reply_id: number, question_id: number, session_id: string) {
+  async findReplyByQuestionId(questionId: number) {
+    const replyExists = await this.prisma.reply.findFirst({
+      where: { questionId },
+    });
+    return !!replyExists;
+  }
+
+  async findReplyByIdAndSessionId(replyId: number, sessionId: string) {
     try {
       return await this.prisma.reply.findFirst({
-        where: { reply_id: reply_id, question_id: question_id, session_id: session_id },
+        where: { replyId, sessionId },
       });
     } catch (error) {
       throw DatabaseException.read('reply');
@@ -65,8 +83,8 @@ export class RepliesRepository {
     try {
       return await this.prisma.replyLike.findFirst({
         where: {
-          reply_id: replyId,
-          create_user_token: createUserToken,
+          replyId,
+          createUserToken,
         },
       });
     } catch (error) {
@@ -78,8 +96,8 @@ export class RepliesRepository {
     try {
       await this.prisma.replyLike.create({
         data: {
-          reply_id: replyId,
-          create_user_token: createUserToken,
+          replyId,
+          createUserToken,
         },
       });
     } catch (error) {
@@ -87,8 +105,8 @@ export class RepliesRepository {
         error instanceof PrismaClientKnownRequestError &&
         error.code === PRISMA_ERROR_CODE.FOREIGN_KEY_CONSTRAINT_VIOLATION
       ) {
-        if (error.message.includes('reply_id')) throw new ResourceNotFoundException('reply_id');
-        if (error.message.includes('create_user_token')) throw new ResourceNotFoundException('create_user_token');
+        if (error.message.includes('replyId')) throw new ResourceNotFoundException('replyId');
+        if (error.message.includes('createUserToken')) throw new ResourceNotFoundException('createUserToken');
       }
       throw DatabaseException.create('replyLike');
     }
@@ -97,7 +115,7 @@ export class RepliesRepository {
   async deleteLike(replyLikeId: number) {
     try {
       await this.prisma.replyLike.delete({
-        where: { reply_like_id: replyLikeId },
+        where: { replyLikeId },
       });
     } catch (error) {
       throw DatabaseException.delete('replyLike');
@@ -107,7 +125,7 @@ export class RepliesRepository {
   async getLikesCount(replyId: number) {
     try {
       return await this.prisma.replyLike.count({
-        where: { reply_id: replyId },
+        where: { replyId },
       });
     } catch (error) {
       throw DatabaseException.read('replyLike');
