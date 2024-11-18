@@ -8,7 +8,7 @@ export const UpdateReplySwagger = () =>
       status: 200,
       description: '답글 수정 성공',
       schema: {
-        example: {  },
+        example: {},
       },
     }),
     ApiResponse({

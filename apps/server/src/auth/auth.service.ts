@@ -1,11 +1,12 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersRepository } from '@users/users.repository';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuid4 } from 'uuid';
 
 import { LoginDto } from './dto/login.dto';
 import { InvalidCredentialsException, RefreshTokenException } from './exceptions/auth.exception';
+
+import { UsersRepository } from '@users/users.repository';
 
 interface RefreshTokenData {
   userId: number;

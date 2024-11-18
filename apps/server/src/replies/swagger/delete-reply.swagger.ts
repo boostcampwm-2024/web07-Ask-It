@@ -16,7 +16,7 @@ export const DeleteReplySwagger = () =>
       description: '답글 삭제 권한 없음',
       schema: {
         example: {
-          forbidden: true
+          forbidden: true,
         },
       },
     }),
