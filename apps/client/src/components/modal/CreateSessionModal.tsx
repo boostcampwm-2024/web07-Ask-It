@@ -18,7 +18,7 @@ function CreateSessionModal() {
   const navigate = useNavigate();
 
   const handleCreateSession = () =>
-    sessionName.length > 0 &&
+    sessionName.trim().length > 0 &&
     createSession({ title: sessionName }).then((res) => {
       closeModal();
       addToast({
@@ -45,7 +45,10 @@ function CreateSessionModal() {
         />
       </div>
       <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
-        <Button className='bg-indigo-600' onClick={handleCreateSession}>
+        <Button
+          className={`transition-colors duration-200 ${sessionName.trim().length > 0 ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
+          onClick={handleCreateSession}
+        >
           <div className='w-[150px] text-sm font-medium text-white'>
             세션 생성하기
           </div>
