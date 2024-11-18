@@ -6,8 +6,7 @@ import { MyPage } from '@/pages';
 export const Route = createFileRoute('/my')({
   component: MyPage,
   beforeLoad: async () => {
-    const { accessToken } = useAuthStore.getState();
-    if (!accessToken) {
+    if (!useAuthStore.getState().isLogin()) {
       // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw redirect({ to: '/' });
     }
