@@ -27,12 +27,6 @@
       },
       "plugins": ["react-hooks", "react-refresh"],
       "rules": {
-        "camelcase": [
-          "error",
-          {
-            "ignoreDestructuring": true
-          }
-        ],
         "react/react-in-jsx-scope": "off",
         "react/require-default-props": "off",
         "react-hooks/rules-of-hooks": "error",
