@@ -1,14 +1,12 @@
-import { SuccessDTO } from '@/shared';
-
 export interface CreateSessionRequestDTO {
   title: string;
 }
 
-export type CreateSessionResponseDTO = SuccessDTO<{
+export interface CreateSessionResponseDTO {
   sessionId: string;
-}>;
+}
 
-export type GetSessionsResponseDTO = SuccessDTO<{
+export interface GetSessionsResponseDTO {
   sessionData: Array<{
     session_id: string;
     title: string;
@@ -19,8 +17,8 @@ export type GetSessionsResponseDTO = SuccessDTO<{
     };
     expired: boolean;
   }>;
-}>;
+}
 
-export type GetSessionTokenResponseDTO = SuccessDTO<{
+export interface GetSessionTokenResponseDTO {
   token: string;
-}>;
+}

@@ -21,10 +21,7 @@ export function useSignInForm() {
   const handleLogin = async () => {
     try {
       const response = await login({ email, password });
-
-      if (response.type === 'success') {
-        setAccessToken(response.data.accessToken);
-      }
+      setAccessToken(response.accessToken);
     } catch (e) {
       if (isAxiosError(e) && e.response && 'error' in e.response.data) {
         if (e.response.status === 400) {

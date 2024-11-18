@@ -35,7 +35,7 @@ export const getSessionToken = (sessionId: string) => {
     .then((data) => {
       localStorage.setItem(
         'sessionTokens',
-        JSON.stringify({ ...tokens, [sessionId]: data.data.token }),
+        JSON.stringify({ ...tokens, [sessionId]: data.token }),
       );
       return data;
     });

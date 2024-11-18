@@ -8,8 +8,7 @@ export const Route = createRootRoute({
   beforeLoad: async () => {
     if (!useAuthStore.getState().isLogin())
       refresh().then((res) => {
-        if (res.type === 'success')
-          useAuthStore.getState().setAccessToken(res.data.accessToken);
+        useAuthStore.getState().setAccessToken(res.accessToken);
       });
   },
   component: () => (

@@ -28,7 +28,7 @@ function CreateSessionModal() {
       });
       navigate({
         to: '/session/$sessionId',
-        params: { sessionId: res.data.sessionId },
+        params: { sessionId: res.sessionId },
       });
     });
 

@@ -6,7 +6,7 @@ import { getSessions } from '@/features/session';
 function MyPage() {
   const { data } = useQuery({ queryKey: ['/sessions'], queryFn: getSessions });
 
-  const sessions = data?.data.sessionData;
+  const sessions = data?.sessionData;
 
   return (
     <div className='inline-flex h-full w-full items-center justify-center gap-4 overflow-hidden px-4 py-4 md:max-w-[1194px]'>
