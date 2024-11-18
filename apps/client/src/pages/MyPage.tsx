@@ -25,7 +25,7 @@ function MyPage() {
               createdAt={
                 new Date(
                   session.created_at.year,
-                  session.created_at.month,
+                  session.created_at.month - 1,
                   session.created_at.date,
                 )
               }
