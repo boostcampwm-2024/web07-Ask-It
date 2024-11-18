@@ -1,3 +1,5 @@
+import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
+import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 import {
   Body,
   Controller,
@@ -13,17 +15,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-
-import { CreateQuestionDto } from './dto/create-question.dto';
-import { GetQuestionDto } from './dto/get-question.dto';
-import { ToggleQuestionLikeDto } from './dto/toggle-question-like.dto';
-import { QuestionsService } from './questions.service';
-import { CreateQuestionSwagger } from './swagger/create-question.swagger';
-import { GetQuestionSwagger } from './swagger/get-question.swagger';
-import { ToggleQuestionLikeSwagger } from './swagger/toggle-question.swagger';
-
-import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
-import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 import {
   UpdateQuestionBodyDto,
   UpdateQuestionClosedDto,
@@ -38,6 +29,14 @@ import {
   UpdateQuestionPinnedSwagger,
 } from '@questions/swagger/update-question.swagger';
 
+import { CreateQuestionDto } from './dto/create-question.dto';
+import { GetQuestionDto } from './dto/get-question.dto';
+import { ToggleQuestionLikeDto } from './dto/toggle-question-like.dto';
+import { QuestionsService } from './questions.service';
+import { CreateQuestionSwagger } from './swagger/create-question.swagger';
+import { GetQuestionSwagger } from './swagger/get-question.swagger';
+import { ToggleQuestionLikeSwagger } from './swagger/toggle-question.swagger';
+
 @ApiTags('Questions')
 @UseInterceptors(TransformInterceptor)
 @Controller('questions')
@@ -46,6 +45,7 @@ export class QuestionsController {
 
   @Get()
   @GetQuestionSwagger()
+  @UseGuards(SessionTokenValidationGuard)
   async getQuestionsBySession(@Query() getQuestionDto: GetQuestionDto) {
     const [questions, isHost] = await this.questionsService.getQuestionsBySession(getQuestionDto);
     return { questions, isHost };
