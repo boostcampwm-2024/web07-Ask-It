@@ -1,4 +1,4 @@
-import { ResourceConflictException } from '../../common/exceptions/resource.exception';
+import { ResourceConflictException } from '@common/exceptions/resource.exception';
 
 export class UserConflictException extends ResourceConflictException {
   static duplicateField(field: string) {

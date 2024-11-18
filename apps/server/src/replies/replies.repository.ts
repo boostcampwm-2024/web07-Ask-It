@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
-import { DatabaseException, ResourceNotFoundException } from '../common/exceptions/resource.exception';
-import { PRISMA_ERROR_CODE } from '../prisma/prisma.error';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { DeleteReplyDto } from './dto/delete-reply.dto';
 import { UpdateReplyDto } from './dto/update-reply.dto';
+
+import { DatabaseException, ResourceNotFoundException } from '@common/exceptions/resource.exception';
+import { PRISMA_ERROR_CODE } from '@prisma-alias/prisma.error';
 
 @Injectable()
 export class RepliesRepository {

@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 
-import { ToggleQuestionLikeDto } from '../dto/toggle-question-like.dto';
+import { ToggleQuestionLikeDto } from '@questions/dto/toggle-question-like.dto';
 
 export const ToggleQuestionLikeSwagger = () =>
   applyDecorators(

@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuid4 } from 'uuid';
 
-import { PrismaService } from '../prisma/prisma.service';
-
 import { DatabaseException } from '@common/exceptions/resource.exception';
+import { PrismaService } from '@prisma-alias/prisma.service';
 
 @Injectable()
 export class SessionsAuthRepository {

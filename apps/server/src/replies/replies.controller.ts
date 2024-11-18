@@ -12,10 +12,9 @@ import { CreateReplySwagger } from './swagger/create-reply.swagger';
 import { DeleteReplySwagger } from './swagger/delete-reply.swagger';
 import { ToggleReplyLikeSwagger } from './swagger/toggle-reply.swagger';
 import { UpdateReplySwagger } from './swagger/update-reply.swagger';
-import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
 
-import { SessionTokenValidationGuard } from '@src/common/guards/session-token-validation.guard';
-import { QuestionExistenceGuard } from '@src/questions/guards/question-existence.guard';
+import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
+import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 
 @ApiTags('Replies')
 @UseInterceptors(TransformInterceptor)
@@ -29,7 +28,7 @@ export class RepliesController {
   @UseGuards(SessionTokenValidationGuard)
   async create(@Body() createReplyDto: CreateReplyDto) {
     const [reply_id, is_host] = await Promise.all([
-      this.repliesService.create(createReplyDto),
+      this.repliesService.createReply(createReplyDto),
       this.repliesService.validateHost(createReplyDto.session_id, createReplyDto.create_user_token),
     ]);
     return { reply_id, is_host };

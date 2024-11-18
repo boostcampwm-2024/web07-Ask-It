@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
-import { PRISMA_ERROR_CODE } from '../prisma/prisma.error';
-import { CreateQuestionDto } from './dto/create-question.dto';
+import { CreateQuestionDto } from './dto/create-qestion.dto';
 
 import { DatabaseException, ResourceNotFoundException } from '@common/exceptions/resource.exception';
+import { PRISMA_ERROR_CODE } from '@prisma-alias/prisma.error';
 import { PrismaService } from '@prisma-alias/prisma.service';
 
 @Injectable()
@@ -24,7 +24,10 @@ export class QuestionsRepository {
   async findByIdAndSession(question_id: number, session_id: string) {
     try {
       return await this.prisma.question.findUnique({
-        where: { question_id: question_id, session_id: session_id },
+        where: {
+          question_id,
+          session_id,
+        },
       });
     } catch (error) {
       throw DatabaseException.read('question');

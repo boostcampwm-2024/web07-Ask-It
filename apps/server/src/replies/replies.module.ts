@@ -3,10 +3,10 @@ import { Module } from '@nestjs/common';
 import { RepliesController } from './replies.controller';
 import { RepliesRepository } from './replies.repository';
 import { RepliesService } from './replies.service';
-import { PrismaModule } from '../prisma/prisma.module';
 
-import { SessionTokenModule } from '@src/common/guards/session-token.module';
-import { SessionsModule } from '@src/sessions/sessions.module';
+import { SessionTokenModule } from '@common/guards/session-token.module';
+import { PrismaModule } from '@prisma-alias/prisma.module';
+import { SessionsModule } from '@sessions/sessions.module';
 
 @Module({
   imports: [PrismaModule, SessionTokenModule, SessionsModule],

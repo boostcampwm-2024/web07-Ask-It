@@ -5,7 +5,8 @@ import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { LoginSwagger, LogoutSwagger, TokenRefreshSwagger } from './swagger/login.swagger';
-import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
+
+import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 
 @ApiTags('Auth')
 @UseInterceptors(TransformInterceptor)

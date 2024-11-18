@@ -5,8 +5,8 @@ import { DeleteReplyDto } from './dto/delete-reply.dto';
 import { UpdateReplyDto } from './dto/update-reply.dto';
 import { RepliesRepository } from './replies.repository';
 
-import { SessionsService } from '@src/sessions/sessions.service';
-import { SessionsAuthRepository } from '@src/sessions-auth/sessions-auth.repository';
+import { SessionsService } from '@sessions/sessions.service';
+import { SessionsAuthRepository } from '@sessions-auth/sessions-auth.repository';
 
 @Injectable()
 export class RepliesService {
@@ -16,16 +16,16 @@ export class RepliesService {
     private readonly sessionAuthRepository: SessionsAuthRepository,
   ) {}
 
-  async create(data: CreateReplyDto) {
-    return await this.repliesRepository.create(data);
+  async createReply(data: CreateReplyDto) {
+    return await this.repliesRepository.createReply(data);
   }
 
   async updateReply(data: UpdateReplyDto) {
-    this.repliesRepository.updateReply(data);
+    return await this.repliesRepository.updateReply(data);
   }
 
   async deleteReply(data: DeleteReplyDto) {
-    this.repliesRepository.deleteReply(data);
+    return await this.repliesRepository.deleteReply(data);
   }
 
   async validateHost(sessionId: string, createUserToken: string) {

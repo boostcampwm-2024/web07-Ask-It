@@ -19,11 +19,14 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@src/*": ["src/*"],
-      "@users/*": ["src/user/*"],
+      "@users/*": ["src/users/*"],
       "@sessions/*": ["src/sessions/*"],
       "@sessions-auth/*": ["src/sessions-auth/*"],
       "@questions/*": ["src/questions/*"],
+      "@replies/*": ["src/replies/*"],
       "@common/*": ["src/common/*"],
+      "@auth/*": ["src/auth/*"],
+      "@upload/*": ["src/upload/*"],
       "@prisma-alias/*": ["src/prisma/*"],
       "@main/*": ["src/main/*"]
     },

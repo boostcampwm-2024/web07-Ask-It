@@ -5,7 +5,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { EmailValidationDocs, NicknameValidationDocs } from './swagger/check-duplication.swagger';
 import { CreateUserSwagger } from './swagger/create-user.swagger';
 import { UsersService } from './users.service';
-import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
+
+import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 
 @ApiTags('Users')
 @UseInterceptors(TransformInterceptor)

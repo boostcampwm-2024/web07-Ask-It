@@ -6,7 +6,8 @@ import { CreateSessionDto } from './dto/create-session.dto';
 import { SessionsService } from './sessions.service';
 import { CreateSessionSwagger } from './swagger/create-session.swagger';
 import { GetSessionSwagger } from './swagger/get-session.swagger';
-import { TransformInterceptor } from '../common/interceptors/transform.interceptor';
+
+import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 
 @ApiTags('Sessions')
 @UseInterceptors(TransformInterceptor)
