@@ -17,7 +17,7 @@ export class SessionsAuthRepository {
         token: uuid4(),
       },
     });
-    return newUserSessionToken;
+    return newUserSessionToken.token;
   }
 
   async findTokenByUserId(user_id: number, session_id: string) {
