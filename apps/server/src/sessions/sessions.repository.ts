@@ -51,4 +51,14 @@ export class SessionRepository {
       throw DatabaseException.read('UserSessionToken');
     }
   }
+
+  async findBySessionIdAndUser(sessionId: string, userId: number) {
+    try {
+      return await this.prisma.session.findFirst({
+        where: { session_id: sessionId, create_user_id: userId },
+      });
+    } catch (error) {
+      throw DatabaseException.read('session');
+    }
+  }
 }

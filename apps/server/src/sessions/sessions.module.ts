@@ -10,5 +10,6 @@ import { PrismaModule } from '../prisma/prisma.module';
   imports: [PrismaModule, JwtModule.register({}), AuthModule],
   controllers: [SessionsController],
   providers: [SessionsService, SessionRepository],
+  exports: [SessionsService],
 })
 export class SessionsModule {}

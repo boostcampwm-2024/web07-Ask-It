@@ -58,6 +58,22 @@ export class SessionsAuthRepository {
     }
   }
 
+  async findUserByToken(token: string) {
+    try {
+      const record = await this.prisma.userSessionToken.findFirst({
+        where: {
+          token: token,
+        },
+        select: {
+          user_id: true,
+        },
+      });
+      return record?.user_id || null;
+    } catch (error) {
+      throw DatabaseException.read('sessions-auth');
+    }
+  }
+
   async findTokenByUserIdAndToken(user_id: number, session_id: string, token: string) {
     const record = await this.prisma.userSessionToken.findFirst({
       where: {
