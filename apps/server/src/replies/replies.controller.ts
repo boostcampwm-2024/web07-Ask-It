@@ -1,8 +1,5 @@
-import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
-import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 import { Body, Controller, Delete, Param, ParseIntPipe, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { QuestionExistenceGuard } from '@questions/guards/question-existence.guard';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { ToggleReplyLikeDto } from './dto/toggle-reply-like.dto';
@@ -14,6 +11,10 @@ import { CreateReplySwagger } from './swagger/create-reply.swagger';
 import { DeleteReplySwagger } from './swagger/delete-reply.swagger';
 import { ToggleReplyLikeSwagger } from './swagger/toggle-reply.swagger';
 import { UpdateReplySwagger } from './swagger/update-reply.swagger';
+
+import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
+import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
+import { QuestionExistenceGuard } from '@questions/guards/question-existence.guard';
 
 @ApiTags('Replies')
 @UseInterceptors(TransformInterceptor)

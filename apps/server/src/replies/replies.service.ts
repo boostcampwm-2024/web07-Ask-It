@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { SessionsService } from '@sessions/sessions.service';
-import { SessionsAuthRepository } from '@sessions-auth/sessions-auth.repository';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { UpdateReplyBodyDto } from './dto/update-reply.dto';
 import { RepliesRepository } from './replies.repository';
+
+import { SessionsService } from '@sessions/sessions.service';
+import { SessionsAuthRepository } from '@sessions-auth/sessions-auth.repository';
 
 @Injectable()
 export class RepliesService {
