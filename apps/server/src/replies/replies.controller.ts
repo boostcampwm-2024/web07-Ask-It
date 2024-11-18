@@ -2,10 +2,9 @@ import { SessionTokenValidationGuard } from '@common/guards/session-token-valida
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 import { Body, Controller, Delete, Param, ParseIntPipe, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { QuestionExistenceGuard } from '@src/questions/guards/question-existence.guard';
+import { QuestionExistenceGuard } from '@questions/guards/question-existence.guard';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
-import { DeleteReplyDto } from './dto/delete-reply.dto';
 import { ToggleReplyLikeDto } from './dto/toggle-reply-like.dto';
 import { UpdateReplyBodyDto } from './dto/update-reply.dto';
 import { ReplyExistenceGuard } from './guards/reply-existence.guard';

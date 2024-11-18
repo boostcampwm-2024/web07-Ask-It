@@ -1,4 +1,4 @@
-import { CreateSessionDto } from '../dto/create-session.dto';
+import { CreateSessionDto } from '@sessions/dto/create-session.dto';
 
 export interface SessionCreateData extends CreateSessionDto {
   expiredAt: Date;

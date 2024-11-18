@@ -15,7 +15,7 @@ export class SessionsService {
 
     const sessionCreateData: SessionCreateData = {
       ...data,
-      expiredAt: expiredAt,
+      expiredAt,
       user: {
         connect: { userId },
       },
