@@ -1,3 +1,4 @@
+import { useRouterState } from '@tanstack/react-router';
 import { isAxiosError } from 'axios';
 import { useState } from 'react';
 
@@ -6,6 +7,8 @@ import { useAuthStore } from '@/features/auth/auth.store';
 import { ValidationStatusWithMessage } from '@/shared';
 
 export function useSignInForm() {
+  const router = useRouterState();
+
   const { setAccessToken } = useAuthStore();
 
   const [email, setEmail] = useState('');
@@ -22,9 +25,9 @@ export function useSignInForm() {
     try {
       const response = await login({ email, password });
       setAccessToken(response.accessToken);
-      window.location.reload();
+      if (router.location.pathname.includes('session'))
+        window.location.reload();
     } catch (e) {
-      console.log(e);
       if (isAxiosError(e) && e.response) {
         if (e.response.status === 400) {
           setLoginFailed({
