@@ -1,8 +1,8 @@
-export interface CreateSessionRequestDTO {
+export interface PostSessionRequestDTO {
   title: string;
 }
 
-export interface CreateSessionResponseDTO {
+export interface PostSessionResponseDTO {
   sessionId: string;
 }
 

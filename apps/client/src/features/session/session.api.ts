@@ -1,17 +1,15 @@
 import axios from 'axios';
 
 import {
-  CreateSessionRequestDTO,
-  CreateSessionResponseDTO,
   GetSessionsResponseDTO,
   GetSessionTokenResponseDTO,
+  PostSessionRequestDTO,
+  PostSessionResponseDTO,
 } from '@/features/session/session.dto';
 
-export const createSession = (
-  createSessionRequestDTO: CreateSessionRequestDTO,
-) =>
+export const postSession = (body: PostSessionRequestDTO) =>
   axios
-    .post<CreateSessionResponseDTO>('/api/sessions', createSessionRequestDTO)
+    .post<PostSessionResponseDTO>('/api/sessions', body)
     .then((res) => res.data);
 
 export const getSessions = () =>
