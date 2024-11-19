@@ -9,6 +9,7 @@ import {
   Question,
   Reply,
 } from '@/features/session/qna';
+import { useToastStore } from '@/features/toast';
 
 interface ReplyItemProps {
   question: Question;
@@ -16,6 +17,8 @@ interface ReplyItemProps {
 }
 
 function ReplyItem({ question, reply }: ReplyItemProps) {
+  const { addToast } = useToastStore();
+
   const { sessionId, sessionToken, expired, updateReply } = useSessionStore();
 
   const { Modal, openModal } = useModal(
@@ -29,6 +32,11 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
       sessionId,
       token: sessionToken,
     }).then(() => {
+      addToast({
+        type: 'SUCCESS',
+        message: '답변이 성공적으로 삭제되었습니다.',
+        duration: 3000,
+      });
       updateReply(question.questionId, {
         ...reply,
         deleted: true,
@@ -43,6 +51,13 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
       sessionId,
       token: sessionToken,
     }).then(() => {
+      addToast({
+        type: 'SUCCESS',
+        message: reply.liked
+          ? '좋아요를 취소했습니다.'
+          : '답변에 좋아요를 눌렀습니다.',
+        duration: 3000,
+      });
       updateReply(question.questionId, {
         ...reply,
         likesCount: reply.likesCount + (reply.liked ? -1 : 1),
