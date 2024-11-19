@@ -7,22 +7,28 @@ import {
 } from 'react';
 
 export interface QnAContextProps {
-  selectedQuestion: number | null;
-  handleSelectQuestion: (questionId: number | null) => void;
+  selectedQuestionId: number | null;
+  handleSelectQuestionId: (questionId: number | null) => void;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const QnAContext = createContext<QnAContextProps | undefined>(undefined);
 
 export function QnAContextProvider({ children }: PropsWithChildren) {
-  const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
+  const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(
+    null,
+  );
 
-  const handleSelectQuestion = useCallback((questionId: number | null) => {
-    setSelectedQuestion(questionId);
+  const handleSelectQuestionId = useCallback((questionId: number | null) => {
+    setSelectedQuestionId(questionId);
   }, []);
 
   const context = useMemo(
-    () => ({ selectedQuestion, handleSelectQuestion }),
-    [selectedQuestion, handleSelectQuestion],
+    () => ({
+      selectedQuestionId,
+      handleSelectQuestionId,
+    }),
+    [selectedQuestionId, handleSelectQuestionId],
   );
 
   return <QnAContext.Provider value={context}>{children}</QnAContext.Provider>;

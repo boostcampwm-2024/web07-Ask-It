@@ -41,6 +41,7 @@ export class QuestionsService {
     const { sessionId, token } = data;
     const questions = await this.questionRepository.findQuestionsWithDetails(sessionId);
     const session = await this.sessionRepository.findById(sessionId);
+    const expired = session.expiredAt < new Date();
     const sessionHostToken = await this.sessionAuthRepository.findTokenByUserId(session.createUserId, sessionId);
     const isHost = sessionHostToken === token;
 
@@ -106,6 +107,7 @@ export class QuestionsService {
         };
       }),
       isHost,
+      expired,
     ];
   }
 

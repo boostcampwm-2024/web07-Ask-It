@@ -1,14 +1,19 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
-import { useAuthStore } from '@/features/auth';
+import { refresh, useAuthStore } from '@/features/auth';
 import { MyPage } from '@/pages';
 
 export const Route = createFileRoute('/my')({
   component: MyPage,
-  beforeLoad: async () => {
-    if (!useAuthStore.getState().isLogin()) {
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
-      throw redirect({ to: '/' });
-    }
+  beforeLoad: () => {
+    if (!useAuthStore.getState().isLogin())
+      refresh()
+        .then((res) => {
+          useAuthStore.getState().setAccessToken(res.accessToken);
+        })
+        .catch(() => {
+          // eslint-disable-next-line @typescript-eslint/no-throw-literal
+          throw redirect({ to: '/' });
+        });
   },
 });

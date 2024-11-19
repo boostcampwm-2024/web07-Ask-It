@@ -6,13 +6,16 @@ export interface QnASlice {
   questions: Question[];
   resetQuestions: () => void;
   addQuestion: (question: Question) => void;
-  updateQuestion: (question: Question) => void;
-  removeQuestion: (question: Question) => void;
-  upvoteQuestion: (question: Question) => void;
-  addReply: (reply: Reply) => void;
-  updateReply: (reply: Reply) => void;
-  removeReply: (reply: Reply) => void;
-  upvoteReply: (reply: Reply) => void;
+  updateQuestion: (
+    question: Partial<Omit<Question, 'questionId'>> & { questionId: number },
+  ) => void;
+  removeQuestion: (questionId: Question['questionId']) => void;
+  addReply: (questionId: number, reply: Reply) => void;
+  updateReply: (
+    questionId: number,
+    reply: Partial<Omit<Reply, 'replyId'>> & { replyId: number },
+  ) => void;
+  removeReply: (replyId: Reply['replyId']) => void;
 }
 
 export const createQnASlice: StateCreator<QnASlice, [], [], QnASlice> = (
@@ -26,58 +29,43 @@ export const createQnASlice: StateCreator<QnASlice, [], [], QnASlice> = (
     set((state) => ({
       ...state,
       questions: state.questions.map((q) =>
-        q.id === question.id ? question : q,
+        q.questionId === question.questionId ? { ...q, ...question } : q,
       ),
     })),
-  removeQuestion: (question) =>
+  removeQuestion: (questionId) =>
     set((state) => ({
       ...state,
-      questions: state.questions.filter((q) => q.id !== question.id),
+      questions: state.questions.filter((q) => q.questionId !== questionId),
     })),
-  upvoteQuestion: (question) =>
+  addReply: (questionId, reply) =>
     set((state) => ({
       ...state,
       questions: state.questions.map((q) =>
-        q.id === question.id ? { ...q, upvotes: q.upvotes + 1 } : q,
-      ),
-    })),
-  addReply: (reply) =>
-    set((state) => ({
-      ...state,
-      questions: state.questions.map((q) =>
-        q.id === reply.questionId
+        q.questionId === questionId
           ? { ...q, replies: [...q.replies, reply] }
           : q,
       ),
     })),
-  updateReply: (reply) =>
+  updateReply: (questionId, reply) =>
     set((state) => ({
       ...state,
       questions: state.questions.map((q) =>
-        q.id === reply.questionId
+        q.questionId === questionId
           ? {
               ...q,
-              replies: q.replies.map((r) => (r.id === reply.id ? reply : r)),
+              replies: q.replies.map((r) =>
+                r.replyId === reply.replyId ? { ...r, ...reply } : r,
+              ),
             }
           : q,
       ),
     })),
-  removeReply: (reply) =>
+  removeReply: (replyId) =>
     set((state) => ({
       ...state,
       questions: state.questions.map((q) => ({
         ...q,
-        replies: q.replies.filter((r) => r.id !== reply.id),
-      })),
-    })),
-  upvoteReply: (reply) =>
-    set((state) => ({
-      ...state,
-      questions: state.questions.map((q) => ({
-        ...q,
-        replies: q.replies.map((r) =>
-          r.id === reply.id ? { ...r, upvotes: r.upvotes + 1 } : r,
-        ),
+        replies: q.replies.filter((r) => r.replyId !== replyId),
       })),
     })),
 });

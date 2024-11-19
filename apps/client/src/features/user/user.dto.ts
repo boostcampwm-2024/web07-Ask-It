@@ -1,11 +1,13 @@
-import { SuccessDTO } from '@/shared';
-
-export interface CreateUserDTO {
+export interface PostUserDTO {
   email: string;
   password: string;
   nickname: string;
 }
 
-export type VerifyEmailDTO = SuccessDTO<{ exists: boolean }>;
+export interface GetVerifyEmailDTO {
+  exists: boolean;
+}
 
-export type VerifyNicknameDTO = SuccessDTO<{ exists: boolean }>;
+export interface GetVerifyNicknameDTO {
+  exists: boolean;
+}
