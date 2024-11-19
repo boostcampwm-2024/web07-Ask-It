@@ -19,16 +19,14 @@ function MyPage() {
           {sessions?.map((session) => (
             <SessionRecord
               key={session.sessionId}
-              sessionId={session.sessionId}
-              sessionName={session.title}
-              closed={session.expired}
-              createdAt={
-                new Date(
+              session={{
+                ...session,
+                createdAt: new Date(
                   session.createdAt.year,
                   session.createdAt.month - 1,
                   session.createdAt.date,
-                )
-              }
+                ).toISOString(),
+              }}
             />
           ))}
         </div>
