@@ -5,7 +5,7 @@ import { refresh, useAuthStore } from '@/features/auth';
 import { ToastContainer } from '@/features/toast';
 
 export const Route = createRootRoute({
-  beforeLoad: async () => {
+  beforeLoad: () => {
     if (!useAuthStore.getState().isLogin())
       refresh().then((res) => {
         useAuthStore.getState().setAccessToken(res.accessToken);
