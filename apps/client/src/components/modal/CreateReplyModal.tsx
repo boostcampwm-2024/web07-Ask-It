@@ -11,6 +11,7 @@ import {
   Question,
   Reply,
 } from '@/features/session/qna';
+import { useToastStore } from '@/features/toast';
 
 interface CreateReplyModalProps {
   question?: Question;
@@ -19,6 +20,8 @@ interface CreateReplyModalProps {
 
 function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
   const { closeModal } = useModalContext();
+
+  const { addToast } = useToastStore();
 
   const { sessionToken, sessionId, expired, addReply, updateReply } =
     useSessionStore();
@@ -36,6 +39,11 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
         body,
       }).then((res) => {
         addReply(question.questionId, { ...res.reply, deleted: false });
+        addToast({
+          type: 'SUCCESS',
+          message: '답변이 성공적으로 등록되었습니다.',
+          duration: 3000,
+        });
         closeModal();
       });
     } else if (reply && question) {
@@ -45,6 +53,11 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
         body,
       }).then((res) => {
         updateReply(question.questionId, res.reply);
+        addToast({
+          type: 'SUCCESS',
+          message: '답변이 성공적으로 수정되었습니다.',
+          duration: 3000,
+        });
         closeModal();
       });
     }
