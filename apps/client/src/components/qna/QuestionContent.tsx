@@ -2,9 +2,9 @@ import { QuestionDetail, QuestionList } from '@/components';
 import { useQnAContext } from '@/features/session/qna';
 
 function QuestionContent() {
-  const { selectedQuestion } = useQnAContext();
+  const { selectedQuestionId } = useQnAContext();
 
-  return selectedQuestion == null ? <QuestionList /> : <QuestionDetail />;
+  return selectedQuestionId == null ? <QuestionList /> : <QuestionDetail />;
 }
 
 export default QuestionContent;

@@ -4,7 +4,7 @@ import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
 import { useModalContext } from '@/features/modal';
 import { useToastStore } from '@/features/toast';
-import { createUser, useSignUpForm } from '@/features/user';
+import { postUser, useSignUpForm } from '@/features/user';
 
 function SignUpModal() {
   const addToast = useToastStore((state) => state.addToast);
@@ -26,7 +26,7 @@ function SignUpModal() {
 
   const signUp = () =>
     isSignUpEnabled &&
-    createUser({ email, nickname, password }).then(() => {
+    postUser({ email, nickname, password }).then(() => {
       closeModal();
       addToast({
         type: 'SUCCESS',
