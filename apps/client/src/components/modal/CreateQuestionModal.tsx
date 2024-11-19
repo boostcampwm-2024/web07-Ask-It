@@ -10,12 +10,15 @@ import {
   postQuestion,
   Question,
 } from '@/features/session/qna';
+import { useToastStore } from '@/features/toast';
 
 interface CreateQuestionModalProps {
   question?: Question;
 }
 
 function CreateQuestionModal({ question }: CreateQuestionModalProps) {
+  const { addToast } = useToastStore();
+
   const { closeModal } = useModalContext();
 
   const { sessionId, sessionToken, expired, addQuestion, updateQuestion } =
@@ -34,6 +37,11 @@ function CreateQuestionModal({ question }: CreateQuestionModalProps) {
         body,
       }).then((response) => {
         addQuestion(response.question);
+        addToast({
+          type: 'SUCCESS',
+          message: '질문이 성공적으로 등록되었습니다.',
+          duration: 3000,
+        });
         closeModal();
       });
     } else {
@@ -43,6 +51,11 @@ function CreateQuestionModal({ question }: CreateQuestionModalProps) {
         body,
       }).then((response) => {
         updateQuestion(response.question);
+        addToast({
+          type: 'SUCCESS',
+          message: '질문이 성공적으로 수정되었습니다.',
+          duration: 3000,
+        });
         closeModal();
       });
     }
