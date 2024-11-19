@@ -11,25 +11,21 @@ function QuestionList() {
 
   const { handleSelectQuestionId } = useQnAContext();
 
-  const sortedQuestions = questions.sort((a, b) => {
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    if (a.closed && !b.closed) return 1;
-    if (!a.closed && b.closed) return -1;
-    if (a.likesCount > b.likesCount) return -1;
-    if (a.likesCount < b.likesCount) return 1;
-    return 0;
-  });
+  const pinnedQuestions = questions
+    .filter((question) => question.pinned && !question.closed)
+    .sort((a, b) => b.likesCount - a.likesCount);
 
-  const pinnedQuestions = sortedQuestions.filter(
-    (question) => question.pinned && !question.closed,
-  );
+  const unpinnedQuestions = questions
+    .filter((question) => !question.pinned && !question.closed)
+    .sort((a, b) => b.likesCount - a.likesCount);
 
-  const unpinnedQuestions = sortedQuestions.filter(
-    (question) => !question.pinned && !question.closed,
-  );
-
-  const closedQuestions = sortedQuestions.filter((question) => question.closed);
+  const closedQuestions = questions
+    .filter((question) => question.closed)
+    .sort((a, b) => {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      return b.likesCount - a.likesCount;
+    });
 
   return (
     <>
