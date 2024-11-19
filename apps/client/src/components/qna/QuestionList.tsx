@@ -60,7 +60,7 @@ function QuestionList() {
               }}
             />
           ))}
-          {(unpinnedQuestions.length > 0 ||
+          {((unpinnedQuestions.length > 0 && closedQuestions.length > 0) ||
             (pinnedQuestions.length > 0 && closedQuestions.length > 0)) && (
             <hr className='mb-4 mt-4 w-full rounded-3xl border-t-[1px] border-indigo-200' />
           )}
