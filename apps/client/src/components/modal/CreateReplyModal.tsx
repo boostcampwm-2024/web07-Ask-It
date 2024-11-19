@@ -34,7 +34,7 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
         questionId: question?.questionId,
         body,
       }).then((res) => {
-        addReply(question.questionId, res.reply);
+        addReply(question.questionId, { ...res.reply, deleted: false });
         closeModal();
       });
     } else if (reply && question) {
