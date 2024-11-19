@@ -13,7 +13,7 @@ function QuestionDivider({
     <div className='my-4 flex w-full items-center gap-2'>
       <hr
         className={`flex-grow rounded-3xl border-t-[1px] ${
-          isExpanded ? 'border-indigo-300' : 'border-indigo-200'
+          isExpanded ? 'border-indigo-300' : 'border-gray-300'
         }`}
       />
       {description && (
@@ -21,7 +21,7 @@ function QuestionDivider({
           <div className='flex items-center gap-1'>
             <svg
               onClick={onClick}
-              className={`ml-1 inline-block h-3 w-3 cursor-pointer transition-transform ${
+              className={`inline-block h-3 w-3 cursor-pointer transition-transform ${
                 isExpanded
                   ? 'font-semibold text-indigo-600'
                   : '-rotate-180 font-normal text-gray-500'
@@ -43,7 +43,7 @@ function QuestionDivider({
           </div>
           <hr
             className={`flex-grow rounded-3xl border-t-[1px] ${
-              isExpanded ? 'border-indigo-300' : 'border-indigo-200'
+              isExpanded ? 'border-indigo-300' : 'border-gray-300'
             }`}
           />
         </>
