@@ -20,20 +20,24 @@ export const Route = createFileRoute('/session/$sessionId')({
 
     useSessionStore.getState().reset();
 
-    const { token } = await getSessionToken(sessionId);
-    useSessionStore.getState().setSessionId(sessionId);
-    useSessionStore.getState().setSessionToken(token);
+    try {
+      const { token } = await getSessionToken(sessionId);
+      useSessionStore.getState().setSessionId(sessionId);
+      useSessionStore.getState().setSessionToken(token);
 
-    const response = await getQuestions({ sessionId, token });
-    useSessionStore.getState().setIsHost(response.isHost);
-    useSessionStore.getState().setExpired(response.expired);
-    response.questions.forEach((question) => {
-      useSessionStore.getState().addQuestion(question);
-    });
-    useToastStore.getState().addToast({
-      type: 'SUCCESS',
-      message: '질문 목록을 불러왔습니다.',
-      duration: 3000,
-    });
+      const response = await getQuestions({ sessionId, token });
+      useSessionStore.getState().setIsHost(response.isHost);
+      useSessionStore.getState().setExpired(response.expired);
+      response.questions.forEach((question) => {
+        useSessionStore.getState().addQuestion(question);
+      });
+      useToastStore.getState().addToast({
+        type: 'SUCCESS',
+        message: '질문 목록을 불러왔습니다.',
+        duration: 3000,
+      });
+    } catch (e) {
+      window.location.href = '/';
+    }
   },
 });
