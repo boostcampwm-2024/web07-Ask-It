@@ -1,12 +1,12 @@
-export interface LoginRequestDTO {
+export interface PostLoginRequestDTO {
   email: string;
   password: string;
 }
 
-export interface LoginResponseDTO {
+export interface PostLoginResponseDTO {
   accessToken: string;
 }
 
-export interface RefreshResponseDTO {
+export interface PostRefreshResponseDTO {
   accessToken: string;
 }
