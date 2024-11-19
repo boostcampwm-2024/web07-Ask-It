@@ -1,7 +1,7 @@
 import { debounce } from 'es-toolkit';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { verifyEmail, verifyNickname } from '@/features/user/index';
+import { getVerifyEmail, getVerifyNickname } from '@/features/user/index';
 import {
   validateEmail,
   validateNickname,
@@ -35,7 +35,7 @@ export function useSignUpForm() {
 
   const checkEmailToVerify = useCallback(
     debounce(async (emailToVerify: string) => {
-      const response = await verifyEmail(emailToVerify);
+      const response = await getVerifyEmail(emailToVerify);
 
       setEmail(emailToVerify);
       setEmailValidationStatus(
@@ -49,7 +49,7 @@ export function useSignUpForm() {
 
   const checkNicknameToVerify = useCallback(
     debounce(async (nicknameToVerify: string) => {
-      const response = await verifyNickname(nicknameToVerify);
+      const response = await getVerifyNickname(nicknameToVerify);
 
       setNickname(nicknameToVerify);
       setNicknameValidationStatus(

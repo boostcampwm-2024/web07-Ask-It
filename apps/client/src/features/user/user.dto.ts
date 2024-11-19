@@ -1,13 +1,13 @@
-export interface CreateUserDTO {
+export interface PostUserDTO {
   email: string;
   password: string;
   nickname: string;
 }
 
-export interface VerifyEmailDTO {
+export interface GetVerifyEmailDTO {
   exists: boolean;
 }
 
-export interface VerifyNicknameDTO {
+export interface GetVerifyNicknameDTO {
   exists: boolean;
 }
