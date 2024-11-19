@@ -10,6 +10,7 @@ import {
   postQuestionLike,
   Question,
 } from '@/features/session/qna';
+import { useToastStore } from '@/features/toast';
 
 interface QuestionItemProps {
   question: Question;
@@ -17,6 +18,8 @@ interface QuestionItemProps {
 }
 
 function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
+  const { addToast } = useToastStore();
+
   const { Modal, openModal } = useModal(
     <CreateQuestionModal question={question} />,
   );
@@ -37,6 +40,13 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
       token: sessionToken,
       sessionId,
     }).then(() => {
+      addToast({
+        type: 'SUCCESS',
+        message: question.liked
+          ? '좋아요를 취소했습니다.'
+          : '질문에 좋아요를 눌렀습니다.',
+        duration: 3000,
+      });
       updateQuestion({
         ...question,
         likesCount: question.likesCount + (question.liked ? -1 : 1),
@@ -53,6 +63,13 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
       sessionId,
       closed: !question.closed,
     }).then(() => {
+      addToast({
+        type: 'SUCCESS',
+        message: question.closed
+          ? '질문 답변 완료를 취소했습니다.'
+          : '질문을 답변 완료했습니다.',
+        duration: 3000,
+      });
       updateQuestion({
         ...question,
         closed: !question.closed,
@@ -68,6 +85,13 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
       sessionId,
       pinned: !question.pinned,
     }).then(() => {
+      addToast({
+        type: 'SUCCESS',
+        message: question.pinned
+          ? '질문 고정을 취소했습니다.'
+          : '질문을 고정했습니다.',
+        duration: 3000,
+      });
       updateQuestion({
         ...question,
         pinned: !question.pinned,
@@ -82,6 +106,11 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
       sessionId,
       token: sessionToken,
     }).then(() => {
+      addToast({
+        type: 'SUCCESS',
+        message: '질문을 삭제했습니다.',
+        duration: 3000,
+      });
       removeQuestion(question.questionId);
     });
   };
