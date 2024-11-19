@@ -16,14 +16,14 @@ interface ReplyItemProps {
 }
 
 function ReplyItem({ question, reply }: ReplyItemProps) {
-  const { sessionId, sessionToken, updateReply } = useSessionStore();
+  const { sessionId, sessionToken, expired, updateReply } = useSessionStore();
 
   const { Modal, openModal } = useModal(
     <CreateReplyModal question={question} reply={reply} />,
   );
 
   const handleDelete = () => {
-    if (!sessionId || !sessionToken) return;
+    if (expired || !sessionId || !sessionToken) return;
 
     deleteReply(reply.replyId, {
       sessionId,
@@ -37,7 +37,7 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
   };
 
   const handleToggleLike = () => {
-    if (!sessionId || !sessionToken || reply.deleted) return;
+    if (expired || !sessionId || !sessionToken || reply.deleted) return;
 
     postReplyLike(reply.replyId, {
       sessionId,
@@ -76,7 +76,7 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
               </div>
             </Button>
             <div className='inline-flex items-center justify-start gap-2 px-2'>
-              {reply.isOwner && !reply.deleted && (
+              {!expired && reply.isOwner && !reply.deleted && (
                 <>
                   <Button
                     className='scale-y-90 bg-gray-200/25 hover:bg-gray-200/50 hover:transition-all'

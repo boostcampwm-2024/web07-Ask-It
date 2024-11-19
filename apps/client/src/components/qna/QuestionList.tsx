@@ -5,7 +5,7 @@ import { useSessionStore } from '@/features/session';
 import { useQnAContext } from '@/features/session/qna';
 
 function QuestionList() {
-  const { questions } = useSessionStore();
+  const { expired, questions } = useSessionStore();
 
   const { Modal, openModal } = useModal(<CreateQuestionModal />);
 
@@ -32,9 +32,11 @@ function QuestionList() {
       <div className='inline-flex h-full w-4/5 flex-grow flex-col items-center justify-start rounded-lg bg-white shadow'>
         <div className='inline-flex h-[54px] w-full items-center justify-between border-b border-gray-200 px-8 py-2'>
           <div className='text-lg font-medium text-black'>질문 목록</div>
-          <Button className='bg-indigo-600' onClick={openModal}>
-            <div className='text-sm font-bold text-white'>질문하기</div>
-          </Button>
+          {!expired && (
+            <Button className='bg-indigo-600' onClick={openModal}>
+              <div className='text-sm font-bold text-white'>질문하기</div>
+            </Button>
+          )}
         </div>
         <div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto px-8 py-4'>
           {pinnedQuestions.map((question) => (

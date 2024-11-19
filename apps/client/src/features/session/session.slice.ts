@@ -9,11 +9,13 @@ export interface SessionSlice {
   sessionId?: string;
   sessionToken?: string;
   isHost: boolean;
+  expired: boolean;
   reset: () => void;
   setSession: (session: Session) => void;
   setSessionId: (sessionId: string) => void;
   setSessionToken: (sessionToken: string) => void;
   setIsHost: (isHost: boolean) => void;
+  setExpired: (expired: boolean) => void;
 }
 
 export const createSessionSlice: StateCreator<
@@ -23,6 +25,7 @@ export const createSessionSlice: StateCreator<
   SessionSlice
 > = (set, get) => ({
   isHost: false,
+  expired: false,
   reset: () => {
     get().resetQuestions();
     get().resetChatting();
@@ -32,4 +35,5 @@ export const createSessionSlice: StateCreator<
   setSessionId: (sessionId) => set({ sessionId }),
   setSessionToken: (sessionToken) => set({ sessionToken }),
   setIsHost: (isHost) => set({ isHost }),
+  setExpired: (expired) => set({ expired }),
 });

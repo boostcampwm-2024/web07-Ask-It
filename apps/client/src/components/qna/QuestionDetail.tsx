@@ -7,7 +7,7 @@ import { useSessionStore } from '@/features/session';
 import { useQnAContext } from '@/features/session/qna';
 
 function QuestionDetail() {
-  const { questions } = useSessionStore();
+  const { questions, expired } = useSessionStore();
 
   const { selectedQuestionId, handleSelectQuestionId } = useQnAContext();
 
@@ -33,9 +33,11 @@ function QuestionDetail() {
           >
             <div className='text-lg font-medium text-black'> ← 질문 목록</div>
           </Button>
-          <Button className='bg-indigo-600' onClick={openModal}>
-            <div className='text-sm font-bold text-white'>답변하기</div>
-          </Button>
+          {!expired && (
+            <Button className='bg-indigo-600' onClick={openModal}>
+              <div className='text-sm font-bold text-white'>답변하기</div>
+            </Button>
+          )}
         </div>
 
         <div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto'>

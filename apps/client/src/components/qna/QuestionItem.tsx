@@ -21,11 +21,17 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
     <CreateQuestionModal question={question} />,
   );
 
-  const { sessionToken, sessionId, isHost, removeQuestion, updateQuestion } =
-    useSessionStore();
+  const {
+    sessionToken,
+    sessionId,
+    isHost,
+    expired,
+    removeQuestion,
+    updateQuestion,
+  } = useSessionStore();
 
   const handleLike = () => {
-    if (!sessionToken || !sessionId) return;
+    if (expired || !sessionToken || !sessionId) return;
 
     postQuestionLike(question.questionId, {
       token: sessionToken,
@@ -40,7 +46,7 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
   };
 
   const handleClose = () => {
-    if (!sessionToken || !sessionId || !isHost) return;
+    if (expired || !sessionToken || !sessionId || !isHost) return;
 
     patchQuestionClosed(question.questionId, {
       token: sessionToken,
@@ -55,7 +61,7 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
   };
 
   const handlePin = () => {
-    if (!sessionToken || !sessionId || !isHost) return;
+    if (expired || !sessionToken || !sessionId || !isHost) return;
 
     patchQuestionPinned(question.questionId, {
       token: sessionToken,
@@ -70,7 +76,7 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
   };
 
   const handleDelete = () => {
-    if (!sessionToken || !sessionId) return;
+    if (expired || !sessionToken || !sessionId) return;
 
     deleteQuestion(question.questionId, {
       sessionId,
@@ -147,7 +153,8 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
           </div>
 
           <div className='inline-flex items-center justify-start gap-2 px-2'>
-            {question.isOwner &&
+            {!expired &&
+              question.isOwner &&
               !question.closed &&
               question.replies.length === 0 && (
                 <>

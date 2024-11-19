@@ -20,12 +20,13 @@ interface CreateReplyModalProps {
 function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
   const { closeModal } = useModalContext();
 
-  const { sessionToken, sessionId, addReply, updateReply } = useSessionStore();
+  const { sessionToken, sessionId, expired, addReply, updateReply } =
+    useSessionStore();
 
   const [body, setBody] = useState('');
 
   const handleSubmit = () => {
-    if (!sessionId || !sessionToken) return;
+    if (expired || !sessionId || !sessionToken) return;
 
     if (!reply && question) {
       postReply({

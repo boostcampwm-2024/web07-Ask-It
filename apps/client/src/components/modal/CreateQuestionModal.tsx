@@ -18,13 +18,14 @@ interface CreateQuestionModalProps {
 function CreateQuestionModal({ question }: CreateQuestionModalProps) {
   const { closeModal } = useModalContext();
 
-  const { sessionId, sessionToken, addQuestion, updateQuestion } =
+  const { sessionId, sessionToken, expired, addQuestion, updateQuestion } =
     useSessionStore();
 
   const [body, setBody] = useState('');
 
   const handleSubmit = () => {
-    if (body.trim().length === 0 || !sessionId || !sessionToken) return;
+    if (expired || body.trim().length === 0 || !sessionId || !sessionToken)
+      return;
 
     if (!question) {
       postQuestion({
