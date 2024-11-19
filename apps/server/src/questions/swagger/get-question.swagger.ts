@@ -24,13 +24,14 @@ export const GetQuestionSwagger = () =>
               isHost: false,
               replies: [
                 {
-                  replyId: 1,
-                  body: '역시 신지호',
-                  createdAt: '2024-11-18T10:50:23.610Z',
+                  replyId: 13,
+                  body: '다 대상현님 덕분이죠.',
+                  createdAt: '2024-11-18T15:31:30.663Z',
+                  deleted: false,
                   isOwner: true,
                   likesCount: 0,
                   liked: false,
-                  nickname: '익명',
+                  nickname: 'user2',
                   isHost: false,
                 },
               ],

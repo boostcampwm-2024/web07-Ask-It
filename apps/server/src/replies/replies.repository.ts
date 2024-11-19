@@ -1,11 +1,10 @@
+import { DatabaseException, ResourceNotFoundException } from '@common/exceptions/resource.exception';
 import { Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-
-import { CreateReplyDto } from './dto/create-reply.dto';
-
-import { DatabaseException, ResourceNotFoundException } from '@common/exceptions/resource.exception';
 import { PRISMA_ERROR_CODE } from '@prisma-alias/prisma.error';
 import { PrismaService } from '@prisma-alias/prisma.service';
+
+import { CreateReplyDto } from './dto/create-reply.dto';
 
 @Injectable()
 export class RepliesRepository {
@@ -49,10 +48,9 @@ export class RepliesRepository {
 
   async deleteReply(replyId: number) {
     try {
-      return await this.prisma.reply.delete({
-        where: {
-          replyId,
-        },
+      return await this.prisma.reply.update({
+        where: { replyId },
+        data: { deleted: true },
       });
     } catch (error) {
       throw DatabaseException.delete('reply');
@@ -69,7 +67,7 @@ export class RepliesRepository {
   async findReplyByIdAndSessionId(replyId: number, sessionId: string) {
     try {
       return await this.prisma.reply.findFirst({
-        where: { replyId, sessionId },
+        where: { replyId, sessionId, deleted: false },
       });
     } catch (error) {
       throw DatabaseException.read('reply');

@@ -10,13 +10,14 @@ export const CreateReplySwagger = () =>
       schema: {
         example: {
           reply: {
-            replyId: 3,
-            body: '신지호 ',
-            createdAt: '2024-11-18T13:01:05.505Z',
+            replyId: 14,
+            body: '다 대상현님 덕분이죠.',
+            createdAt: '2024-11-19T02:47:23.386Z',
             isOwner: true,
             likesCount: 0,
             liked: false,
-            nickname: '익명',
+            deleted: false,
+            nickname: 'user2',
             isHost: false,
           },
         },

@@ -66,7 +66,7 @@ model QuestionLike {
   createUserToken       String @map("create_user_token")
   questionId            Int    @map("question_id")
 
-  question              Question         @relation("QuestionLikes", fields: [questionId], references: [questionId])
+  question              Question         @relation("QuestionLikes", fields: [questionId], references: [questionId], onDelete: Cascade)
   createUserTokenEntity UserSessionToken @relation("TokenQuestionLikes", fields: [createUserToken], references: [token])
 }
 
@@ -77,6 +77,7 @@ model Reply {
   questionId           Int      @map("question_id")
   body                 String
   createdAt            DateTime @default(now()) @map("created_at")
+  deleted              Boolean  @default(false)
 
   session              Session          @relation("SessionReplies", fields: [sessionId], references: [sessionId])
   question             Question         @relation("QuestionReplies", fields: [questionId], references: [questionId])
@@ -89,7 +90,7 @@ model ReplyLike {
   createUserToken      String @map("create_user_token")
   replyId              Int    @map("reply_id")
 
-  reply                Reply            @relation("ReplyLikes", fields: [replyId], references: [replyId])
+  reply                Reply            @relation("ReplyLikes", fields: [replyId], references: [replyId], onDelete: Cascade)
   createUserTokenEntity UserSessionToken @relation("TokenReplyLikes", fields: [createUserToken], references: [token])
 }
 
