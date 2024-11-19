@@ -50,7 +50,7 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
     postReplyLike(reply.replyId, {
       sessionId,
       token: sessionToken,
-    }).then(() => {
+    }).then((res) => {
       addToast({
         type: 'SUCCESS',
         message: reply.liked
@@ -60,8 +60,7 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
       });
       updateReply(question.questionId, {
         ...reply,
-        likesCount: reply.likesCount + (reply.liked ? -1 : 1),
-        liked: !reply.liked,
+        ...res,
       });
     });
   };

@@ -39,7 +39,7 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
     postQuestionLike(question.questionId, {
       token: sessionToken,
       sessionId,
-    }).then(() => {
+    }).then((res) => {
       addToast({
         type: 'SUCCESS',
         message: question.liked
@@ -49,8 +49,7 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
       });
       updateQuestion({
         ...question,
-        likesCount: question.likesCount + (question.liked ? -1 : 1),
-        liked: !question.liked,
+        ...res,
       });
     });
   };
