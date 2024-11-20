@@ -46,9 +46,11 @@ function QuestionDetail() {
               {question.body}
             </Markdown>
           </div>
-          {question.replies.map((r) => (
-            <ReplyItem key={r.replyId} question={question} reply={r} />
-          ))}
+          {question.replies
+            .sort((a, b) => (b.isHost ? 1 : 0) - (a.isHost ? 1 : 0))
+            .map((r) => (
+              <ReplyItem key={r.replyId} question={question} reply={r} />
+            ))}
         </div>
       </div>
       {Modal}
