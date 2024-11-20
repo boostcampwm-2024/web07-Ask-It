@@ -26,7 +26,7 @@ export interface QuestionUpdatedEventPayload extends SocketEventPayload {
   type: 'questionUpdated';
   payload: {
     question: {
-      questionId: string;
+      questionId: number;
       createUserToken: string;
       sessionId: string;
       body: string;
@@ -40,14 +40,14 @@ export interface QuestionUpdatedEventPayload extends SocketEventPayload {
 export interface QuestionDeletedEventPayload extends SocketEventPayload {
   type: 'questionDeleted';
   payload: {
-    questionId: string;
+    questionId: number;
   };
 }
 
 export interface QuestionLikedEventPayload extends SocketEventPayload {
   type: 'questionLiked';
   payload: {
-    questionId: string;
+    questionId: number;
     liked: boolean;
     likesCount: number;
   };
@@ -56,7 +56,7 @@ export interface QuestionLikedEventPayload extends SocketEventPayload {
 export interface ReplyCreatedEventPayload extends SocketEventPayload {
   type: 'replyCreated';
   payload: {
-    reply: Reply;
+    reply: Reply & { questionId: number };
   };
 }
 
@@ -64,10 +64,10 @@ export interface ReplyUpdatedEventPayload extends SocketEventPayload {
   type: 'replyUpdated';
   payload: {
     reply: {
-      replyId: string;
+      replyId: number;
       createUserToken: string;
       sessionId: string;
-      questionId: string;
+      questionId: number;
       body: string;
       createdAt: string;
       deleted: boolean;
@@ -78,14 +78,16 @@ export interface ReplyUpdatedEventPayload extends SocketEventPayload {
 export interface ReplyDeletedEventPayload extends SocketEventPayload {
   type: 'replyDeleted';
   payload: {
-    replyId: string;
+    questionId: number;
+    replyId: number;
   };
 }
 
 export interface ReplyLikedEventPayload extends SocketEventPayload {
   type: 'replyLiked';
   payload: {
-    replyId: string;
+    questionId: number;
+    replyId: number;
     liked: boolean;
     likesCount: number;
   };
