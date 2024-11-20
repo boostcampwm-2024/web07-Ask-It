@@ -4,14 +4,12 @@ import { Button, CreateQuestionModal } from '@/components';
 import QuestionSection from '@/components/qna/QuestionSection';
 import { useModal } from '@/features/modal';
 import { useSessionStore } from '@/features/session';
-import { useQnAContext } from '@/features/session/qna';
 
 function QuestionList() {
-  const { sessionTitle, expired, questions } = useSessionStore();
+  const { sessionTitle, expired, questions, setSelectedQuestionId } =
+    useSessionStore();
 
   const { Modal, openModal } = useModal(<CreateQuestionModal />);
-
-  const { handleSelectQuestionId } = useQnAContext();
 
   const sections = [
     {
@@ -55,7 +53,7 @@ function QuestionList() {
               key={section.title}
               title={section.title}
               questions={section.questions}
-              onQuestionSelect={handleSelectQuestionId}
+              onQuestionSelect={setSelectedQuestionId}
             />
           ))}
         </motion.div>

@@ -63,7 +63,7 @@
       }
     },
     {
-      "files": ["**/*.ts", "src/routes/*.tsx"],
+      "files": ["**/*.ts", "src/routes/**/*.tsx"],
       "rules": {
         "import/prefer-default-export": "off"
       }

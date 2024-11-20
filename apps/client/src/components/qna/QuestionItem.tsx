@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router';
 import { FiEdit2 } from 'react-icons/fi';
 import { GoCheck } from 'react-icons/go';
 import { GrClose, GrLike, GrLikeFill, GrPin } from 'react-icons/gr';
@@ -22,6 +23,8 @@ interface QuestionItemProps {
 }
 
 function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
+  const navigate = useNavigate();
+
   const { addToast } = useToastStore();
 
   const { Modal, openModal } = useModal(
@@ -35,7 +38,18 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
     expired,
     removeQuestion,
     updateQuestion,
+    setFromDetail,
   } = useSessionStore();
+
+  const handleSelectQuestionId = () => {
+    if (!sessionId) return;
+
+    setFromDetail(true);
+    onQuestionSelect();
+    navigate({
+      to: `/session/${sessionId}/${question.questionId}`,
+    });
+  };
 
   const handleLike = () => {
     if (expired || !sessionToken || !sessionId) return;
@@ -182,7 +196,7 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
             </Button>
             <Button
               className='hover:bg-gray-200/50 hover:transition-all'
-              onClick={onQuestionSelect}
+              onClick={handleSelectQuestionId}
             >
               <div className='flex flex-row items-center gap-2 text-sm font-medium text-gray-500'>
                 <RiQuestionAnswerLine />

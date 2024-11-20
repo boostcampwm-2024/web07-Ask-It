@@ -11,6 +11,8 @@ export interface SessionSlice {
   isHost: boolean;
   expired: boolean;
   sessionTitle?: string;
+  fromDetail: boolean;
+  selectedQuestionId?: number;
   reset: () => void;
   setSession: (session: Session) => void;
   setSessionId: (sessionId: string) => void;
@@ -18,6 +20,8 @@ export interface SessionSlice {
   setIsHost: (isHost: boolean) => void;
   setExpired: (expired: boolean) => void;
   setSessionTitle: (sessionTitle: string) => void;
+  setFromDetail: (fromDetail: boolean) => void;
+  setSelectedQuestionId: (selectedQuestionId?: number) => void;
 }
 
 export const createSessionSlice: StateCreator<
@@ -28,10 +32,19 @@ export const createSessionSlice: StateCreator<
 > = (set, get) => ({
   isHost: false,
   expired: false,
+  fromDetail: false,
   reset: () => {
     get().resetQuestions();
     get().resetChatting();
-    set({ session: undefined, sessionToken: undefined, isHost: false });
+    set({
+      session: undefined,
+      sessionToken: undefined,
+      isHost: false,
+      expired: false,
+      sessionTitle: undefined,
+      fromDetail: false,
+      selectedQuestionId: undefined,
+    });
   },
   setSession: (session) => set({ session }),
   setSessionId: (sessionId) => set({ sessionId }),
@@ -39,4 +52,6 @@ export const createSessionSlice: StateCreator<
   setIsHost: (isHost) => set({ isHost }),
   setExpired: (expired) => set({ expired }),
   setSessionTitle: (sessionTitle) => set({ sessionTitle }),
+  setFromDetail: (fromDetail) => set({ fromDetail }),
+  setSelectedQuestionId: (selectedQuestionId) => set({ selectedQuestionId }),
 });
