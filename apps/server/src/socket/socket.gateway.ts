@@ -61,7 +61,9 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private createEventBroadcaster(event: string) {
     return (sessionId: string, token: string, content: Record<any, any>) => {
       const client = this.tokenToSocketMap.get(token);
-      client.socket.broadcast.to(sessionId).emit(event, content);
+      if (client) {
+        client.socket.broadcast.to(sessionId).emit(event, content);
+      }
     };
   }
 
