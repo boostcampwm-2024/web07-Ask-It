@@ -1,3 +1,4 @@
+import { GrValidate } from 'react-icons/gr';
 import Markdown from 'react-markdown';
 
 import { Button, CreateReplyModal } from '@/components';
@@ -70,8 +71,11 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
       <div className='flex shrink basis-0 flex-col items-start justify-start gap-4 self-stretch px-12'>
         <div className='flex h-fit flex-col items-start justify-start gap-2 self-stretch rounded-md bg-gray-50 p-4'>
           <div className='flex h-fit flex-col items-start justify-start gap-1 self-stretch border-b border-gray-200 pb-2'>
-            <div className='w-full text-base font-bold leading-normal text-black'>
-              {reply.deleted ? '알 수 없음' : reply.nickname}
+            <div className='flex flex-row items-center gap-1'>
+              {!reply.deleted && !reply.isHost && <GrValidate size={18} />}
+              <span className='w-full text-base font-bold leading-normal text-black'>
+                {reply.deleted ? '알 수 없음' : reply.nickname}
+              </span>
             </div>
             <Markdown className='prose prose-stone flex h-full w-full flex-col justify-start gap-3 text-base font-medium leading-normal text-black prose-img:rounded-md'>
               {reply.deleted ? '삭제된 답변입니다' : reply.body}
