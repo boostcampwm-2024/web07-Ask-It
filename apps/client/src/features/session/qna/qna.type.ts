@@ -5,9 +5,9 @@ export interface Reply {
   isOwner: boolean;
   likesCount: number;
   liked: boolean;
+  deleted: boolean;
   nickname: string;
   isHost: boolean;
-  deleted: boolean;
 }
 
 export interface Question {
@@ -21,6 +21,5 @@ export interface Question {
   likesCount: number;
   liked: boolean;
   nickname: string;
-  isHost: false;
   replies: Reply[];
 }
