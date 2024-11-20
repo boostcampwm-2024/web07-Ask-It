@@ -6,9 +6,11 @@ import { ToastContainer } from '@/features/toast';
 
 export const Route = createRootRoute({
   beforeLoad: () => {
-    if (!useAuthStore.getState().isLogin())
+    const { isLogin, setAccessToken } = useAuthStore.getState();
+
+    if (!isLogin())
       refresh().then((res) => {
-        useAuthStore.getState().setAccessToken(res.accessToken);
+        setAccessToken(res.accessToken);
       });
   },
   component: () => (

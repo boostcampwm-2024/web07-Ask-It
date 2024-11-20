@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router';
 import { GoArrowLeft } from 'react-icons/go';
 import Markdown from 'react-markdown';
 
@@ -5,12 +6,13 @@ import { Button, CreateReplyModal } from '@/components';
 import ReplyItem from '@/components/qna/ReplyItem';
 import { useModal } from '@/features/modal';
 import { useSessionStore } from '@/features/session';
-import { useQnAContext } from '@/features/session/qna';
 
 function QuestionDetail() {
+  const navigate = useNavigate();
+
   const { questions, expired } = useSessionStore();
 
-  const { selectedQuestionId, handleSelectQuestionId } = useQnAContext();
+  const { selectedQuestionId, setSelectedQuestionId } = useSessionStore();
 
   const question = questions.find((q) => q.questionId === selectedQuestionId);
 
@@ -29,7 +31,8 @@ function QuestionDetail() {
           <Button
             className='hover:bg-gray-200 hover:transition-all'
             onClick={() => {
-              handleSelectQuestionId(null);
+              navigate({ to: '..' });
+              setSelectedQuestionId(undefined);
             }}
           >
             <div className='flex flex-row items-center gap-2 text-lg font-medium text-black'>
