@@ -47,8 +47,9 @@ export class QuestionsController {
   @Get()
   @GetQuestionSwagger()
   async getQuestionsBySession(@Query() getQuestionDto: GetQuestionDto) {
-    const [questions, isHost, expired] = await this.questionsService.getQuestionsBySession(getQuestionDto);
-    return { questions, isHost, expired };
+    const [questions, isHost, expired, sessionTitle] =
+      await this.questionsService.getQuestionsBySession(getQuestionDto);
+    return { questions, isHost, expired, sessionTitle };
   }
 
   @Post()

@@ -108,6 +108,7 @@ export class QuestionsService {
       }),
       isHost,
       expired,
+      session.title,
     ];
   }
 

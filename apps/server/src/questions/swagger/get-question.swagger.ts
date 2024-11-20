@@ -38,6 +38,8 @@ export const GetQuestionSwagger = () =>
             },
           ],
           isHost: false,
+          expired: false,
+          sessionTitle: '돼지호의 세션',
         },
       },
     }),
