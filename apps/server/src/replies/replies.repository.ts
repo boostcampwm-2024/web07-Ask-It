@@ -1,20 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
-import { PrismaService } from '../prisma/prisma.service';
 import { CreateReplyDto } from './dto/create-reply.dto';
-import { DeleteReplyDto } from './dto/delete-reply.dto';
-import { UpdateReplyBodyDto } from './dto/update-reply.dto';
 
 import { DatabaseException, ResourceNotFoundException } from '@common/exceptions/resource.exception';
 import { PRISMA_ERROR_CODE } from '@prisma-alias/prisma.error';
+import { PrismaService } from '@prisma-alias/prisma.service';
 
 @Injectable()
 export class RepliesRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createReply(data: CreateReplyDto) {
-    const { questionId, token: createUserToken, sessionId, body } = data;
+  async createReply({ questionId, token: createUserToken, sessionId, body }: CreateReplyDto) {
     const replyData = {
       questionId,
       createUserToken,
@@ -52,10 +49,9 @@ export class RepliesRepository {
 
   async deleteReply(replyId: number) {
     try {
-      return await this.prisma.reply.delete({
-        where: {
-          replyId,
-        },
+      return await this.prisma.reply.update({
+        where: { replyId },
+        data: { deleted: true },
       });
     } catch (error) {
       throw DatabaseException.delete('reply');
@@ -72,7 +68,7 @@ export class RepliesRepository {
   async findReplyByIdAndSessionId(replyId: number, sessionId: string) {
     try {
       return await this.prisma.reply.findFirst({
-        where: { replyId, sessionId },
+        where: { replyId, sessionId, deleted: false },
       });
     } catch (error) {
       throw DatabaseException.read('reply');

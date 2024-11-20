@@ -1,17 +1,15 @@
 import axios from 'axios';
 
 import {
-  CreateSessionRequestDTO,
-  CreateSessionResponseDTO,
   GetSessionsResponseDTO,
   GetSessionTokenResponseDTO,
+  PostSessionRequestDTO,
+  PostSessionResponseDTO,
 } from '@/features/session/session.dto';
 
-export const createSession = (
-  createSessionRequestDTO: CreateSessionRequestDTO,
-) =>
+export const postSession = (body: PostSessionRequestDTO) =>
   axios
-    .post<CreateSessionResponseDTO>('/api/sessions', createSessionRequestDTO)
+    .post<PostSessionResponseDTO>('/api/sessions', body)
     .then((res) => res.data);
 
 export const getSessions = () =>
@@ -27,7 +25,7 @@ export const getSessionToken = (sessionId: string) => {
   return axios
     .get<GetSessionTokenResponseDTO>(`/api/sessions-auth`, {
       params: {
-        session_id: sessionId,
+        sessionId,
         token,
       },
     })
@@ -35,7 +33,7 @@ export const getSessionToken = (sessionId: string) => {
     .then((data) => {
       localStorage.setItem(
         'sessionTokens',
-        JSON.stringify({ ...tokens, [sessionId]: data.data.token }),
+        JSON.stringify({ ...tokens, [sessionId]: data.token }),
       );
       return data;
     });

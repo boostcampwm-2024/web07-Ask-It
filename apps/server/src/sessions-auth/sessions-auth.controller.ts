@@ -7,6 +7,7 @@ import { AuthSessionsSwagger } from './swagger/sessions-auth.swagger';
 
 import { JwtPayloadInterceptor } from '@common/interceptors/jwt-payload.interceptor';
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
+
 @ApiTags('sessions-auth')
 @UseInterceptors(TransformInterceptor)
 @UseInterceptors(JwtPayloadInterceptor)

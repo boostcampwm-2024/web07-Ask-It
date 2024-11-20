@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateSessionDto } from './dto/create-session.dto';
 import { SessionsService } from './sessions.service';
 import { CreateSessionSwagger } from './swagger/create-session.swagger';
 import { GetSessionSwagger } from './swagger/get-session.swagger';
 
+import { JwtAuthGuard } from '@auth/jwt-auth.guard';
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 
 @ApiTags('Sessions')

@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Param, ParseIntPipe, Patch, Post, UseGuards, 
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
-import { DeleteReplyDto } from './dto/delete-reply.dto';
 import { ToggleReplyLikeDto } from './dto/toggle-reply-like.dto';
 import { UpdateReplyBodyDto } from './dto/update-reply.dto';
 import { ReplyExistenceGuard } from './guards/reply-existence.guard';
@@ -15,6 +14,7 @@ import { UpdateReplySwagger } from './swagger/update-reply.swagger';
 
 import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
+import { QuestionExistenceGuard } from '@questions/guards/question-existence.guard';
 
 @ApiTags('Replies')
 @UseInterceptors(TransformInterceptor)
@@ -25,7 +25,7 @@ export class RepliesController {
   @Post()
   @CreateReplySwagger()
   @ApiBody({ type: CreateReplyDto })
-  @UseGuards(SessionTokenValidationGuard)
+  @UseGuards(SessionTokenValidationGuard, QuestionExistenceGuard)
   async create(@Body() createReplyDto: CreateReplyDto) {
     const [reply, isHost] = await Promise.all([
       this.repliesService.createReply(createReplyDto),

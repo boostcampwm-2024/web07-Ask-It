@@ -10,12 +10,13 @@ export const UpdateReplySwagger = () =>
       schema: {
         example: {
           reply: {
-            replyId: 1,
-            createUserToken: '859a3450-32c2-4c04-b2a3-127f679a1905',
-            sessionId: 'd340a812-ec52-45f1-824e-4ccbf338ed73',
-            questionId: 1,
-            body: '역시 신지호',
-            createdAt: '2024-11-18T10:50:23.610Z',
+            replyId: 13,
+            createUserToken: 'dc706db3-db2e-494c-99f5-fa680a51dd45',
+            sessionId: '2003544c-d901-4455-818d-d54af3784afa',
+            questionId: 10,
+            body: '수정합니다!',
+            createdAt: '2024-11-18T15:31:30.663Z',
+            deleted: false,
           },
         },
       },

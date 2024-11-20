@@ -1,18 +1,12 @@
-import { ErrorDTO, SuccessDTO } from '@/shared';
-
-export interface LoginRequestDTO {
+export interface PostLoginRequestDTO {
   email: string;
   password: string;
 }
 
-export type LoginResponseDTO =
-  | SuccessDTO<{
-      accessToken: string;
-    }>
-  | ErrorDTO;
+export interface PostLoginResponseDTO {
+  accessToken: string;
+}
 
-export type RefreshResponseDTO =
-  | SuccessDTO<{
-      accessToken: string;
-    }>
-  | ErrorDTO;
+export interface PostRefreshResponseDTO {
+  accessToken: string;
+}

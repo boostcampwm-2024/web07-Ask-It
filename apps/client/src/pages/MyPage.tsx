@@ -6,7 +6,7 @@ import { getSessions } from '@/features/session';
 function MyPage() {
   const { data } = useQuery({ queryKey: ['/sessions'], queryFn: getSessions });
 
-  const sessions = data?.data.sessionData;
+  const sessions = data?.sessionData;
 
   return (
     <div className='inline-flex h-full w-full items-center justify-center gap-4 overflow-hidden px-4 py-4 md:max-w-[1194px]'>
@@ -18,17 +18,15 @@ function MyPage() {
         <div className='flex shrink grow basis-0 flex-col items-start justify-start gap-4 self-stretch overflow-y-auto px-8 py-2'>
           {sessions?.map((session) => (
             <SessionRecord
-              key={session.session_id}
-              sessionId={session.session_id}
-              sessionName={session.title}
-              closed={session.expired}
-              createdAt={
-                new Date(
-                  session.created_at.year,
-                  session.created_at.month - 1,
-                  session.created_at.date,
-                )
-              }
+              key={session.sessionId}
+              session={{
+                ...session,
+                createdAt: new Date(
+                  session.createdAt.year,
+                  session.createdAt.month - 1,
+                  session.createdAt.date,
+                ).toISOString(),
+              }}
             />
           ))}
         </div>

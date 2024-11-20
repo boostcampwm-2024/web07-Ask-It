@@ -1,7 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
-
-import { ToggleReplyLikeDto } from '../dto/toggle-reply-like.dto'; //윈도우는 안 돼요..
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 export const ToggleReplyLikeSwagger = () =>
   applyDecorators(

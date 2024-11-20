@@ -1,3 +1,6 @@
+import { GoArchive, GoPeople } from 'react-icons/go';
+import { IoChatboxEllipsesOutline, IoLockClosedOutline } from 'react-icons/io5';
+
 import { Button, CreateSessionModal, FeatureCard } from '@/components';
 import { useAuthStore } from '@/features/auth';
 import { useModal } from '@/features/modal';
@@ -40,24 +43,24 @@ function HomePage() {
         <div className='inline-flex flex-grow flex-col items-center justify-center gap-8 bg-white py-8'>
           <div className='inline-flex h-fit w-2/3 flex-col items-start justify-center gap-8 sm:w-[536px] sm:flex-row'>
             <FeatureCard
-              icon='💬'
+              icon={<GoPeople size={32} />}
               title='실시간 Q&A'
-              description='마크다운과 이미지를 지원하는 풍부한 질문과 답변'
+              description='연사자와 익명의 청중의 실시간 응답'
             />
             <FeatureCard
-              icon='👥'
-              title='채팅 토론'
-              description='실시간 채팅으로 즉각적인 소통과 토론'
+              icon={<IoChatboxEllipsesOutline size={32} />}
+              title='채팅'
+              description='실시간 채팅으로 즉각적인 소통'
             />
           </div>
           <div className='inline-flex h-fit w-2/3 flex-col items-start justify-center gap-8 sm:w-[536px] sm:flex-row'>
             <FeatureCard
-              icon='🔒'
+              icon={<IoLockClosedOutline size={32} />}
               title='권한 관리'
               description='연사자와 참가자를 위한 세분화된 권한 시스템'
             />
             <FeatureCard
-              icon='📦'
+              icon={<GoArchive size={32} />}
               title='아카이빙'
               description='세션 내용 보존과 효율적인 자료화'
             />

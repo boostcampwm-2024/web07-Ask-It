@@ -41,6 +41,7 @@ export class QuestionsService {
     const { sessionId, token } = data;
     const questions = await this.questionRepository.findQuestionsWithDetails(sessionId);
     const session = await this.sessionRepository.findById(sessionId);
+    const expired = session.expiredAt < new Date();
     const sessionHostToken = await this.sessionAuthRepository.findTokenByUserId(session.createUserId, sessionId);
     const isHost = sessionHostToken === token;
 
@@ -89,12 +90,13 @@ export class QuestionsService {
         };
 
         const replyInfo = replies.map((reply) => {
-          const { replyId, createUserToken, body, createdAt, createUserTokenEntity, replyLikes } = reply;
+          const { replyId, createUserToken, body, createdAt, createUserTokenEntity, replyLikes, deleted } = reply;
 
           return {
             replyId,
             body,
             createdAt,
+            deleted,
             ...mapLikesAndOwnership({ createUserToken, likes: replyLikes, createUserTokenEntity }, token),
           };
         });
@@ -105,6 +107,8 @@ export class QuestionsService {
         };
       }),
       isHost,
+      expired,
+      session.title,
     ];
   }
 

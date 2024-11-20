@@ -1,7 +1,7 @@
 import { debounce } from 'es-toolkit';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { verifyEmail, verifyNickname } from '@/features/user/index';
+import { getVerifyEmail, getVerifyNickname } from '@/features/user/index';
 import {
   validateEmail,
   validateNickname,
@@ -35,11 +35,11 @@ export function useSignUpForm() {
 
   const checkEmailToVerify = useCallback(
     debounce(async (emailToVerify: string) => {
-      const response = await verifyEmail(emailToVerify);
+      const response = await getVerifyEmail(emailToVerify);
 
       setEmail(emailToVerify);
       setEmailValidationStatus(
-        response.data.exists
+        response.exists
           ? { status: 'INVALID', message: '이미 사용 중인 이메일입니다.' }
           : { status: 'VALID', message: '사용 가능한 이메일입니다.' },
       );
@@ -49,11 +49,11 @@ export function useSignUpForm() {
 
   const checkNicknameToVerify = useCallback(
     debounce(async (nicknameToVerify: string) => {
-      const response = await verifyNickname(nicknameToVerify);
+      const response = await getVerifyNickname(nicknameToVerify);
 
       setNickname(nicknameToVerify);
       setNicknameValidationStatus(
-        response.data.exists
+        response.exists
           ? { status: 'INVALID', message: '이미 사용 중인 닉네임입니다.' }
           : { status: 'VALID', message: '사용 가능한 닉네임입니다.' },
       );

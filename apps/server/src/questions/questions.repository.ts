@@ -34,8 +34,7 @@ export class QuestionsRepository {
     }
   }
 
-  async create(data: CreateQuestionDto) {
-    const { sessionId, token: createUserToken, body } = data;
+  async create({ sessionId, token: createUserToken, body }: CreateQuestionDto) {
     const questionData = {
       createUserToken,
       sessionId,
@@ -65,6 +64,7 @@ export class QuestionsRepository {
     try {
       return await this.prisma.question.findMany({
         where: { sessionId },
+        orderBy: { questionId: 'asc' },
         include: {
           questionLikes: {
             select: {
@@ -79,6 +79,7 @@ export class QuestionsRepository {
             },
           },
           replies: {
+            orderBy: { replyId: 'asc' },
             include: {
               createUserTokenEntity: {
                 select: {

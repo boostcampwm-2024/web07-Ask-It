@@ -6,8 +6,18 @@ import { Session } from '@/features/session/session.type';
 
 export interface SessionSlice {
   session?: Session;
+  sessionId?: string;
+  sessionToken?: string;
+  isHost: boolean;
+  expired: boolean;
+  sessionTitle?: string;
   reset: () => void;
   setSession: (session: Session) => void;
+  setSessionId: (sessionId: string) => void;
+  setSessionToken: (sessionToken: string) => void;
+  setIsHost: (isHost: boolean) => void;
+  setExpired: (expired: boolean) => void;
+  setSessionTitle: (sessionTitle: string) => void;
 }
 
 export const createSessionSlice: StateCreator<
@@ -16,11 +26,17 @@ export const createSessionSlice: StateCreator<
   [],
   SessionSlice
 > = (set, get) => ({
-  session: undefined,
+  isHost: false,
+  expired: false,
   reset: () => {
     get().resetQuestions();
     get().resetChatting();
-    set({ session: undefined });
+    set({ session: undefined, sessionToken: undefined, isHost: false });
   },
   setSession: (session) => set({ session }),
+  setSessionId: (sessionId) => set({ sessionId }),
+  setSessionToken: (sessionToken) => set({ sessionToken }),
+  setIsHost: (isHost) => set({ isHost }),
+  setExpired: (expired) => set({ expired }),
+  setSessionTitle: (sessionTitle) => set({ sessionTitle }),
 });

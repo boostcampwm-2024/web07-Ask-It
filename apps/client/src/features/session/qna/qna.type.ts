@@ -1,28 +1,26 @@
-import { Session } from '@/features/session/session.type';
+export interface Reply {
+  replyId: number;
+  body: string;
+  createdAt: string;
+  isOwner: boolean;
+  likesCount: number;
+  liked: boolean;
+  nickname: string;
+  isHost: boolean;
+  deleted: boolean;
+}
 
 export interface Question {
-  id: number;
-  sessionId: Session['id'];
+  questionId: number;
+  sessionId: string;
   body: string;
   closed: boolean;
   pinned: boolean;
-  upvotes: number;
+  createdAt: string;
+  isOwner: boolean;
+  likesCount: number;
+  liked: boolean;
+  nickname: string;
+  isHost: false;
   replies: Reply[];
-  user: {
-    token: string;
-    nickname: string;
-  };
-  createdAt: string;
-}
-
-export interface Reply {
-  id: number;
-  questionId: Question['id'];
-  body: string;
-  user: {
-    token: string;
-    nickname: string;
-  };
-  upvotes: number;
-  createdAt: string;
 }

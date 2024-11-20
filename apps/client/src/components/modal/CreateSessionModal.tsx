@@ -5,7 +5,7 @@ import Button from '@/components/Button';
 import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
 import { useModalContext } from '@/features/modal';
-import { createSession } from '@/features/session/session.api';
+import { postSession } from '@/features/session/session.api';
 import { useToastStore } from '@/features/toast';
 
 function CreateSessionModal() {
@@ -19,7 +19,7 @@ function CreateSessionModal() {
 
   const handleCreateSession = () =>
     sessionName.trim().length > 0 &&
-    createSession({ title: sessionName }).then((res) => {
+    postSession({ title: sessionName }).then((res) => {
       closeModal();
       addToast({
         type: 'SUCCESS',
@@ -28,7 +28,7 @@ function CreateSessionModal() {
       });
       navigate({
         to: '/session/$sessionId',
-        params: { sessionId: res.data.sessionId },
+        params: { sessionId: res.sessionId },
       });
     });
 
