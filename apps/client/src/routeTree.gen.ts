@@ -10,12 +10,12 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as MyImport } from './routes/my'
-import { Route as SessionRouteImport } from './routes/session/route'
-import { Route as IndexImport } from './routes/index'
-import { Route as SessionSessionIdIndexImport } from './routes/session/$sessionId/index'
-import { Route as SessionSessionIdQuestionIdIndexImport } from './routes/session/$sessionId/$questionId/index'
+import { Route as rootRoute } from './routes/__root';
+import { Route as MyImport } from './routes/my';
+import { Route as SessionRouteImport } from './routes/session/route';
+import { Route as IndexImport } from './routes/index';
+import { Route as SessionSessionIdIndexImport } from './routes/session/$sessionId/index';
+import { Route as SessionSessionIdQuestionIdIndexImport } from './routes/session/$sessionId/$questionId/index';
 
 // Create/Update Routes
 
@@ -23,156 +23,156 @@ const MyRoute = MyImport.update({
   id: '/my',
   path: '/my',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const SessionRouteRoute = SessionRouteImport.update({
   id: '/session',
   path: '/session',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const SessionSessionIdIndexRoute = SessionSessionIdIndexImport.update({
   id: '/$sessionId/',
   path: '/$sessionId/',
   getParentRoute: () => SessionRouteRoute,
-} as any)
+} as any);
 
 const SessionSessionIdQuestionIdIndexRoute =
   SessionSessionIdQuestionIdIndexImport.update({
     id: '/$sessionId/$questionId/',
     path: '/$sessionId/$questionId/',
     getParentRoute: () => SessionRouteRoute,
-  } as any)
+  } as any);
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/';
+      path: '/';
+      fullPath: '/';
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
     '/session': {
-      id: '/session'
-      path: '/session'
-      fullPath: '/session'
-      preLoaderRoute: typeof SessionRouteImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/session';
+      path: '/session';
+      fullPath: '/session';
+      preLoaderRoute: typeof SessionRouteImport;
+      parentRoute: typeof rootRoute;
+    };
     '/my': {
-      id: '/my'
-      path: '/my'
-      fullPath: '/my'
-      preLoaderRoute: typeof MyImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/my';
+      path: '/my';
+      fullPath: '/my';
+      preLoaderRoute: typeof MyImport;
+      parentRoute: typeof rootRoute;
+    };
     '/session/$sessionId/': {
-      id: '/session/$sessionId/'
-      path: '/$sessionId'
-      fullPath: '/session/$sessionId'
-      preLoaderRoute: typeof SessionSessionIdIndexImport
-      parentRoute: typeof SessionRouteImport
-    }
+      id: '/session/$sessionId/';
+      path: '/$sessionId';
+      fullPath: '/session/$sessionId';
+      preLoaderRoute: typeof SessionSessionIdIndexImport;
+      parentRoute: typeof SessionRouteImport;
+    };
     '/session/$sessionId/$questionId/': {
-      id: '/session/$sessionId/$questionId/'
-      path: '/$sessionId/$questionId'
-      fullPath: '/session/$sessionId/$questionId'
-      preLoaderRoute: typeof SessionSessionIdQuestionIdIndexImport
-      parentRoute: typeof SessionRouteImport
-    }
+      id: '/session/$sessionId/$questionId/';
+      path: '/$sessionId/$questionId';
+      fullPath: '/session/$sessionId/$questionId';
+      preLoaderRoute: typeof SessionSessionIdQuestionIdIndexImport;
+      parentRoute: typeof SessionRouteImport;
+    };
   }
 }
 
 // Create and export the route tree
 
 interface SessionRouteRouteChildren {
-  SessionSessionIdIndexRoute: typeof SessionSessionIdIndexRoute
-  SessionSessionIdQuestionIdIndexRoute: typeof SessionSessionIdQuestionIdIndexRoute
+  SessionSessionIdIndexRoute: typeof SessionSessionIdIndexRoute;
+  SessionSessionIdQuestionIdIndexRoute: typeof SessionSessionIdQuestionIdIndexRoute;
 }
 
 const SessionRouteRouteChildren: SessionRouteRouteChildren = {
   SessionSessionIdIndexRoute: SessionSessionIdIndexRoute,
   SessionSessionIdQuestionIdIndexRoute: SessionSessionIdQuestionIdIndexRoute,
-}
+};
 
 const SessionRouteRouteWithChildren = SessionRouteRoute._addFileChildren(
   SessionRouteRouteChildren,
-)
+);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/session': typeof SessionRouteRouteWithChildren
-  '/my': typeof MyRoute
-  '/session/$sessionId': typeof SessionSessionIdIndexRoute
-  '/session/$sessionId/$questionId': typeof SessionSessionIdQuestionIdIndexRoute
+  '/': typeof IndexRoute;
+  '/session': typeof SessionRouteRouteWithChildren;
+  '/my': typeof MyRoute;
+  '/session/$sessionId': typeof SessionSessionIdIndexRoute;
+  '/session/$sessionId/$questionId': typeof SessionSessionIdQuestionIdIndexRoute;
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/session': typeof SessionRouteRouteWithChildren
-  '/my': typeof MyRoute
-  '/session/$sessionId': typeof SessionSessionIdIndexRoute
-  '/session/$sessionId/$questionId': typeof SessionSessionIdQuestionIdIndexRoute
+  '/': typeof IndexRoute;
+  '/session': typeof SessionRouteRouteWithChildren;
+  '/my': typeof MyRoute;
+  '/session/$sessionId': typeof SessionSessionIdIndexRoute;
+  '/session/$sessionId/$questionId': typeof SessionSessionIdQuestionIdIndexRoute;
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/session': typeof SessionRouteRouteWithChildren
-  '/my': typeof MyRoute
-  '/session/$sessionId/': typeof SessionSessionIdIndexRoute
-  '/session/$sessionId/$questionId/': typeof SessionSessionIdQuestionIdIndexRoute
+  __root__: typeof rootRoute;
+  '/': typeof IndexRoute;
+  '/session': typeof SessionRouteRouteWithChildren;
+  '/my': typeof MyRoute;
+  '/session/$sessionId/': typeof SessionSessionIdIndexRoute;
+  '/session/$sessionId/$questionId/': typeof SessionSessionIdQuestionIdIndexRoute;
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | '/'
     | '/session'
     | '/my'
     | '/session/$sessionId'
-    | '/session/$sessionId/$questionId'
-  fileRoutesByTo: FileRoutesByTo
+    | '/session/$sessionId/$questionId';
+  fileRoutesByTo: FileRoutesByTo;
   to:
     | '/'
     | '/session'
     | '/my'
     | '/session/$sessionId'
-    | '/session/$sessionId/$questionId'
+    | '/session/$sessionId/$questionId';
   id:
     | '__root__'
     | '/'
     | '/session'
     | '/my'
     | '/session/$sessionId/'
-    | '/session/$sessionId/$questionId/'
-  fileRoutesById: FileRoutesById
+    | '/session/$sessionId/$questionId/';
+  fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  SessionRouteRoute: typeof SessionRouteRouteWithChildren
-  MyRoute: typeof MyRoute
+  IndexRoute: typeof IndexRoute;
+  SessionRouteRoute: typeof SessionRouteRouteWithChildren;
+  MyRoute: typeof MyRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SessionRouteRoute: SessionRouteRouteWithChildren,
   MyRoute: MyRoute,
-}
+};
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
 /* ROUTE_MANIFEST_START
 {
