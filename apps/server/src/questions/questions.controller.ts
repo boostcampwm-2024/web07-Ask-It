@@ -64,7 +64,7 @@ export class QuestionsController {
   async createQuestion(@Body() createQuestionDto: CreateQuestionDto) {
     const createdQuestion = await this.questionsService.createQuestion(createQuestionDto);
     const { sessionId, token } = createQuestionDto;
-    const resultForOwner = { quesiton: createdQuestion };
+    const resultForOwner = { question: createdQuestion };
     const resultForOther = { question: { ...createdQuestion, isOwner: false } };
     this.socketGateway.broadcastNewQuestion(sessionId, token, resultForOther);
     return resultForOwner;
