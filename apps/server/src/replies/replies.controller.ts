@@ -69,9 +69,9 @@ export class RepliesController {
   @DeleteReplySwagger()
   @UseGuards(SessionTokenValidationGuard, ReplyExistenceGuard, ReplyOwnershipGuard)
   async delete(@Param('replyId', ParseIntPipe) replyId: number, @Query() data: BaseDto) {
-    await this.repliesService.deleteReply(replyId);
+    const { questionId } = await this.repliesService.deleteReply(replyId);
     const { sessionId, token } = data;
-    const resultForOther = { replyId };
+    const resultForOther = { replyId, questionId };
     this.socketGateway.broadcastReplyDelete(sessionId, token, resultForOther);
     return {};
   }
@@ -80,11 +80,11 @@ export class RepliesController {
   @ToggleReplyLikeSwagger()
   @UseGuards(SessionTokenValidationGuard)
   async toggleLike(@Param('replyId', ParseIntPipe) replyId: number, @Body() toggleReplyLikeDto: ToggleReplyLikeDto) {
-    const { liked } = await this.repliesService.toggleLike(replyId, toggleReplyLikeDto.token);
+    const { liked, questionId } = await this.repliesService.toggleLike(replyId, toggleReplyLikeDto.token);
     const likesCount = await this.repliesService.getLikesCount(replyId);
     const { sessionId, token } = toggleReplyLikeDto;
     const resultForOwner = { liked, likesCount };
-    const resultForOther = { replyId, liked: false, likesCount };
+    const resultForOther = { replyId, liked: false, likesCount, questionId };
     this.socketGateway.broadcastReplyLike(sessionId, token, resultForOther);
     return resultForOwner;
   }

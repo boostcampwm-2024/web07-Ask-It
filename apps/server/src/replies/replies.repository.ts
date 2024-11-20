@@ -90,10 +90,13 @@ export class RepliesRepository {
 
   async createLike(replyId: number, createUserToken: string) {
     try {
-      await this.prisma.replyLike.create({
+      return await this.prisma.replyLike.create({
         data: {
           replyId,
           createUserToken,
+        },
+        include: {
+          reply: true,
         },
       });
     } catch (error) {
@@ -110,8 +113,11 @@ export class RepliesRepository {
 
   async deleteLike(replyLikeId: number) {
     try {
-      await this.prisma.replyLike.delete({
+      return await this.prisma.replyLike.delete({
         where: { replyLikeId },
+        include: {
+          reply: true,
+        },
       });
     } catch (error) {
       throw DatabaseException.delete('replyLike');
