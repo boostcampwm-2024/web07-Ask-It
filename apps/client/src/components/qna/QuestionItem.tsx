@@ -1,3 +1,7 @@
+import { FiEdit2 } from 'react-icons/fi';
+import { GoCheck } from 'react-icons/go';
+import { GrClose, GrLike, GrLikeFill, GrPin } from 'react-icons/gr';
+import { RiQuestionAnswerLine } from 'react-icons/ri';
 import Markdown from 'react-markdown';
 
 import { Button, CreateQuestionModal } from '@/components';
@@ -128,7 +132,7 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
               {(isHost || (!isHost && question.closed)) && (
                 <Button
                   onClick={handleClose}
-                  className={`scale-y-90 self-start transition-colors duration-200 ${
+                  className={`self-start transition-colors duration-200 ${
                     question.closed
                       ? 'bg-green-100 hover:bg-green-200'
                       : 'bg-red-100 hover:bg-red-200'
@@ -139,7 +143,7 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
                       question.closed ? 'text-green-800' : 'text-red-800'
                     }`}
                   >
-                    ✓
+                    <GoCheck />
                   </div>
                 </Button>
               )}
@@ -148,34 +152,41 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
         </div>
         <div className='inline-flex w-full justify-between'>
           <div className='inline-flex items-center justify-start gap-2'>
-            <Button
-              className='hover:bg-gray-200/50 hover:transition-all'
-              onClick={handleLike}
-            >
-              <div>
-                <span className='text-sm font-medium text-black'>👍 </span>
-                <span className='text-sm font-medium text-gray-500'>
-                  {question.likesCount}
-                </span>
-              </div>
-            </Button>
             {isHost && (
               <Button
                 className='hover:bg-gray-200/50 hover:transition-all'
                 onClick={handlePin}
               >
-                <div>
-                  <span className='text-sm font-medium text-black'>📌 </span>
-                  <span className='text-sm font-medium text-gray-500'>Pin</span>
+                <div className='flex flex-row items-center gap-2 text-sm font-medium text-gray-500'>
+                  <GrPin />
+                  <span>{question.pinned ? '고정 해제' : '고정'}</span>
                 </div>
               </Button>
             )}
             <Button
               className='hover:bg-gray-200/50 hover:transition-all'
+              onClick={handleLike}
+            >
+              <div className='flex flex-row items-center gap-2 text-sm font-medium text-gray-500'>
+                {question.liked ? (
+                  <GrLikeFill
+                    style={{
+                      fill: 'rgb(165 180 252)',
+                    }}
+                  />
+                ) : (
+                  <GrLike />
+                )}
+                <span>{question.likesCount}</span>
+              </div>
+            </Button>
+            <Button
+              className='hover:bg-gray-200/50 hover:transition-all'
               onClick={onQuestionSelect}
             >
-              <div className='text-sm font-medium text-indigo-600'>
-                💬 답글 {`${question.replies.length}`}
+              <div className='flex flex-row items-center gap-2 text-sm font-medium text-gray-500'>
+                <RiQuestionAnswerLine />
+                <span>답글 {question.replies.length}</span>
               </div>
             </Button>
           </div>
@@ -187,16 +198,16 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
               question.replies.length === 0 && (
                 <>
                   <Button
-                    className='scale-y-90 bg-gray-200/25 hover:bg-gray-200/50 hover:transition-all'
+                    className='bg-gray-200/25 font-medium text-gray-500 hover:bg-gray-200/50 hover:transition-all'
                     onClick={openModal}
                   >
-                    ✎
+                    <FiEdit2 />
                   </Button>
                   <Button
-                    className='scale-y-90 bg-red-200/25 text-red-600 hover:bg-red-200/50 hover:transition-all'
+                    className='bg-red-200/25 text-red-600 hover:bg-red-200/50 hover:transition-all'
                     onClick={handleDelete}
                   >
-                    X
+                    <GrClose />
                   </Button>
                 </>
               )}

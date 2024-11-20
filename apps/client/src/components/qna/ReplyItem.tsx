@@ -1,4 +1,5 @@
-import { GrValidate } from 'react-icons/gr';
+import { FiEdit2 } from 'react-icons/fi';
+import { GrClose, GrLike, GrLikeFill, GrValidate } from 'react-icons/gr';
 import Markdown from 'react-markdown';
 
 import { Button, CreateReplyModal } from '@/components';
@@ -86,27 +87,33 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
               className='hover:bg-gray-200/50 hover:transition-all'
               onClick={handleToggleLike}
             >
-              <div>
-                <span className='text-sm font-medium text-black'>👍 </span>
-                <span className='text-sm font-medium text-gray-500'>
-                  {reply.likesCount}
-                </span>
+              <div className='flex flex-row items-center gap-2 text-sm font-medium text-gray-500'>
+                {reply.liked ? (
+                  <GrLikeFill
+                    style={{
+                      fill: 'rgb(165 180 252)',
+                    }}
+                  />
+                ) : (
+                  <GrLike />
+                )}
+                <span>{reply.likesCount}</span>
               </div>
             </Button>
             <div className='inline-flex items-center justify-start gap-2 px-2'>
               {!expired && reply.isOwner && !reply.deleted && (
                 <>
                   <Button
-                    className='scale-y-90 bg-gray-200/25 hover:bg-gray-200/50 hover:transition-all'
+                    className='bg-gray-200/25 hover:bg-gray-200/50 hover:transition-all'
                     onClick={openModal}
                   >
-                    ✎
+                    <FiEdit2 />
                   </Button>
                   <Button
-                    className='scale-y-90 bg-red-200/25 text-red-600 hover:bg-red-200/50 hover:transition-all'
+                    className='bg-red-200/25 text-red-600 hover:bg-red-200/50 hover:transition-all'
                     onClick={handleDelete}
                   >
-                    X
+                    <GrClose />
                   </Button>
                 </>
               )}
