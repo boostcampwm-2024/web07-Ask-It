@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { SocketModule } from '@socket/socket.module';
 
 import { QuestionsController } from './questions.controller';
 import { QuestionsRepository } from './questions.repository';
@@ -11,7 +12,7 @@ import { QuestionOwnershipGuard } from '@questions/guards/question-ownership.gua
 import { RepliesRepository } from '@replies/replies.repository';
 
 @Module({
-  imports: [PrismaModule, SessionTokenModule],
+  imports: [PrismaModule, SessionTokenModule, SocketModule],
   controllers: [QuestionsController],
   providers: [QuestionsService, QuestionsRepository, QuestionExistenceGuard, QuestionOwnershipGuard, RepliesRepository],
   exports: [QuestionExistenceGuard, QuestionsRepository],

@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 
+import { SocketModule } from './socket/socket.module';
+
 import { AuthModule } from '@auth/auth.module';
 import { PrismaModule } from '@prisma-alias/prisma.module';
 import { PrismaService } from '@prisma-alias/prisma.service';
@@ -9,7 +11,6 @@ import { SessionsModule } from '@sessions/sessions.module';
 import { SessionsAuthModule } from '@sessions-auth/sessions-auth.module';
 import { UploadModule } from '@upload/upload.module';
 import { UsersModule } from '@users/users.module';
-import { ChatModule } from './chat/chat.module';
 @Module({
   imports: [
     UsersModule,
@@ -21,7 +22,7 @@ import { ChatModule } from './chat/chat.module';
     RepliesModule,
     AuthModule,
     UploadModule,
-    ChatModule,
+    SocketModule,
   ],
   controllers: [],
   providers: [PrismaService],
