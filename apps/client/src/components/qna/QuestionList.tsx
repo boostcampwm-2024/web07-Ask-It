@@ -1,5 +1,7 @@
+import { motion } from 'motion/react';
+
 import { Button, CreateQuestionModal } from '@/components';
-import QuestionItem from '@/components/qna/QuestionItem';
+import QuestionSection from '@/components/qna/QuestionSection';
 import { useModal } from '@/features/modal';
 import { useSessionStore } from '@/features/session';
 import { useQnAContext } from '@/features/session/qna';
@@ -11,21 +13,30 @@ function QuestionList() {
 
   const { handleSelectQuestionId } = useQnAContext();
 
-  const pinnedQuestions = questions
-    .filter((question) => question.pinned && !question.closed)
-    .sort((a, b) => b.likesCount - a.likesCount);
-
-  const unpinnedQuestions = questions
-    .filter((question) => !question.pinned && !question.closed)
-    .sort((a, b) => b.likesCount - a.likesCount);
-
-  const closedQuestions = questions
-    .filter((question) => question.closed)
-    .sort((a, b) => {
-      if (a.pinned && !b.pinned) return -1;
-      if (!a.pinned && b.pinned) return 1;
-      return b.likesCount - a.likesCount;
-    });
+  const sections = [
+    {
+      title: '고정된 질문',
+      questions: questions
+        .filter((question) => question.pinned && !question.closed)
+        .sort((a, b) => b.likesCount - a.likesCount),
+    },
+    {
+      title: '질문',
+      questions: questions
+        .filter((question) => !question.pinned && !question.closed)
+        .sort((a, b) => b.likesCount - a.likesCount),
+    },
+    {
+      title: '답변 완료된 질문',
+      questions: questions
+        .filter((question) => question.closed)
+        .sort((a, b) => {
+          if (a.pinned && !b.pinned) return -1;
+          if (!a.pinned && b.pinned) return 1;
+          return b.likesCount - a.likesCount;
+        }),
+    },
+  ];
 
   return (
     <>
@@ -38,42 +49,16 @@ function QuestionList() {
             </Button>
           )}
         </div>
-        <div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto px-8 py-4'>
-          {pinnedQuestions.map((question) => (
-            <QuestionItem
-              key={question.questionId}
-              question={question}
-              onQuestionSelect={() => {
-                handleSelectQuestionId(question.questionId);
-              }}
+        <motion.div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto px-8 py-4'>
+          {sections.map((section) => (
+            <QuestionSection
+              key={section.title}
+              title={section.title}
+              questions={section.questions}
+              onQuestionSelect={handleSelectQuestionId}
             />
           ))}
-          {pinnedQuestions.length > 0 && unpinnedQuestions.length > 0 && (
-            <hr className='mb-4 mt-4 w-full rounded-3xl border-t-[1px] border-indigo-200' />
-          )}
-          {unpinnedQuestions.map((question) => (
-            <QuestionItem
-              key={question.questionId}
-              question={question}
-              onQuestionSelect={() => {
-                handleSelectQuestionId(question.questionId);
-              }}
-            />
-          ))}
-          {((unpinnedQuestions.length > 0 && closedQuestions.length > 0) ||
-            (pinnedQuestions.length > 0 && closedQuestions.length > 0)) && (
-            <hr className='mb-4 mt-4 w-full rounded-3xl border-t-[1px] border-indigo-200' />
-          )}
-          {closedQuestions.map((question) => (
-            <QuestionItem
-              key={question.questionId}
-              question={question}
-              onQuestionSelect={() => {
-                handleSelectQuestionId(question.questionId);
-              }}
-            />
-          ))}
-        </div>
+        </motion.div>
       </div>
       {Modal}
     </>
