@@ -22,6 +22,7 @@ import { CreateQuestionSwagger } from './swagger/create-question.swagger';
 import { GetQuestionSwagger } from './swagger/get-question.swagger';
 import { ToggleQuestionLikeSwagger } from './swagger/toggle-question.swagger';
 
+import { BaseDto } from '@common/base.dto';
 import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 import {
@@ -37,12 +38,16 @@ import {
   UpdateQuestionClosedSwagger,
   UpdateQuestionPinnedSwagger,
 } from '@questions/swagger/update-question.swagger';
+import { SocketGateway } from '@socket/socket.gateway';
 
 @ApiTags('Questions')
 @UseInterceptors(TransformInterceptor)
 @Controller('questions')
 export class QuestionsController {
-  constructor(private readonly questionsService: QuestionsService) {}
+  constructor(
+    private readonly questionsService: QuestionsService,
+    private readonly socketGateway: SocketGateway,
+  ) {}
 
   @Get()
   @GetQuestionSwagger()
@@ -58,7 +63,11 @@ export class QuestionsController {
   @UseGuards(SessionTokenValidationGuard)
   async createQuestion(@Body() createQuestionDto: CreateQuestionDto) {
     const createdQuestion = await this.questionsService.createQuestion(createQuestionDto);
-    return { question: createdQuestion };
+    const { sessionId, token } = createQuestionDto;
+    const resultForOwner = { quesiton: createdQuestion };
+    const resultForOther = { question: { ...createdQuestion, isOwner: false } };
+    this.socketGateway.broadcastNewQuestion(sessionId, token, resultForOther);
+    return resultForOwner;
   }
 
   @Patch(':questionId/body')
@@ -75,15 +84,21 @@ export class QuestionsController {
       updateQuestionBodyDto,
       req.question,
     );
-    return { question: updatedQuestion };
+    const { sessionId, token } = updateQuestionBodyDto;
+    const result = { question: updatedQuestion };
+    this.socketGateway.broadcastQuestionUpdate(sessionId, token, result);
+    return result;
   }
 
   @Delete(':questionId')
   @DeleteQuestionSwagger()
   @UseGuards(SessionTokenValidationGuard, QuestionExistenceGuard, QuestionOwnershipGuard)
-  async deleteQuestion(@Param('questionId', ParseIntPipe) questionId: number, @Req() req: any) {
-    const deletedQuestion = await this.questionsService.deleteQuestion(questionId, req.question);
-    return { question: deletedQuestion };
+  async deleteQuestion(@Param('questionId', ParseIntPipe) questionId: number, @Query() data: BaseDto, @Req() req: any) {
+    await this.questionsService.deleteQuestion(questionId, req.question);
+    const { sessionId, token } = data;
+    const resultForOther = { questionId };
+    this.socketGateway.broadcastQuestionDelete(sessionId, token, resultForOther);
+    return {};
   }
 
   @Patch(':questionId/pinned')
@@ -95,7 +110,10 @@ export class QuestionsController {
     @Body() updateQuestionPinnedDto: UpdateQuestionPinnedDto,
   ) {
     const updatedQuestion = await this.questionsService.updateQuestionPinned(questionId, updateQuestionPinnedDto);
-    return { question: updatedQuestion };
+    const { sessionId, token } = updateQuestionPinnedDto;
+    const result = { question: updatedQuestion };
+    this.socketGateway.broadcastQuestionUpdate(sessionId, token, result);
+    return result;
   }
 
   @Patch(':questionId/closed')
@@ -107,7 +125,10 @@ export class QuestionsController {
     @Body() updateQuestionClosedDto: UpdateQuestionClosedDto,
   ) {
     const updatedQuestion = await this.questionsService.updateQuestionClosed(questionId, updateQuestionClosedDto);
-    return { question: updatedQuestion };
+    const { sessionId, token } = updateQuestionClosedDto;
+    const result = { question: updatedQuestion };
+    this.socketGateway.broadcastQuestionUpdate(sessionId, token, result);
+    return result;
   }
 
   @Post(':questionId/likes')
@@ -119,6 +140,10 @@ export class QuestionsController {
   ) {
     const { liked } = await this.questionsService.toggleLike(questionId, toggleQuestionLikeDto.token);
     const likesCount = await this.questionsService.getLikesCount(questionId);
-    return { liked, likesCount };
+    const { sessionId, token } = toggleQuestionLikeDto;
+    const resultForOwner = { liked, likesCount };
+    const resultForOther = { questionId, liked: false, likesCount };
+    this.socketGateway.broadcastQuestionLike(sessionId, token, resultForOther);
+    return resultForOwner;
   }
 }

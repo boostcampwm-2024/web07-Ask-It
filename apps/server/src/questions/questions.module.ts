@@ -9,9 +9,10 @@ import { PrismaModule } from '@prisma-alias/prisma.module';
 import { QuestionExistenceGuard } from '@questions/guards/question-existence.guard';
 import { QuestionOwnershipGuard } from '@questions/guards/question-ownership.guard';
 import { RepliesRepository } from '@replies/replies.repository';
+import { SocketModule } from '@socket/socket.module';
 
 @Module({
-  imports: [PrismaModule, SessionTokenModule],
+  imports: [PrismaModule, SessionTokenModule, SocketModule],
   controllers: [QuestionsController],
   providers: [QuestionsService, QuestionsRepository, QuestionExistenceGuard, QuestionOwnershipGuard, RepliesRepository],
   exports: [QuestionExistenceGuard, QuestionsRepository],

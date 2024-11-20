@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Param, ParseIntPipe, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
@@ -15,12 +26,17 @@ import { UpdateReplySwagger } from './swagger/update-reply.swagger';
 import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 import { QuestionExistenceGuard } from '@questions/guards/question-existence.guard';
+import { SocketGateway } from '@socket/socket.gateway';
+import { BaseDto } from '@src/common/base.dto';
 
 @ApiTags('Replies')
 @UseInterceptors(TransformInterceptor)
 @Controller('replies')
 export class RepliesController {
-  constructor(private readonly repliesService: RepliesService) {}
+  constructor(
+    private readonly repliesService: RepliesService,
+    private readonly socketGateway: SocketGateway,
+  ) {}
 
   @Post()
   @CreateReplySwagger()
@@ -31,7 +47,10 @@ export class RepliesController {
       this.repliesService.createReply(createReplyDto),
       this.repliesService.validateHost(createReplyDto.sessionId, createReplyDto.token),
     ]);
-    return { reply: { ...reply, isHost } };
+    const result = { reply: { ...reply, isHost } };
+    const { sessionId, token } = createReplyDto;
+    this.socketGateway.broadcastNewReply(sessionId, token, result);
+    return result;
   }
 
   @Patch(':replyId/body')
@@ -40,14 +59,20 @@ export class RepliesController {
   @UseGuards(SessionTokenValidationGuard, ReplyExistenceGuard, ReplyOwnershipGuard)
   async update(@Param('replyId', ParseIntPipe) replyId: number, @Body() updateReplyBodyDto: UpdateReplyBodyDto) {
     const updatedReply = await this.repliesService.updateBody(replyId, updateReplyBodyDto);
-    return { reply: updatedReply };
+    const { sessionId, token } = updateReplyBodyDto;
+    const result = { reply: updatedReply };
+    this.socketGateway.broadcastReplyUpdate(sessionId, token, result);
+    return result;
   }
 
   @Delete(':replyId')
   @DeleteReplySwagger()
   @UseGuards(SessionTokenValidationGuard, ReplyExistenceGuard, ReplyOwnershipGuard)
-  async delete(@Param('replyId', ParseIntPipe) replyId: number) {
+  async delete(@Param('replyId', ParseIntPipe) replyId: number, @Query() data: BaseDto) {
     await this.repliesService.deleteReply(replyId);
+    const { sessionId, token } = data;
+    const resultForOther = { replyId };
+    this.socketGateway.broadcastReplyDelete(sessionId, token, resultForOther);
     return {};
   }
 
@@ -57,6 +82,10 @@ export class RepliesController {
   async toggleLike(@Param('replyId', ParseIntPipe) replyId: number, @Body() toggleReplyLikeDto: ToggleReplyLikeDto) {
     const { liked } = await this.repliesService.toggleLike(replyId, toggleReplyLikeDto.token);
     const likesCount = await this.repliesService.getLikesCount(replyId);
-    return { liked, likesCount };
+    const { sessionId, token } = toggleReplyLikeDto;
+    const resultForOwner = { liked, likesCount };
+    const resultForOther = { replyId, liked: false, likesCount };
+    this.socketGateway.broadcastReplyLike(sessionId, token, resultForOther);
+    return resultForOwner;
   }
 }

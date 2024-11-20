@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 
+import { SocketModule } from './socket/socket.module';
+
 import { AuthModule } from '@auth/auth.module';
 import { PrismaModule } from '@prisma-alias/prisma.module';
 import { PrismaService } from '@prisma-alias/prisma.service';
@@ -20,6 +22,7 @@ import { UsersModule } from '@users/users.module';
     RepliesModule,
     AuthModule,
     UploadModule,
+    SocketModule,
   ],
   controllers: [],
   providers: [PrismaService],
