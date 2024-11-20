@@ -9,6 +9,7 @@ import { SessionsModule } from '@sessions/sessions.module';
 import { SessionsAuthModule } from '@sessions-auth/sessions-auth.module';
 import { UploadModule } from '@upload/upload.module';
 import { UsersModule } from '@users/users.module';
+import { ChatModule } from './chat/chat.module';
 @Module({
   imports: [
     UsersModule,
@@ -20,6 +21,7 @@ import { UsersModule } from '@users/users.module';
     RepliesModule,
     AuthModule,
     UploadModule,
+    ChatModule,
   ],
   controllers: [],
   providers: [PrismaService],
