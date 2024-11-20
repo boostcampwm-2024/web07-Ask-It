@@ -10,12 +10,14 @@ export interface SessionSlice {
   sessionToken?: string;
   isHost: boolean;
   expired: boolean;
+  sessionTitle?: string;
   reset: () => void;
   setSession: (session: Session) => void;
   setSessionId: (sessionId: string) => void;
   setSessionToken: (sessionToken: string) => void;
   setIsHost: (isHost: boolean) => void;
   setExpired: (expired: boolean) => void;
+  setSessionTitle: (sessionTitle: string) => void;
 }
 
 export const createSessionSlice: StateCreator<
@@ -36,4 +38,5 @@ export const createSessionSlice: StateCreator<
   setSessionToken: (sessionToken) => set({ sessionToken }),
   setIsHost: (isHost) => set({ isHost }),
   setExpired: (expired) => set({ expired }),
+  setSessionTitle: (sessionTitle) => set({ sessionTitle }),
 });
