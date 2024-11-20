@@ -11,7 +11,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { SocketGateway } from '@socket/socket.gateway';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { ToggleReplyLikeDto } from './dto/toggle-reply-like.dto';
@@ -27,6 +26,7 @@ import { UpdateReplySwagger } from './swagger/update-reply.swagger';
 import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 import { QuestionExistenceGuard } from '@questions/guards/question-existence.guard';
+import { SocketGateway } from '@socket/socket.gateway';
 import { BaseDto } from '@src/common/base.dto';
 
 @ApiTags('Replies')

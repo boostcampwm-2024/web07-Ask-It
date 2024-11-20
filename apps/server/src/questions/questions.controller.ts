@@ -13,7 +13,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { SocketGateway } from '@socket/socket.gateway';
 
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { GetQuestionDto } from './dto/get-question.dto';
@@ -39,6 +38,7 @@ import {
   UpdateQuestionClosedSwagger,
   UpdateQuestionPinnedSwagger,
 } from '@questions/swagger/update-question.swagger';
+import { SocketGateway } from '@socket/socket.gateway';
 
 @ApiTags('Questions')
 @UseInterceptors(TransformInterceptor)

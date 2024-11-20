@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { SocketModule } from '@socket/socket.module';
 
 import { QuestionsController } from './questions.controller';
 import { QuestionsRepository } from './questions.repository';
@@ -10,6 +9,7 @@ import { PrismaModule } from '@prisma-alias/prisma.module';
 import { QuestionExistenceGuard } from '@questions/guards/question-existence.guard';
 import { QuestionOwnershipGuard } from '@questions/guards/question-ownership.guard';
 import { RepliesRepository } from '@replies/replies.repository';
+import { SocketModule } from '@socket/socket.module';
 
 @Module({
   imports: [PrismaModule, SessionTokenModule, SocketModule],
