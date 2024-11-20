@@ -1,10 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Question } from '@prisma/client';
-
-import { CreateQuestionDto } from './dto/create-question.dto';
-import { GetQuestionDto } from './dto/get-question.dto';
-import { QuestionsRepository } from './questions.repository';
-
 import {
   UpdateQuestionBodyDto,
   UpdateQuestionClosedDto,
@@ -13,6 +8,10 @@ import {
 import { RepliesRepository } from '@replies/replies.repository';
 import { SessionRepository } from '@sessions/sessions.repository';
 import { SessionsAuthRepository } from '@sessions-auth/sessions-auth.repository';
+
+import { CreateQuestionDto } from './dto/create-question.dto';
+import { GetQuestionDto } from './dto/get-question.dto';
+import { QuestionsRepository } from './questions.repository';
 
 @Injectable()
 export class QuestionsService {
@@ -108,6 +107,7 @@ export class QuestionsService {
       }),
       isHost,
       expired,
+      session.title,
     ];
   }
 
