@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 interface QuestionDividerProps {
   description?: string;
   isExpanded?: boolean;
@@ -18,10 +20,12 @@ function QuestionDivider({
       />
       {description && (
         <>
-          <div className='flex items-center gap-1'>
+          <div
+            className='flex cursor-pointer items-center gap-1'
+            onClick={onClick}
+          >
             <svg
-              onClick={onClick}
-              className={`inline-block h-3 w-3 cursor-pointer transition-transform ${
+              className={`inline-block h-3 w-3 transition-transform ${
                 isExpanded
                   ? 'font-semibold text-indigo-600'
                   : '-rotate-180 font-normal text-gray-500'

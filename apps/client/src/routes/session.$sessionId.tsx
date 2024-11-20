@@ -28,6 +28,7 @@ export const Route = createFileRoute('/session/$sessionId')({
       const response = await getQuestions({ sessionId, token });
       useSessionStore.getState().setIsHost(response.isHost);
       useSessionStore.getState().setExpired(response.expired);
+      useSessionStore.getState().setSessionTitle(response.sessionTitle);
       response.questions.forEach((question) => {
         useSessionStore.getState().addQuestion(question);
       });

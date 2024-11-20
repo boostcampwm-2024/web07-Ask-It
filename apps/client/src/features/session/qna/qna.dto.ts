@@ -9,6 +9,7 @@ export interface GetQuestionsResponseDTO {
   questions: Question[];
   isHost: boolean;
   expired: boolean;
+  sessionTitle: string;
 }
 
 export interface PostQuestionRequestDTO {

@@ -1,3 +1,4 @@
+import { GoArrowLeft } from 'react-icons/go';
 import Markdown from 'react-markdown';
 
 import { Button, CreateReplyModal } from '@/components';
@@ -31,7 +32,10 @@ function QuestionDetail() {
               handleSelectQuestionId(null);
             }}
           >
-            <div className='text-lg font-medium text-black'> ← 질문 목록</div>
+            <div className='flex flex-row items-center gap-2 text-lg font-medium text-black'>
+              <GoArrowLeft />
+              <span>질문 목록</span>
+            </div>
           </Button>
           {!expired && (
             <Button className='bg-indigo-600' onClick={openModal}>
@@ -40,15 +44,17 @@ function QuestionDetail() {
           )}
         </div>
 
-        <div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto'>
+        <div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto pb-4'>
           <div className='flex h-fit flex-col items-start justify-center gap-2.5 self-stretch border-b border-gray-200/50 px-12 py-4'>
             <Markdown className='prose prose-stone flex w-full flex-col gap-3 self-stretch text-base font-medium leading-normal text-black prose-img:rounded-md'>
               {question.body}
             </Markdown>
           </div>
-          {question.replies.map((r) => (
-            <ReplyItem key={r.replyId} question={question} reply={r} />
-          ))}
+          {question.replies
+            .sort((a, b) => (b.isHost ? 1 : 0) - (a.isHost ? 1 : 0))
+            .map((r) => (
+              <ReplyItem key={r.replyId} question={question} reply={r} />
+            ))}
         </div>
       </div>
       {Modal}
