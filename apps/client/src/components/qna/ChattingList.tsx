@@ -10,6 +10,7 @@ function ChattingList() {
   const [message, setMessage] = useState<string>('');
   const [userScrolled, setUserScrolled] = useState(false);
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
+  const [isProgrammaticScroll, setIsProgrammaticScroll] = useState(false);
 
   const socket = useSocket();
 
@@ -21,21 +22,43 @@ function ChattingList() {
     return Math.abs(scrollHeight - scrollTop - clientHeight) < 1;
   };
 
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      setIsProgrammaticScroll(true);
+      messagesEndRef.current.scrollTo({
+        top: messagesEndRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+      setUserScrolled(false);
+      setIsScrolledToBottom(true);
+      setIsProgrammaticScroll(false);
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
-      if (!messagesEndRef.current) return;
+      if (!messagesEndRef.current || isProgrammaticScroll) return;
       setUserScrolled(true);
       setIsScrolledToBottom(isAtBottom());
     };
 
+    const handleScrollEnd = () => {
+      if (isProgrammaticScroll) setIsProgrammaticScroll(false);
+    };
+
     const messageContainer = messagesEndRef.current;
     messageContainer?.addEventListener('scroll', handleScroll);
+    messageContainer?.addEventListener('scrollend', handleScrollEnd);
 
-    return () => messageContainer?.removeEventListener('scroll', handleScroll);
-  }, [chatting]);
+    return () => {
+      messageContainer?.removeEventListener('scroll', handleScroll);
+      messageContainer?.removeEventListener('scrollend', handleScrollEnd);
+    };
+  }, [chatting, isProgrammaticScroll]);
 
   useEffect(() => {
     if (messagesEndRef.current && (!userScrolled || isScrolledToBottom)) {
+      setIsProgrammaticScroll(true);
       messagesEndRef.current.scrollTo({
         top: messagesEndRef.current.scrollHeight,
         behavior: 'smooth',
@@ -56,7 +79,7 @@ function ChattingList() {
       </div>
 
       <div
-        className='inline-flex h-full w-full flex-col items-start justify-start overflow-y-auto break-words p-2.5 scrollbar-hide'
+        className='scrollbar-hide inline-flex h-full w-full flex-col items-start justify-start overflow-y-auto break-words p-2.5'
         ref={messagesEndRef}
       >
         {chatting.map((chat) => (
@@ -84,6 +107,28 @@ function ChattingList() {
           />
         </div>
       </div>
+
+      {userScrolled && !isScrolledToBottom && (
+        <button
+          type='button'
+          onClick={scrollToBottom}
+          className='absolute bottom-[10%] rounded-full bg-indigo-500 p-2 text-white shadow-lg transition-all hover:bg-indigo-600'
+          aria-label='맨 아래로 스크롤'
+        >
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            className='h-5 w-5'
+            viewBox='0 0 20 20'
+            fill='currentColor'
+          >
+            <path
+              fillRule='evenodd'
+              d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'
+              clipRule='evenodd'
+            />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }
