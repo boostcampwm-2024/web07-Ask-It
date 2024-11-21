@@ -47,10 +47,11 @@ export class RepliesController {
       this.repliesService.createReply(createReplyDto),
       this.repliesService.validateHost(createReplyDto.sessionId, createReplyDto.token),
     ]);
-    const result = { reply: { ...reply, isHost } };
+    const resultForOwner = { reply: { ...reply, isHost } };
+    const resultForOther = { reply: { ...reply, isHost, isOwner: false } };
     const { sessionId, token } = createReplyDto;
-    this.socketGateway.broadcastNewReply(sessionId, token, result);
-    return result;
+    this.socketGateway.broadcastNewReply(sessionId, token, resultForOther);
+    return resultForOwner;
   }
 
   @Patch(':replyId/body')
