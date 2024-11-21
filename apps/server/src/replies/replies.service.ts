@@ -16,7 +16,8 @@ export class RepliesService {
   ) {}
 
   async createReply(data: CreateReplyDto) {
-    const { replyId, body, createdAt, createUserTokenEntity, deleted } = await this.repliesRepository.createReply(data);
+    const { replyId, body, createdAt, createUserTokenEntity, deleted, questionId } =
+      await this.repliesRepository.createReply(data);
     return {
       replyId,
       body,
@@ -25,6 +26,7 @@ export class RepliesService {
       likesCount: 0,
       liked: false,
       deleted,
+      questionId,
       nickname: createUserTokenEntity?.user?.nickname || '익명',
     };
   }
@@ -46,9 +48,11 @@ export class RepliesService {
 
   async toggleLike(replyId: number, createUserToken: string) {
     const exist = await this.repliesRepository.findLike(replyId, createUserToken);
-    if (exist) await this.repliesRepository.deleteLike(exist.replyLikeId);
-    else await this.repliesRepository.createLike(replyId, createUserToken);
-    return { liked: !exist };
+    const liked = !exist;
+    const { reply } = exist
+      ? await this.repliesRepository.deleteLike(exist.replyLikeId)
+      : await this.repliesRepository.createLike(replyId, createUserToken);
+    return { liked, questionId: reply.questionId };
   }
 
   async getLikesCount(replyId: number) {
