@@ -22,7 +22,7 @@ function Session() {
     return () => {
       socketService.disconnect();
     };
-  }, []);
+  }, [sessionId, sessionToken]);
 
   return (
     <div className='flex h-full w-full items-center justify-center gap-4 px-4 py-4 md:max-w-[1194px]'>
