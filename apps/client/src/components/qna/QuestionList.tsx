@@ -50,7 +50,7 @@ function QuestionList() {
             </Button>
           )}
         </div>
-        <motion.div className='scrollbar-hide inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto px-8 py-4'>
+        <motion.div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto px-8 py-4 scrollbar-hide'>
           {sections.map((section) => (
             <QuestionSection
               key={section.title}
