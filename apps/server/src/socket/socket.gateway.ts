@@ -9,6 +9,8 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
+import { ChatsRepository } from '@src/chats/chats.repository';
+
 interface Client {
   sessionId: string;
   token: string;
@@ -22,6 +24,8 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   private tokenToSocketMap = new Map<string, Pick<Client, 'sessionId' | 'socket'>>(); //key : token
   private socketToTokenMap = new Map<Socket, Pick<Client, 'sessionId' | 'token'>>(); //key : socket
+
+  constructor(private readonly chatsRepository: ChatsRepository) {}
 
   handleConnection(socket: Socket) {
     const sessionId = socket.handshake.query.sessionId as string;
@@ -46,12 +50,14 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('createChat')
   create(@MessageBody() data: string, @ConnectedSocket() socket: Socket) {
-    const content = `서버가 받은 내용 : ${data}`;
-
     const clientInfo = this.socketToTokenMap.get(socket);
     if (!clientInfo) return;
 
-    this.broadcastChat(clientInfo.sessionId, content);
+    const { sessionId, token } = clientInfo;
+
+    this.chatsRepository.save({ sessionId, token, body: data });
+
+    this.broadcastChat(clientInfo.sessionId, data);
   }
 
   private broadcastChat(sessionId: string, content: string) {
