@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 import { ChattingList } from '@/components';
 import { useSessionStore } from '@/features/session/session.store';
-import { SocketService } from '@/features/socket/socket.service';
+import { SocketService } from '@/features/socket';
 
 function Session() {
   const { sessionId, sessionToken } = useSessionStore();
