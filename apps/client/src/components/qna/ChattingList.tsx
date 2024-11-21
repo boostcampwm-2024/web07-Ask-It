@@ -5,6 +5,8 @@ import ChattingMessage from '@/components/qna/ChattingMessage';
 import { useSessionStore } from '@/features/session';
 import { useSocket } from '@/features/socket';
 
+const DEBOUNCE_TIME = 1000;
+
 function ChattingList() {
   const { chatting } = useSessionStore();
 
@@ -25,7 +27,7 @@ function ChattingList() {
           Math.abs(scrollHeight - scrollTop - clientHeight) < 10;
         setIsBottom(isAtBottom);
       }
-    }, 1000),
+    }, DEBOUNCE_TIME),
     [],
   );
 
