@@ -1,20 +1,47 @@
 import { useEffect, useRef, useState } from 'react';
 
 import ChattingMessage from '@/components/qna/ChattingMessage';
+import { useSessionStore } from '@/features/session';
+import { useSocket } from '@/features/socket';
 
 function ChattingList() {
+  const { chatting } = useSessionStore();
+
   const [message, setMessage] = useState<string>('');
+  const [userScrolled, setUserScrolled] = useState(false);
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
+
+  const socket = useSocket();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const isAtBottom = () => {
+    if (!messagesEndRef.current) return true;
+    const { scrollHeight, scrollTop, clientHeight } = messagesEndRef.current;
+    return Math.abs(scrollHeight - scrollTop - clientHeight) < 1;
+  };
+
   useEffect(() => {
-    if (messagesEndRef.current) {
+    const handleScroll = () => {
+      if (!messagesEndRef.current) return;
+      setUserScrolled(true);
+      setIsScrolledToBottom(isAtBottom());
+    };
+
+    const messageContainer = messagesEndRef.current;
+    messageContainer?.addEventListener('scroll', handleScroll);
+
+    return () => messageContainer?.removeEventListener('scroll', handleScroll);
+  }, [chatting]);
+
+  useEffect(() => {
+    if (messagesEndRef.current && (!userScrolled || isScrolledToBottom)) {
       messagesEndRef.current.scrollTo({
         top: messagesEndRef.current.scrollHeight,
         behavior: 'smooth',
       });
     }
-  }, []);
+  }, [chatting, userScrolled, isScrolledToBottom]);
 
   return (
     <div className='inline-flex h-full w-1/5 min-w-[240px] flex-col items-center justify-start rounded-lg bg-white shadow'>
@@ -28,19 +55,12 @@ function ChattingList() {
       </div>
 
       <div
-        className='inline-flex h-full w-full flex-col items-start justify-start overflow-y-auto p-2.5'
+        className='scrollbar-hide inline-flex h-full w-full flex-col items-start justify-start overflow-y-auto break-words p-2.5'
         ref={messagesEndRef}
       >
-        {/* TODO: 채팅 메세지 목록으로 변환 필요 */}
-        <ChattingMessage nickname='장난꾸러기' message='1' />
-        <ChattingMessage nickname='장난꾸러기' message='2' />
-        <ChattingMessage nickname='장난꾸러기' message='3' />
-        <ChattingMessage nickname='장난꾸러기' message='4' />
-        <ChattingMessage nickname='장난꾸러기' message='5' />
-        <ChattingMessage nickname='장난꾸러기' message='6' />
-        <ChattingMessage nickname='장난꾸러기' message='7' />
-        <ChattingMessage nickname='장난꾸러기' message='8' />
-        <ChattingMessage nickname='장난꾸러기' message='9' />
+        {chatting.map((chat) => (
+          <ChattingMessage key={chat.chattingId} chat={chat} />
+        ))}
       </div>
 
       <div className='inline-flex h-[75px] w-full items-center justify-center gap-2.5 border-t border-gray-200 bg-gray-50 p-4'>
@@ -49,7 +69,12 @@ function ChattingList() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
+              if (
+                e.key === 'Enter' &&
+                !e.nativeEvent.isComposing &&
+                message.trim().length
+              ) {
+                socket?.sendChatMessage(message);
                 setMessage('');
               }
             }}

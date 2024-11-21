@@ -15,7 +15,7 @@ function QuestionDivider({
     <div className='my-4 flex w-full items-center gap-2'>
       <hr
         className={`flex-grow rounded-3xl border-t-[1px] ${
-          isExpanded ? 'border-indigo-300' : 'border-gray-300'
+          isExpanded ? 'border-indigo-600' : 'border-gray-300'
         }`}
       />
       {description && (
@@ -47,7 +47,7 @@ function QuestionDivider({
           </div>
           <hr
             className={`flex-grow rounded-3xl border-t-[1px] ${
-              isExpanded ? 'border-indigo-300' : 'border-gray-300'
+              isExpanded ? 'border-indigo-600' : 'border-gray-300'
             }`}
           />
         </>

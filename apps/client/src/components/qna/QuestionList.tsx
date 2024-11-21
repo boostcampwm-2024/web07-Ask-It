@@ -14,18 +14,21 @@ function QuestionList() {
   const sections = [
     {
       title: '고정된 질문',
+      initialOpen: true,
       questions: questions
         .filter((question) => question.pinned && !question.closed)
         .sort((a, b) => b.likesCount - a.likesCount),
     },
     {
       title: '질문',
+      initialOpen: true,
       questions: questions
         .filter((question) => !question.pinned && !question.closed)
         .sort((a, b) => b.likesCount - a.likesCount),
     },
     {
       title: '답변 완료된 질문',
+      initialOpen: false,
       questions: questions
         .filter((question) => question.closed)
         .sort((a, b) => {
@@ -47,11 +50,12 @@ function QuestionList() {
             </Button>
           )}
         </div>
-        <motion.div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto px-8 py-4'>
+        <motion.div className='scrollbar-hide inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto px-8 py-4'>
           {sections.map((section) => (
             <QuestionSection
               key={section.title}
               title={section.title}
+              initialOpen={section.initialOpen}
               questions={section.questions}
               onQuestionSelect={setSelectedQuestionId}
             />

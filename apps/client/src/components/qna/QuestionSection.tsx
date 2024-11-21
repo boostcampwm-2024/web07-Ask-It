@@ -52,15 +52,17 @@ const sectionVariants = {
 interface QuestionSectionProps {
   title: string;
   questions: Question[];
+  initialOpen: boolean;
   onQuestionSelect: (questionId: number) => void;
 }
 
 function QuestionSection({
   title,
   questions,
+  initialOpen,
   onQuestionSelect,
 }: QuestionSectionProps) {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(initialOpen);
 
   if (questions.length === 0) return null;
 
