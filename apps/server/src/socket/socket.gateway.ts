@@ -32,13 +32,13 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   handleConnection(socket: Socket) {
     const sessionId = socket.handshake.query.sessionId as string;
     const token = socket.handshake.query.token as string;
-
-    if (this.tokenToSocketMap.get(token)) {
-      socket.emit('invalidConnection');
-      return socket.disconnect();
-    }
+    const originalSocket = this.tokenToSocketMap.get(token);
 
     if (!sessionId || !token) return socket.disconnect();
+
+    if (originalSocket) {
+      originalSocket.socket.disconnect();
+    }
 
     this.socketToTokenMap.set(socket, { sessionId, token });
     this.tokenToSocketMap.set(token, { sessionId, socket });
