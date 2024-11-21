@@ -1,3 +1,4 @@
+import { UseGuards } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -9,7 +10,8 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-import { ChatsRepository } from '@src/chats/chats.repository';
+import { ChatsService } from '@src/chats/chats.service';
+import { SessionTokenValidationGuard } from '@src/common/guards/session-token-validation.guard';
 
 interface Client {
   sessionId: string;
@@ -25,7 +27,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private tokenToSocketMap = new Map<string, Pick<Client, 'sessionId' | 'socket'>>(); //key : token
   private socketToTokenMap = new Map<Socket, Pick<Client, 'sessionId' | 'token'>>(); //key : socket
 
-  constructor(private readonly chatsRepository: ChatsRepository) {}
+  constructor(private readonly chatsService: ChatsService) {}
 
   handleConnection(socket: Socket) {
     const sessionId = socket.handshake.query.sessionId as string;
@@ -49,19 +51,20 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('createChat')
-  create(@MessageBody() data: string, @ConnectedSocket() socket: Socket) {
+  async create(@MessageBody() data: string, @ConnectedSocket() socket: Socket) {
     const clientInfo = this.socketToTokenMap.get(socket);
     if (!clientInfo) return;
-
-    const { sessionId, token } = clientInfo;
-
-    this.chatsRepository.save({ sessionId, token, body: data });
-
-    this.broadcastChat(clientInfo.sessionId, data);
+    try {
+      const { sessionId, token } = clientInfo;
+      const chattingData = await this.chatsService.saveChat({ sessionId, token, body: data });
+      this.broadcastChat(clientInfo.sessionId, chattingData);
+    } catch (error) {
+      socket.emit('chatError', { message: '채팅 생성에 실패했습니다', error: error.message });
+    }
   }
 
-  private broadcastChat(sessionId: string, content: string) {
-    this.server.to(sessionId).emit('chatMessage', { content });
+  private broadcastChat(sessionId: string, data: Record<any, any>) {
+    this.server.to(sessionId).emit('chatMessage', data);
   }
 
   private createEventBroadcaster(event: string) {

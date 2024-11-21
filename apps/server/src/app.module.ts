@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 
+import { ChatsModule } from './chats/chats.module';
+import { ChatsService } from './chats/chats.service';
 import { SocketModule } from './socket/socket.module';
 
 import { AuthModule } from '@auth/auth.module';
@@ -23,8 +25,9 @@ import { UsersModule } from '@users/users.module';
     AuthModule,
     UploadModule,
     SocketModule,
+    ChatsModule,
   ],
   controllers: [],
-  providers: [PrismaService],
+  providers: [PrismaService, ChatsService],
 })
 export class AppModule {}

@@ -27,7 +27,7 @@
       "@common/*": ["src/common/*"],
       "@auth/*": ["src/auth/*"],
       "@upload/*": ["src/upload/*"],
-      "@chat/*": ["src/chat/*"],
+      "@chats/*": ["src/chats/*"],
       "@socket/*": ["src/socket/*"],
       "@prisma-alias/*": ["src/prisma/*"],
       "@main/*": ["src/main/*"]
