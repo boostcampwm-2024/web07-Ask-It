@@ -17,8 +17,11 @@ function CreateSessionModal() {
 
   const navigate = useNavigate();
 
+  const enableCreateSession =
+    sessionName.trim().length > 0 && sessionName.trim().length <= 20;
+
   const handleCreateSession = () =>
-    sessionName.trim().length > 0 &&
+    enableCreateSession &&
     postSession({ title: sessionName }).then((res) => {
       closeModal();
       addToast({
@@ -41,12 +44,21 @@ function CreateSessionModal() {
           type='text'
           value={sessionName}
           onChange={setSessionName}
+          validationStatus={{
+            status:
+              sessionName.trim().length === 0 || enableCreateSession
+                ? 'INITIAL'
+                : 'INVALID',
+            message: enableCreateSession
+              ? '세션 이름을 입력해주세요'
+              : '세션 이름은 3자 이상 20자 이하로 입력해주세요',
+          }}
           placeholder='세션 이름을 입력해주세요'
         />
       </div>
       <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
         <Button
-          className={`transition-colors duration-200 ${sessionName.trim().length > 0 ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
+          className={`transition-colors duration-200 ${enableCreateSession ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
           onClick={handleCreateSession}
         >
           <div className='w-[150px] text-sm font-medium text-white'>
