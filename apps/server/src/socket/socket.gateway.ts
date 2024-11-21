@@ -37,6 +37,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (!sessionId || !token) return socket.disconnect();
 
     if (originalSocket) {
+      originalSocket.socket.emit('duplicatedConnection');
       originalSocket.socket.disconnect();
     }
 

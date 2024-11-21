@@ -28,6 +28,6 @@ import { UsersModule } from '@users/users.module';
     ChatsModule,
   ],
   controllers: [],
-  providers: [PrismaService, ChatsService],
+  providers: [PrismaService],
 })
 export class AppModule {}
