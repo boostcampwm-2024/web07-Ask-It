@@ -79,7 +79,7 @@ function ChattingList() {
       </div>
 
       <div
-        className='scrollbar-hide inline-flex h-full w-full flex-col items-start justify-start overflow-y-auto break-words p-2.5'
+        className='inline-flex h-full w-full flex-col items-start justify-start overflow-y-auto break-words p-2.5 scrollbar-hide'
         ref={messagesEndRef}
       >
         {chatting.map((chat) => (
