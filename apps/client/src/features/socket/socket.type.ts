@@ -8,7 +8,11 @@ export type SocketEventType =
   | 'replyCreated'
   | 'replyUpdated'
   | 'replyDeleted'
-  | 'replyLiked';
+  | 'replyLiked'
+  | 'createChat'
+  | 'chatMessage'
+  | 'chatError'
+  | 'invalidConnection';
 
 export interface SocketEventPayload {
   type: SocketEventType;
@@ -90,5 +94,22 @@ export interface ReplyLikedEventPayload extends SocketEventPayload {
     replyId: number;
     liked: boolean;
     likesCount: number;
+  };
+}
+
+export interface ChatMessageEventPayload extends SocketEventPayload {
+  type: 'chatMessage';
+  payload: {
+    chattingId: string;
+    content: string;
+    nickname: string;
+  };
+}
+
+export interface ChatErrorEventPayload extends SocketEventPayload {
+  type: 'chatError';
+  payload: {
+    message: string;
+    error: string;
   };
 }
