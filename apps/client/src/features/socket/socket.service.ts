@@ -53,14 +53,9 @@ export class SocketService {
 
     this.socket.on(
       'questionLiked',
-      ({
-        questionId,
-        liked,
-        likesCount,
-      }: QuestionLikedEventPayload['payload']) => {
+      ({ questionId, likesCount }: QuestionLikedEventPayload['payload']) => {
         store.updateQuestion({
           questionId,
-          liked,
           likesCount,
         });
       },
@@ -98,12 +93,10 @@ export class SocketService {
       ({
         questionId,
         replyId,
-        liked,
         likesCount,
       }: ReplyLikedEventPayload['payload']) => {
         store.updateReply(questionId, {
           replyId,
-          liked,
           likesCount,
         });
       },
