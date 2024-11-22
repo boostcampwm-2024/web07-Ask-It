@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router';
 
 import { useSessionStore } from '@/features/session';
 import { Session } from '@/features/session/session.type';
+
 import { formatDate } from '@/shared';
 
 interface SessionRecordProps {

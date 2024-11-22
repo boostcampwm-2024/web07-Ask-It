@@ -1,12 +1,13 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
-import Button from '@/components/Button';
-import InputField from '@/components/modal/InputField';
-import Modal from '@/components/modal/Modal';
 import { useModalContext } from '@/features/modal';
 import { postSession } from '@/features/session/session.api';
 import { useToastStore } from '@/features/toast';
+
+import Button from '@/components/Button';
+import InputField from '@/components/modal/InputField';
+import Modal from '@/components/modal/Modal';
 
 function CreateSessionModal() {
   const addToast = useToastStore((state) => state.addToast);

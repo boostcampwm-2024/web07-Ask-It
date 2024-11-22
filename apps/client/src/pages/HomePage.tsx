@@ -1,9 +1,10 @@
 import { GoArchive, GoPeople } from 'react-icons/go';
 import { IoChatboxEllipsesOutline, IoLockClosedOutline } from 'react-icons/io5';
 
-import { Button, CreateSessionModal, FeatureCard } from '@/components';
 import { useAuthStore } from '@/features/auth';
 import { useModal } from '@/features/modal';
+
+import { Button, CreateSessionModal, FeatureCard } from '@/components';
 
 function HomePage() {
   const { isLogin } = useAuthStore();

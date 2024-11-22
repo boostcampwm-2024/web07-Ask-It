@@ -1,10 +1,11 @@
+import { useSignInForm } from '@/features/auth';
+import { useModalContext } from '@/features/modal';
+import { useToastStore } from '@/features/toast';
+
 import Button from '../Button';
 
 import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
-import { useSignInForm } from '@/features/auth';
-import { useModalContext } from '@/features/modal';
-import { useToastStore } from '@/features/toast';
 
 function SignInModal() {
   const addToast = useToastStore((state) => state.addToast);

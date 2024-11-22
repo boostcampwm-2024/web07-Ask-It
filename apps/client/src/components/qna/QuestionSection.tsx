@@ -1,9 +1,10 @@
 import { AnimatePresence, motion, Variants } from 'motion/react';
 import { useState } from 'react';
 
+import { Question } from '@/features/session/qna';
+
 import QuestionDivider from '@/components/qna/QuestionDivider';
 import QuestionItem from '@/components/qna/QuestionItem';
-import { Question } from '@/features/session/qna';
 
 const itemVariants: Variants = {
   hidden: {

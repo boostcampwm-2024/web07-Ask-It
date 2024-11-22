@@ -5,7 +5,6 @@ import { GrClose, GrLike, GrLikeFill, GrPin } from 'react-icons/gr';
 import { RiQuestionAnswerLine } from 'react-icons/ri';
 import Markdown from 'react-markdown';
 
-import { Button, CreateQuestionModal } from '@/components';
 import { useModal } from '@/features/modal';
 import { useSessionStore } from '@/features/session';
 import {
@@ -16,6 +15,8 @@ import {
   Question,
 } from '@/features/session/qna';
 import { useToastStore } from '@/features/toast';
+
+import { Button, CreateQuestionModal } from '@/components';
 
 interface QuestionItemProps {
   question: Question;

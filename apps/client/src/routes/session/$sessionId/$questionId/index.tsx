@@ -1,9 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { QuestionDetail } from '@/components';
 import { refresh, useAuthStore } from '@/features/auth';
 import { getSessionToken, useSessionStore } from '@/features/session';
 import { getQuestions } from '@/features/session/qna';
+
+import { QuestionDetail } from '@/components';
 
 export const Route = createFileRoute('/session/$sessionId/$questionId/')({
   component: QuestionDetail,

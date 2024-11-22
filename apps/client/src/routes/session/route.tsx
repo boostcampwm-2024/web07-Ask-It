@@ -4,8 +4,9 @@ import {
   ScrollRestoration,
 } from '@tanstack/react-router';
 
-import { ChattingList } from '@/components';
 import { SocketProvider } from '@/features/socket';
+
+import { ChattingList } from '@/components';
 
 export const Route = createFileRoute('/session')({
   beforeLoad: ({ location }) => {

@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
 
-import { Button } from '@/components';
-import Modal from '@/components/modal/Modal';
 import { useModalContext } from '@/features/modal';
 import { useSessionStore } from '@/features/session';
 import {
@@ -11,6 +9,9 @@ import {
   Question,
 } from '@/features/session/qna';
 import { useToastStore } from '@/features/toast';
+
+import { Button } from '@/components';
+import Modal from '@/components/modal/Modal';
 
 interface CreateQuestionModalProps {
   question?: Question;

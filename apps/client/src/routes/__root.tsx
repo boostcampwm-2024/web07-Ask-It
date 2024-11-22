@@ -1,8 +1,9 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 
-import { Header } from '@/components';
 import { refresh, useAuthStore } from '@/features/auth';
 import { ToastContainer } from '@/features/toast';
+
+import { Header } from '@/components';
 
 export const Route = createRootRoute({
   beforeLoad: () => {

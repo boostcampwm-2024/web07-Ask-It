@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { SessionRecord } from '@/components/my';
 import { getSessions } from '@/features/session';
+
+import { SessionRecord } from '@/components/my';
 
 function MyPage() {
   const { data } = useQuery({ queryKey: ['/sessions'], queryFn: getSessions });

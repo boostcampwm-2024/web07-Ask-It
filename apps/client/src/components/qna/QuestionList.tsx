@@ -1,9 +1,10 @@
 import { motion } from 'motion/react';
 
-import { Button, CreateQuestionModal } from '@/components';
-import QuestionSection from '@/components/qna/QuestionSection';
 import { useModal } from '@/features/modal';
 import { useSessionStore } from '@/features/session';
+
+import { Button, CreateQuestionModal } from '@/components';
+import QuestionSection from '@/components/qna/QuestionSection';
 
 function QuestionList() {
   const { sessionTitle, expired, questions, setSelectedQuestionId } =

@@ -2,10 +2,11 @@ import { useNavigate } from '@tanstack/react-router';
 import { GoArrowLeft } from 'react-icons/go';
 import Markdown from 'react-markdown';
 
-import { Button, CreateReplyModal } from '@/components';
-import ReplyItem from '@/components/qna/ReplyItem';
 import { useModal } from '@/features/modal';
 import { useSessionStore } from '@/features/session';
+
+import { Button, CreateReplyModal } from '@/components';
+import ReplyItem from '@/components/qna/ReplyItem';
 
 function QuestionDetail() {
   const navigate = useNavigate();

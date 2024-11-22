@@ -1,9 +1,10 @@
 import { debounce } from 'es-toolkit';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import ChattingMessage from '@/components/qna/ChattingMessage';
 import { useSessionStore } from '@/features/session';
 import { useSocket } from '@/features/socket';
+
+import ChattingMessage from '@/components/qna/ChattingMessage';
 
 const DEBOUNCE_TIME = 1000;
 

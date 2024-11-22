@@ -42,6 +42,18 @@
           "error",
           {
             "groups": ["builtin", "external", ["parent", "sibling"], "index"],
+            "pathGroups": [
+              {
+                "pattern": "@/component/**",
+                "group": "parent",
+                "position": "before"
+              },
+              {
+                "pattern": "@/features/**",
+                "group": "parent",
+                "position": "before"
+              }
+            ],
             "named": true,
             "alphabetize": {
               "order": "asc",

@@ -2,6 +2,7 @@ import { debounce } from 'es-toolkit';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { getVerifyEmail, getVerifyNickname } from '@/features/user/index';
+
 import {
   validateEmail,
   validateNickname,
