@@ -6,7 +6,7 @@ import { DatabaseException } from '@common/exceptions/resource.exception';
 import { PrismaService } from '@prisma-alias/prisma.service';
 
 @Injectable()
-export class SessionRepository {
+export class SessionsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: SessionCreateData) {

@@ -4,14 +4,14 @@ import { CreateReplyDto } from './dto/create-reply.dto';
 import { UpdateReplyBodyDto } from './dto/update-reply.dto';
 import { RepliesRepository } from './replies.repository';
 
-import { SessionsService } from '@sessions/sessions.service';
+import { SessionsRepository } from '@sessions/sessions.repository';
 import { SessionsAuthRepository } from '@sessions-auth/sessions-auth.repository';
 
 @Injectable()
 export class RepliesService {
   constructor(
     private readonly repliesRepository: RepliesRepository,
-    private readonly sessionService: SessionsService,
+    private readonly sessionsRepository: SessionsRepository,
     private readonly sessionAuthRepository: SessionsAuthRepository,
   ) {}
 
@@ -43,7 +43,7 @@ export class RepliesService {
   async validateHost(sessionId: string, createUserToken: string) {
     const userId = await this.sessionAuthRepository.findUserByToken(createUserToken);
     if (!userId) return false;
-    return await this.sessionService.checkSessionHost(sessionId, userId);
+    return !!(await this.sessionsRepository.findBySessionIdAndUser(sessionId, userId));
   }
 
   async toggleLike(replyId: number, createUserToken: string) {

@@ -1,12 +1,12 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 
-import { SessionRepository } from '@sessions/sessions.repository';
+import { SessionsRepository } from '@sessions/sessions.repository';
 import { SessionsAuthRepository } from '@sessions-auth/sessions-auth.repository';
 
 @Injectable()
 export class SessionTokenValidationGuard implements CanActivate {
   constructor(
-    private readonly sessionsRepository: SessionRepository,
+    private readonly sessionsRepository: SessionsRepository,
     private readonly sessionsAuthRepository: SessionsAuthRepository,
   ) {}
 

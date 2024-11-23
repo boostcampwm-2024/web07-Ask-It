@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 
 import { CreateSessionDto } from './dto/create-session.dto';
 import { SessionCreateData } from './interface/session-create-data.interface';
-import { SessionRepository } from './sessions.repository';
+import { SessionsRepository } from './sessions.repository';
 
 const SESSION_EXPIRATION_TIME = 7 * (24 * 60 * 60 * 1000); //일주일
 
 @Injectable()
 export class SessionsService {
-  constructor(private readonly sessionRepository: SessionRepository) {}
+  constructor(private readonly sessionRepository: SessionsRepository) {}
 
   async create(data: CreateSessionDto, userId: number) {
     const expiredAt = new Date(Date.now() + SESSION_EXPIRATION_TIME);
@@ -44,9 +44,5 @@ export class SessionsService {
       };
     });
     return transformedSessions;
-  }
-
-  async checkSessionHost(sessionId: string, userId: number) {
-    return !!(await this.sessionRepository.findBySessionIdAndUser(sessionId, userId));
   }
 }

@@ -11,14 +11,14 @@ import {
   UpdateQuestionPinnedDto,
 } from '@questions/dto/update-question.dto';
 import { RepliesRepository } from '@replies/replies.repository';
-import { SessionRepository } from '@sessions/sessions.repository';
+import { SessionsRepository } from '@sessions/sessions.repository';
 import { SessionsAuthRepository } from '@sessions-auth/sessions-auth.repository';
 
 @Injectable()
 export class QuestionsService {
   constructor(
     private readonly questionRepository: QuestionsRepository,
-    private readonly sessionRepository: SessionRepository,
+    private readonly sessionRepository: SessionsRepository,
     private readonly sessionAuthRepository: SessionsAuthRepository,
     private readonly repliesRepository: RepliesRepository,
   ) {}
