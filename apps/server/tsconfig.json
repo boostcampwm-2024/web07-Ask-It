@@ -29,6 +29,7 @@
       "@upload/*": ["src/upload/*"],
       "@chats/*": ["src/chats/*"],
       "@socket/*": ["src/socket/*"],
+      "@logger/*": ["src/logger/*"],
       "@prisma-alias/*": ["src/prisma/*"],
       "@main/*": ["src/main/*"]
     }
