@@ -54,6 +54,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.tokenToSocketMap.set(token, { sessionId, socket });
 
     socket.join(sessionId);
+    this.broadcastParticipantCount(sessionId);
 
     this.logger.log(`Client connected: token=${token}, sessionId=${sessionId}, socketId=${socket.id}`, 'SocketGateway');
   }
@@ -69,7 +70,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     socket.leave(sessionId);
     this.tokenToSocketMap.delete(token);
     this.socketToTokenMap.delete(socket);
-
+    this.broadcastParticipantCount(sessionId);
     this.logger.log(
       `Client disconnected: token=${token}, sessionId=${sessionId}, socketId=${socket.id}`,
       'SocketGateway',
@@ -109,6 +110,17 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         client.socket.broadcast.to(sessionId).emit(event, content);
       }
     };
+  }
+
+  private getParticipantCount(sessionId: string) {
+    const room = this.server.sockets.adapter.rooms.get(sessionId);
+    return room ? room.size : 0;
+  }
+
+  private broadcastParticipantCount(sessionId: string) {
+    this.server
+      .to(sessionId)
+      .emit('participantCountUpdated', { participantCount: this.getParticipantCount(sessionId) });
   }
 
   broadcastNewQuestion = this.createEventBroadcaster('questionCreated');
