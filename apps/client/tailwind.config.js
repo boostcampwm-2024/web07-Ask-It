@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Pretendard', 'sans-serif'],
+        header: ['ADLaM Display', 'sans-serif'],
       },
       keyframes: {
         fadeIn: {

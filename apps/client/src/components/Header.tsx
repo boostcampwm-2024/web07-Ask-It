@@ -36,8 +36,9 @@ function Header() {
     <>
       <div className='h-16 w-full bg-white px-4 py-4 shadow'>
         <div className='mx-auto flex h-full w-full max-w-[1194px] items-center justify-between px-4'>
-          <Link to='/' className='text-2xl font-bold text-indigo-600'>
-            Ask-It
+          <Link to='/' className='font-header text-2xl'>
+            <span className='text-indigo-600'>A</span>
+            <span className='text-black'>sk-It</span>
           </Link>
           <div className='flex items-center justify-center gap-2.5'>
             <Button
