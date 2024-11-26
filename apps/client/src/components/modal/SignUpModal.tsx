@@ -27,7 +27,7 @@ function SignUpModal() {
     isSignUpEnabled,
   } = useSignUpForm();
 
-  const { mutate: signUp, isPending } = useMutation({
+  const { mutate: signUpQuery, isPending } = useMutation({
     mutationFn: () => postUser({ email, nickname, password }),
     onSuccess: () => {
       closeModal();
@@ -49,7 +49,7 @@ function SignUpModal() {
 
   const handleSignUp = () => {
     if (!isSignUpEnabled || isPending) return;
-    signUp();
+    signUpQuery();
   };
 
   const isSignUpButtonEnabled = isSignUpEnabled && !isPending;

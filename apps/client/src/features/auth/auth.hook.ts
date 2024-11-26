@@ -24,7 +24,7 @@ export function useSignInForm() {
     status: 'INITIAL',
   });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate: loginQuery, isPending } = useMutation({
     mutationFn: (credentials: { email: string; password: string }) =>
       login(credentials),
     onSuccess: (response) => {
@@ -58,7 +58,7 @@ export function useSignInForm() {
   const isLoginEnabled = email.length > 0 && password.length > 7 && !isPending;
 
   const handleLogin = (callback: () => void) =>
-    mutate({ email, password }, { onSettled: callback });
+    loginQuery({ email, password }, { onSettled: callback });
 
   return {
     email,

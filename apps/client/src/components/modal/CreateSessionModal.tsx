@@ -19,7 +19,7 @@ function CreateSessionModal() {
 
   const navigate = useNavigate();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate: postSessionQuery, isPending } = useMutation({
     mutationFn: postSession,
     onSuccess: (res) => {
       closeModal();
@@ -40,7 +40,7 @@ function CreateSessionModal() {
 
   const handleCreateSession = () => {
     if (!enableCreateSession || isPending) return;
-    mutate({ title: sessionName });
+    postSessionQuery({ title: sessionName });
   };
 
   return (
