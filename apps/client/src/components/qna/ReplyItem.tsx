@@ -73,7 +73,7 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
       <div className='flex shrink basis-0 flex-col items-start justify-start gap-4 self-stretch px-12'>
         <div className='flex h-fit flex-col items-start justify-start gap-2 self-stretch rounded-md bg-gray-50 p-4'>
           <div className='flex h-fit flex-col items-start justify-start gap-1 self-stretch border-b border-gray-200 pb-2'>
-            <div className='flex flex-row items-center gap-1'>
+            <div className='flex flex-row items-center gap-1 text-indigo-600'>
               {!reply.deleted && reply.isHost && <GrValidate size={18} />}
               <span className='w-full text-base font-bold leading-normal text-black'>
                 {reply.deleted ? '알 수 없음' : reply.nickname}
