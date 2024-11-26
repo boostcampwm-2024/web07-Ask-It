@@ -8,10 +8,6 @@
   margin: 0;
 }
 
-* {
-  user-select: none;
-}
-
 ::-webkit-scrollbar {
   width: 8px;
 }
