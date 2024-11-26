@@ -30,7 +30,11 @@ function SessionParticipantsModal() {
               <span>님을</span>
             </span>
             <br />
-            <span>호스트로 지정하겠습니까?</span>
+            <span>
+              {selectedUser.isHost
+                ? '호스트를 해제하겠습니까?'
+                : '호스트로 지정하겠습니까?'}
+            </span>
           </div>
           <div className='mx-auto mt-4 inline-flex min-w-[22.5dvw] items-start justify-center gap-2.5'>
             <Button
