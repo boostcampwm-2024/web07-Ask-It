@@ -17,5 +17,7 @@ export const getVerifyEmail = (email: string) =>
 
 export const getVerifyNickname = (nickname: string) =>
   axios
-    .get<GetVerifyNicknameDTO>(`${USER_BASE_URL}/nicknames/${nickname}`)
+    .get<GetVerifyNicknameDTO>(
+      `${USER_BASE_URL}/nicknames/${encodeURIComponent(nickname)}`,
+    )
     .then((res) => res.data);
