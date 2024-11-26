@@ -20,7 +20,7 @@ function SignInModal() {
   } = useSignInForm();
 
   const login = () => {
-    handleLogin(() => closeModal());
+    if (isLoginEnabled) handleLogin(() => closeModal());
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

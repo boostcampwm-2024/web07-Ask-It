@@ -48,7 +48,7 @@ function SignUpModal() {
   });
 
   const handleSignUp = () => {
-    if (!isSignUpEnabled) return;
+    if (!isSignUpEnabled || isPending) return;
     signUp();
   };
 
