@@ -12,7 +12,7 @@ import { TransformInterceptor } from '@common/interceptors/transform.interceptor
 @UseInterceptors(TransformInterceptor)
 @Controller('auth')
 export class AuthController {
-  private readonly REFRESH_TOKEN = 'refreshTtoken';
+  private readonly REFRESH_TOKEN = 'refreshToken';
 
   constructor(private readonly authService: AuthService) {}
 
