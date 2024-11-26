@@ -1,6 +1,5 @@
 import { useSignInForm } from '@/features/auth';
 import { useModalContext } from '@/features/modal';
-import { useToastStore } from '@/features/toast';
 
 import Button from '../Button';
 
@@ -8,8 +7,6 @@ import InputField from '@/components/modal/InputField';
 import Modal from '@/components/modal/Modal';
 
 function SignInModal() {
-  const addToast = useToastStore((state) => state.addToast);
-
   const { closeModal } = useModalContext();
 
   const {
@@ -22,16 +19,9 @@ function SignInModal() {
     loginFailed,
   } = useSignInForm();
 
-  const login = () =>
-    isLoginEnabled &&
-    handleLogin().then(() => {
-      closeModal();
-      addToast({
-        type: 'SUCCESS',
-        message: '로그인 되었습니다.',
-        duration: 3000,
-      });
-    });
+  const login = () => {
+    handleLogin(() => closeModal());
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

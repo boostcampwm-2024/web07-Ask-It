@@ -1,9 +1,11 @@
+import { useMutation } from '@tanstack/react-query';
 import { useRouterState } from '@tanstack/react-router';
 import { isAxiosError } from 'axios';
 import { useState } from 'react';
 
 import { login } from '@/features/auth/auth.api';
 import { useAuthStore } from '@/features/auth/auth.store';
+import { useToastStore } from '@/features/toast';
 
 import { ValidationStatusWithMessage } from '@/shared';
 
@@ -12,39 +14,51 @@ export function useSignInForm() {
 
   const { setAccessToken } = useAuthStore();
 
+  const { addToast } = useToastStore();
+
   const [email, setEmail] = useState('');
 
   const [password, setPassword] = useState('');
-
-  const isLoginEnabled = email.length > 0 && password.length > 7;
 
   const [loginFailed, setLoginFailed] = useState<ValidationStatusWithMessage>({
     status: 'INITIAL',
   });
 
-  const handleLogin = async () => {
-    try {
-      const response = await login({ email, password });
+  const { mutate, isPending } = useMutation({
+    mutationFn: (credentials: { email: string; password: string }) =>
+      login(credentials),
+    onSuccess: (response) => {
+      addToast({
+        type: 'SUCCESS',
+        message: '로그인 되었습니다.',
+        duration: 3000,
+      });
       setAccessToken(response.accessToken);
-      if (router.location.pathname.includes('session'))
+      if (router.location.pathname.includes('session')) {
         window.location.reload();
-    } catch (e) {
-      if (isAxiosError(e) && e.response) {
-        if (e.response.status === 400) {
+      }
+    },
+    onError: (error) => {
+      if (isAxiosError(error) && error.response) {
+        if (error.response.status === 400) {
           setLoginFailed({
             status: 'INVALID',
-            message: e.response.data.messages.shift(),
+            message: error.response.data.messages.shift(),
           });
-        } else if (e.response.status === 401) {
+        } else if (error.response.status === 401) {
           setLoginFailed({
             status: 'INVALID',
-            message: e.response.data.message,
+            message: error.response.data.message,
           });
         }
       }
-      throw e;
-    }
-  };
+    },
+  });
+
+  const isLoginEnabled = email.length > 0 && password.length > 7 && !isPending;
+
+  const handleLogin = (callback: () => void) =>
+    mutate({ email, password }, { onSettled: callback });
 
   return {
     email,
