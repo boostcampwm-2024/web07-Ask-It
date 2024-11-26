@@ -82,7 +82,7 @@ function ChattingList() {
       </div>
 
       <div className='relative inline-flex h-[75px] w-full items-center justify-center gap-2.5 border-t border-gray-200 bg-gray-50 p-4'>
-        {!isBottom && userScrolling && (
+        {!isBottom && userScrolling.current && (
           <button
             type='button'
             onClick={scrollToBottom}
