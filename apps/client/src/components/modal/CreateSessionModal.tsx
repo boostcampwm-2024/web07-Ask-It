@@ -36,7 +36,7 @@ function CreateSessionModal() {
   });
 
   const enableCreateSession =
-    sessionName.trim().length > 3 && sessionName.trim().length <= 20;
+    sessionName.trim().length >= 3 && sessionName.trim().length <= 20;
 
   const handleCreateSession = () => {
     if (!enableCreateSession || isPending) return;
