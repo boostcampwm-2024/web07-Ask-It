@@ -1,3 +1,5 @@
+import { useMutation } from '@tanstack/react-query';
+
 import { useModalContext } from '@/features/modal';
 import { useToastStore } from '@/features/toast';
 import { postUser, useSignUpForm } from '@/features/user';
@@ -25,16 +27,32 @@ function SignUpModal() {
     isSignUpEnabled,
   } = useSignUpForm();
 
-  const signUp = () =>
-    isSignUpEnabled &&
-    postUser({ email, nickname, password }).then(() => {
+  const { mutate: signUp, isPending } = useMutation({
+    mutationFn: () => postUser({ email, nickname, password }),
+    onSuccess: () => {
       closeModal();
       addToast({
         type: 'SUCCESS',
         message: '회원가입 되었습니다.',
         duration: 3000,
       });
-    });
+    },
+    onError: () => {
+      closeModal();
+      addToast({
+        type: 'ERROR',
+        message: '회원가입에 실패했습니다.',
+        duration: 3000,
+      });
+    },
+  });
+
+  const handleSignUp = () => {
+    if (!isSignUpEnabled) return;
+    signUp();
+  };
+
+  const isSignUpButtonEnabled = isSignUpEnabled && !isPending;
 
   return (
     <Modal>
@@ -66,8 +84,8 @@ function SignUpModal() {
         />
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button
-            className={`transition-colors duration-200 ${isSignUpEnabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
-            onClick={signUp}
+            className={`transition-colors duration-200 ${isSignUpButtonEnabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
+            onClick={handleSignUp}
           >
             <div className='w-[150px] text-sm font-medium text-white'>
               회원 가입
