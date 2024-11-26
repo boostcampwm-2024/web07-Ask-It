@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import { FiEdit2 } from 'react-icons/fi';
 import { GrClose, GrLike, GrLikeFill, GrValidate } from 'react-icons/gr';
 import Markdown from 'react-markdown';
@@ -28,43 +29,80 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
     <CreateReplyModal question={question} reply={reply} />,
   );
 
-  const handleDelete = () => {
-    if (expired || !sessionId || !sessionToken) return;
+  const { mutate: postReplyLikeQuery, isPending: isLikeInProgress } =
+    useMutation({
+      mutationFn: (params: {
+        replyId: number;
+        sessionId: string;
+        token: string;
+      }) =>
+        postReplyLike(params.replyId, {
+          sessionId: params.sessionId,
+          token: params.token,
+        }),
+      onSuccess: (res) => {
+        addToast({
+          type: 'SUCCESS',
+          message: reply.liked
+            ? '좋아요를 취소했습니다.'
+            : '답변에 좋아요를 눌렀습니다.',
+          duration: 3000,
+        });
+        updateReply(question.questionId, {
+          ...reply,
+          ...res,
+        });
+      },
+    });
 
-    deleteReply(reply.replyId, {
+  const handleToggleLike = () => {
+    if (
+      expired ||
+      !sessionId ||
+      !sessionToken ||
+      isLikeInProgress ||
+      reply.deleted
+    )
+      return;
+
+    postReplyLikeQuery({
+      replyId: reply.replyId,
       sessionId,
       token: sessionToken,
-    }).then(() => {
-      addToast({
-        type: 'SUCCESS',
-        message: '답변이 성공적으로 삭제되었습니다.',
-        duration: 3000,
-      });
-      updateReply(question.questionId, {
-        ...reply,
-        deleted: true,
-      });
     });
   };
 
-  const handleToggleLike = () => {
-    if (expired || !sessionId || !sessionToken || reply.deleted) return;
+  const { mutate: deleteReplyQuery, isPending: isDeleteInProgress } =
+    useMutation({
+      mutationFn: (params: {
+        replyId: number;
+        sessionId: string;
+        token: string;
+      }) =>
+        deleteReply(params.replyId, {
+          sessionId: params.sessionId,
+          token: params.token,
+        }),
+      onSuccess: () => {
+        addToast({
+          type: 'SUCCESS',
+          message: '답변이 성공적으로 삭제되었습니다.',
+          duration: 3000,
+        });
+        updateReply(question.questionId, {
+          ...reply,
+          deleted: true,
+        });
+      },
+    });
 
-    postReplyLike(reply.replyId, {
+  const handleDelete = () => {
+    if (expired || !sessionId || !sessionToken || isDeleteInProgress) return;
+
+    deleteReplyQuery({
+      replyId: reply.replyId,
       sessionId,
       token: sessionToken,
-    }).then((res) => {
-      addToast({
-        type: 'SUCCESS',
-        message: reply.liked
-          ? '좋아요를 취소했습니다.'
-          : '답변에 좋아요를 눌렀습니다.',
-        duration: 3000,
-      });
-      updateReply(question.questionId, {
-        ...reply,
-        ...res,
-      });
     });
   };
 

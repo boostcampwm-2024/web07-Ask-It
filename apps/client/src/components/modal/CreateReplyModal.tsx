@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
 
@@ -29,16 +30,10 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
 
   const [body, setBody] = useState('');
 
-  const handleSubmit = () => {
-    if (expired || !sessionId || !sessionToken) return;
-
-    if (!reply && question) {
-      postReply({
-        sessionId,
-        token: sessionToken,
-        questionId: question?.questionId,
-        body,
-      }).then((res) => {
+  const { mutate: postReplyQuery, isPending: isPostInProgress } = useMutation({
+    mutationFn: postReply,
+    onSuccess: (res) => {
+      if (!reply && question) {
         addReply(question.questionId, { ...res.reply, deleted: false });
         addToast({
           type: 'SUCCESS',
@@ -46,20 +41,60 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
           duration: 3000,
         });
         closeModal();
+      }
+    },
+  });
+
+  const { mutate: patchReplyBodyQuery, isPending: isPatchInProgress } =
+    useMutation({
+      mutationFn: (params: {
+        replyId: number;
+        token: string;
+        sessionId: string;
+        body: string;
+      }) =>
+        patchReplyBody(params.replyId, {
+          token: params.token,
+          sessionId: params.sessionId,
+          body: params.body,
+        }),
+      onSuccess: (res) => {
+        if (reply && question) {
+          updateReply(question.questionId, res.reply);
+          addToast({
+            type: 'SUCCESS',
+            message: '답변이 성공적으로 수정되었습니다.',
+            duration: 3000,
+          });
+          closeModal();
+        }
+      },
+    });
+
+  const submitDisabled =
+    expired ||
+    body.trim().length === 0 ||
+    !sessionId ||
+    !sessionToken ||
+    isPostInProgress ||
+    isPatchInProgress;
+
+  const handleSubmit = () => {
+    if (submitDisabled) return;
+
+    if (!reply && question) {
+      postReplyQuery({
+        sessionId,
+        token: sessionToken,
+        questionId: question?.questionId,
+        body,
       });
     } else if (reply && question) {
-      patchReplyBody(reply.replyId, {
+      patchReplyBodyQuery({
+        replyId: reply.replyId,
         token: sessionToken,
         sessionId,
         body,
-      }).then((res) => {
-        updateReply(question.questionId, res.reply);
-        addToast({
-          type: 'SUCCESS',
-          message: '답변이 성공적으로 수정되었습니다.',
-          duration: 3000,
-        });
-        closeModal();
       });
     }
   };
@@ -91,7 +126,10 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
         </div>
         <div className='flex h-fit flex-col items-end justify-center gap-2.5 self-stretch'>
           <div className='inline-flex items-center justify-center gap-2.5'>
-            <Button className='bg-indigo-600' onClick={handleSubmit}>
+            <Button
+              className={`${!submitDisabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
+              onClick={handleSubmit}
+            >
               <div className='text-sm font-bold text-white'>
                 {reply ? '수정하기' : '생성하기'}
               </div>
