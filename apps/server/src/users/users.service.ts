@@ -22,6 +22,6 @@ export class UsersService {
   }
 
   async hasNickname(nickname: string) {
-    return this.userRepository.findByNickname(nickname).then((nickname) => !!nickname);
+    return this.userRepository.findByNickname(nickname).then((user) => !!user);
   }
 }
