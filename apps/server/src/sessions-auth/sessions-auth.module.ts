@@ -5,11 +5,13 @@ import { SessionsAuthController } from './sessions-auth.controller';
 import { SessionsAuthRepository } from './sessions-auth.repository';
 import { SessionsAuthService } from './sessions-auth.service';
 
+import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
+import { SessionTokenModule } from '@common/guards/session-token.module';
 import { PrismaModule } from '@prisma-alias/prisma.module';
 
 @Module({
-  imports: [JwtModule.register({}), PrismaModule],
+  imports: [JwtModule.register({}), PrismaModule, SessionTokenModule],
   controllers: [SessionsAuthController],
-  providers: [SessionsAuthService, SessionsAuthRepository],
+  providers: [SessionsAuthService, SessionsAuthRepository, SessionTokenValidationGuard],
 })
 export class SessionsAuthModule {}

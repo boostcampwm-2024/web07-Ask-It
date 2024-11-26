@@ -26,6 +26,6 @@ export class SessionsAuthService {
 
   async findUsers(sessionId: string) {
     const users = await this.sessionsAuthRepository.findUsersBySessionId(sessionId);
-    return users.map(({ user }) => user);
+    return users.map(({ user, isHost }) => ({ ...user, isHost }));
   }
 }
