@@ -48,7 +48,7 @@ function QuestionDetail() {
           )}
         </div>
 
-        <div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto pb-4 scrollbar-hide'>
+        <div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto pb-4'>
           <div className='flex h-fit flex-col items-start justify-center gap-2.5 self-stretch border-b border-gray-200/50 px-12 py-4'>
             <Markdown className='prose prose-stone flex w-full flex-col gap-3 self-stretch text-base font-medium leading-normal text-black prose-img:rounded-md'>
               {question.body}

@@ -11,7 +11,7 @@ function MyPage() {
 
   return (
     <div className='inline-flex h-full w-full items-center justify-center gap-4 overflow-hidden px-4 py-4 md:max-w-[1194px]'>
-      <div className='inline-flex shrink grow basis-0 flex-col items-center justify-start gap-4 self-stretch rounded-lg bg-white shadow'>
+      <div className='inline-flex shrink grow basis-0 flex-col items-center justify-start self-stretch rounded-lg bg-white shadow'>
         <div className='inline-flex h-[54px] items-center justify-between self-stretch border-b border-gray-200 px-8 py-2'>
           <div className='text-lg font-medium text-black'>참여한 세션 기록</div>
           <div className='rounded-md px-3 py-2' />
