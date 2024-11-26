@@ -19,7 +19,7 @@ function CreateSessionModal() {
   const navigate = useNavigate();
 
   const enableCreateSession =
-    sessionName.trim().length > 0 && sessionName.trim().length <= 20;
+    sessionName.trim().length >= 3 && sessionName.trim().length <= 20;
 
   const handleCreateSession = () =>
     enableCreateSession &&
@@ -27,7 +27,7 @@ function CreateSessionModal() {
       closeModal();
       addToast({
         type: 'SUCCESS',
-        message: `세션( ${sessionName} )이 생성되었습니다.`,
+        message: `세션(${sessionName})이 생성되었습니다.`,
         duration: 3000,
       });
       navigate({
