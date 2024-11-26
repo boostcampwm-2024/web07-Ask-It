@@ -9,3 +9,4 @@ export { default as QuestionDetail } from './qna/QuestionDetail';
 export { default as ChattingList } from './qna/ChattingList';
 export { default as CreateQuestionModal } from './modal/CreateQuestionModal';
 export { default as CreateReplyModal } from './modal/CreateReplyModal';
+export { default as SessionParticipantsModal } from './modal/SessionParticipantsModal';
