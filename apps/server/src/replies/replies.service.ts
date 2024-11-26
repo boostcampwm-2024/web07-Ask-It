@@ -40,10 +40,8 @@ export class RepliesService {
     return await this.repliesRepository.deleteReply(replyId);
   }
 
-  async validateHost(sessionId: string, createUserToken: string) {
-    const userId = await this.sessionAuthRepository.findUserByToken(createUserToken);
-    if (!userId) return false;
-    return !!(await this.sessionsRepository.findBySessionIdAndUser(sessionId, userId));
+  async validateHost(token: string) {
+    return (await this.sessionAuthRepository.findByToken(token)).isHost;
   }
 
   async toggleLike(replyId: number, createUserToken: string) {

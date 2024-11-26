@@ -36,6 +36,7 @@ model UserSessionToken {
   token          String @id @default(uuid())
   userId         Int?   @map("user_id")
   sessionId      String @map("session_id")
+  isHost         Boolean @default(false) @map("is_host")
 
   user           User?          @relation("UserTokens", fields: [userId], references: [userId])
   session        Session        @relation("SessionTokens", fields: [sessionId], references: [sessionId])

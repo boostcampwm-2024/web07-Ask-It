@@ -42,9 +42,8 @@ export class QuestionsService {
     const questions = await this.questionRepository.findQuestionsWithDetails(sessionId);
     const session = await this.sessionRepository.findById(sessionId);
     const expired = session.expiredAt < new Date();
-    const sessionHostToken = await this.sessionAuthRepository.findTokenByUserId(session.createUserId, sessionId);
-    const isHost = sessionHostToken === token;
-
+    const sessionHostTokens = await this.sessionAuthRepository.findHostTokensInSession(sessionId);
+    const isHost = sessionHostTokens.some(({ token: hostToken }) => hostToken === token);
     const mapLikesAndOwnership = <
       T extends {
         createUserToken: string;
@@ -56,7 +55,7 @@ export class QuestionsService {
       token: string,
     ) => {
       const isOwner = item.createUserToken === token;
-      const isHost = item.createUserToken === sessionHostToken;
+      const isHost = sessionHostTokens.some(({ token: hostToken }) => hostToken === item.createUserToken);
       const likesCount = item.likes.length;
       const liked = item.likes.some((like) => like.createUserToken === token);
       const nickname = item.createUserTokenEntity?.user?.nickname || '익명';
@@ -137,10 +136,9 @@ export class QuestionsService {
 
   async updateQuestionPinned(questionId: number, updateQuestionPinnedDto: UpdateQuestionPinnedDto) {
     const { sessionId, token, pinned } = updateQuestionPinnedDto;
-    const session = await this.sessionRepository.findById(sessionId);
-    const foundToken = await this.sessionAuthRepository.findByToken(token);
-    if (foundToken.userId !== session.createUserId) {
-      throw new ForbiddenException('세션 생성자만 이 작업을 수행할 수 있습니다.');
+    const hostTokens = await this.sessionAuthRepository.findHostTokensInSession(sessionId);
+    if (hostTokens.some(({ token: hostToken }) => hostToken === token)) {
+      throw new ForbiddenException('호스트만 이 작업을 수행할 수 있습니다.');
     }
     return await this.questionRepository.updatePinned(questionId, pinned);
   }
@@ -150,10 +148,9 @@ export class QuestionsService {
     if (!closed) {
       throw new ForbiddenException('이미 완료된 답변입니다.');
     }
-    const session = await this.sessionRepository.findById(sessionId);
-    const foundToken = await this.sessionAuthRepository.findByToken(token);
-    if (foundToken.userId !== session.createUserId) {
-      throw new ForbiddenException('세션 생성자만 이 작업을 수행할 수 있습니다.');
+    const hostTokens = await this.sessionAuthRepository.findHostTokensInSession(sessionId);
+    if (hostTokens.some(({ token: hostToken }) => hostToken === token)) {
+      throw new ForbiddenException('호스트만 이 작업을 수행할 수 있습니다.');
     }
     return await this.questionRepository.updateClosed(questionId, closed);
   }

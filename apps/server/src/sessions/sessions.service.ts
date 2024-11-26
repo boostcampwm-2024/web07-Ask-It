@@ -4,11 +4,16 @@ import { CreateSessionDto } from './dto/create-session.dto';
 import { SessionCreateData } from './interface/session-create-data.interface';
 import { SessionsRepository } from './sessions.repository';
 
+import { SessionsAuthRepository } from '@sessions-auth/sessions-auth.repository';
+
 const SESSION_EXPIRATION_TIME = 7 * (24 * 60 * 60 * 1000); //일주일
 
 @Injectable()
 export class SessionsService {
-  constructor(private readonly sessionRepository: SessionsRepository) {}
+  constructor(
+    private readonly sessionRepository: SessionsRepository,
+    private readonly sessionsAuthRepository: SessionsAuthRepository,
+  ) {}
 
   async create(data: CreateSessionDto, userId: number) {
     const expiredAt = new Date(Date.now() + SESSION_EXPIRATION_TIME);
@@ -22,7 +27,9 @@ export class SessionsService {
     };
 
     const createdSession = await this.sessionRepository.create(sessionCreateData);
-    return { sessionId: createdSession.sessionId };
+    const { sessionId } = createdSession;
+    await this.sessionsAuthRepository.generateToken(userId, sessionId, true);
+    return { sessionId };
   }
 
   async getSessionsById(userId: number) {

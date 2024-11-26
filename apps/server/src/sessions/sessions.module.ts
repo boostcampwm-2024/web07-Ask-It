@@ -7,10 +7,11 @@ import { SessionsService } from './sessions.service';
 
 import { AuthModule } from '@auth/auth.module';
 import { PrismaModule } from '@prisma-alias/prisma.module';
+import { SessionsAuthRepository } from '@sessions-auth/sessions-auth.repository';
 @Module({
   imports: [PrismaModule, JwtModule.register({}), AuthModule],
   controllers: [SessionsController],
-  providers: [SessionsService, SessionsRepository],
+  providers: [SessionsService, SessionsRepository, SessionsAuthRepository],
   exports: [SessionsService],
 })
 export class SessionsModule {}

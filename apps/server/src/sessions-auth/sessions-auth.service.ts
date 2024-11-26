@@ -23,4 +23,9 @@ export class SessionsAuthService {
       return result ?? (await this.sessionsAuthRepository.generateToken(userId, sessionId));
     }
   }
+
+  async findUsers(sessionId: string) {
+    const users = await this.sessionsAuthRepository.findUsersBySessionId(sessionId);
+    return users.map(({ user }) => user);
+  }
 }

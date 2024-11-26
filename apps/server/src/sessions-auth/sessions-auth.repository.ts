@@ -8,12 +8,13 @@ import { PrismaService } from '@prisma-alias/prisma.service';
 export class SessionsAuthRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async generateToken(userId: number | null, sessionId: string) {
+  async generateToken(userId: number | null, sessionId: string, isHost = false) {
     const newUserSessionToken = await this.prisma.userSessionToken.create({
       data: {
         sessionId,
         userId: userId ? userId : null,
         token: uuid4(),
+        isHost,
       },
     });
     return newUserSessionToken.token;
@@ -31,6 +32,15 @@ export class SessionsAuthRepository {
     });
     return record?.token || null;
   }
+
+  async findHostTokensInSession(sessionId: string) {
+    try {
+      return await this.prisma.userSessionToken.findMany({ where: { sessionId, isHost: true } });
+    } catch (error) {
+      throw DatabaseException.read('sessions-auth');
+    }
+  }
+
   async findTokenByToken(sessionId: string, token: string) {
     const record = await this.prisma.userSessionToken.findFirst({
       where: {
@@ -57,22 +67,6 @@ export class SessionsAuthRepository {
     }
   }
 
-  async findUserByToken(token: string) {
-    try {
-      const record = await this.prisma.userSessionToken.findFirst({
-        where: {
-          token,
-        },
-        select: {
-          userId: true,
-        },
-      });
-      return record?.userId || null;
-    } catch (error) {
-      throw DatabaseException.read('sessions-auth');
-    }
-  }
-
   async findTokenByUserIdAndToken(userId: number, sessionId: string, token: string) {
     const record = await this.prisma.userSessionToken.findFirst({
       where: {
@@ -94,6 +88,29 @@ export class SessionsAuthRepository {
       });
     } catch (error) {
       throw DatabaseException.read('reply');
+    }
+  }
+
+  async findUsersBySessionId(sessionId: string) {
+    try {
+      return await this.prisma.userSessionToken.findMany({
+        where: {
+          sessionId,
+          userId: {
+            not: null,
+          },
+        },
+        include: {
+          user: {
+            select: {
+              userId: true,
+              nickname: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      throw DatabaseException.read('sessions-auth');
     }
   }
 }

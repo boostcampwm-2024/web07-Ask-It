@@ -45,7 +45,7 @@ export class RepliesController {
   async create(@Body() createReplyDto: CreateReplyDto) {
     const [reply, isHost] = await Promise.all([
       this.repliesService.createReply(createReplyDto),
-      this.repliesService.validateHost(createReplyDto.sessionId, createReplyDto.token),
+      this.repliesService.validateHost(createReplyDto.token),
     ]);
     const resultForOwner = { reply: { ...reply, isHost } };
     const resultForOther = { reply: { ...reply, isHost, isOwner: false } };
