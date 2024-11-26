@@ -1,4 +1,3 @@
-import { debounce } from 'es-toolkit';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useSessionStore } from '@/features/session';
@@ -6,57 +5,60 @@ import { useSocket } from '@/features/socket';
 
 import ChattingMessage from '@/components/qna/ChattingMessage';
 
-const DEBOUNCE_TIME = 1000;
-
 function ChattingList() {
   const { chatting } = useSessionStore();
 
-  const [message, setMessage] = useState<string>('');
+  const [message, setMessage] = useState('');
   const [isBottom, setIsBottom] = useState(true);
+  const userScrolling = useRef(false);
+  const autoScrolling = useRef(false);
 
   const socket = useSocket();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // 스크롤 위치 체크 (디바운싱 적용)
-  const checkScrollPosition = useCallback(
-    debounce(() => {
-      if (messagesEndRef.current) {
-        const { scrollHeight, scrollTop, clientHeight } =
-          messagesEndRef.current;
-        const isAtBottom =
-          Math.abs(scrollHeight - scrollTop - clientHeight) < 10;
-        setIsBottom(isAtBottom);
-      }
-    }, DEBOUNCE_TIME),
-    [],
-  );
+  const checkScrollPosition = useCallback(() => {
+    if (messagesEndRef.current) {
+      const { scrollHeight, scrollTop, clientHeight } = messagesEndRef.current;
+      const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 10;
+      setIsBottom(isAtBottom);
+
+      if (isAtBottom) userScrolling.current = false;
+    }
+  }, []);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
+      userScrolling.current = false;
+      autoScrolling.current = true;
       setIsBottom(true);
       messagesEndRef.current.scrollTo({
         top: messagesEndRef.current.scrollHeight,
-        behavior: 'smooth',
+        behavior: 'instant',
       });
+      autoScrolling.current = false;
     }
   };
 
   useEffect(() => {
+    const handleScroll = () => {
+      userScrolling.current = true;
+      checkScrollPosition();
+    };
+
     const messageContainer = messagesEndRef.current;
-    messageContainer?.addEventListener('scroll', checkScrollPosition);
+    messageContainer?.addEventListener('scroll', handleScroll);
 
     return () => {
-      messageContainer?.removeEventListener('scroll', checkScrollPosition);
+      messageContainer?.removeEventListener('scroll', handleScroll);
     };
-  }, [checkScrollPosition]);
+  }, [autoScrolling, checkScrollPosition]);
 
-  // 새 메시지 추가시 자동 스크롤
   useEffect(() => {
-    if (isBottom) {
+    if (isBottom && !userScrolling.current) {
       scrollToBottom();
     }
-  }, [chatting, isBottom]); // chatting이 변경될 때마다 실행
+  }, [chatting, isBottom]);
 
   return (
     <div className='inline-flex h-full w-1/5 min-w-[240px] flex-col items-center justify-start rounded-lg bg-white shadow'>
@@ -80,7 +82,7 @@ function ChattingList() {
       </div>
 
       <div className='relative inline-flex h-[75px] w-full items-center justify-center gap-2.5 border-t border-gray-200 bg-gray-50 p-4'>
-        {!isBottom && (
+        {!isBottom && userScrolling.current && (
           <button
             type='button'
             onClick={scrollToBottom}

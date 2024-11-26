@@ -126,6 +126,9 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
         </div>
         <div className='flex h-fit flex-col items-end justify-center gap-2.5 self-stretch'>
           <div className='inline-flex items-center justify-center gap-2.5'>
+            <Button className='bg-gray-500' onClick={closeModal}>
+              <div className='text-sm font-bold text-white'>취소하기</div>
+            </Button>
             <Button
               className={`${!submitDisabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
               onClick={handleSubmit}
@@ -133,9 +136,6 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
               <div className='text-sm font-bold text-white'>
                 {reply ? '수정하기' : '생성하기'}
               </div>
-            </Button>
-            <Button className='bg-gray-500' onClick={closeModal}>
-              <div className='text-sm font-bold text-white'>취소하기</div>
             </Button>
           </div>
         </div>
