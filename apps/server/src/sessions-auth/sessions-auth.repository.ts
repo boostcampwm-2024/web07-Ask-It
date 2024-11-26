@@ -37,7 +37,7 @@ export class SessionsAuthRepository {
     try {
       return await this.prisma.userSessionToken.findMany({ where: { sessionId, isHost: true } });
     } catch (error) {
-      throw DatabaseException.read('sessions-auth');
+      throw DatabaseException.read('UserSessionToken');
     }
   }
 
@@ -63,7 +63,7 @@ export class SessionsAuthRepository {
         },
       });
     } catch (error) {
-      throw DatabaseException.read('sessions-auth');
+      throw DatabaseException.read('UserSessionToken');
     }
   }
 
@@ -81,6 +81,7 @@ export class SessionsAuthRepository {
     if (record === null) return await this.findTokenByUserId(userId, sessionId);
     return record?.token || null;
   }
+
   async findByIdAndSession(replyId: number, sessionId: string) {
     try {
       return await this.prisma.reply.findUnique({
@@ -110,7 +111,21 @@ export class SessionsAuthRepository {
         },
       });
     } catch (error) {
-      throw DatabaseException.read('sessions-auth');
+      throw DatabaseException.read('UserSessionToken');
+    }
+  }
+
+  async updateIsHost(token: string, isHost: boolean) {
+    try {
+      return await this.prisma.userSessionToken.update({
+        where: {
+          token,
+        },
+        data: { isHost },
+        select: { user: true, isHost: true },
+      });
+    } catch (error) {
+      throw DatabaseException.update('UserSessionToken');
     }
   }
 }

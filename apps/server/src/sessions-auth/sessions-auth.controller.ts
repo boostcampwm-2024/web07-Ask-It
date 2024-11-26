@@ -1,9 +1,22 @@
-import { Controller, Get, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Query,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { SessionAuthDto } from './dto/session-auth.dto';
+import { UpdateHostDto } from './dto/update-host.dto';
 import { SessionsAuthService } from './sessions-auth.service';
 import { AuthSessionsSwagger } from './swagger/sessions-auth.swagger';
+import { SessionsHostSwagger } from './swagger/sessions-host.swagger';
 import { SessionsUserSwagger } from './swagger/sessions-user.swagger';
 
 import { BaseDto } from '@common/base.dto';
@@ -31,5 +44,12 @@ export class SessionsAuthController {
   async getUserInfo(@Query() { sessionId }: BaseDto) {
     const users = await this.sessionsAuthService.findUsers(sessionId);
     return { users };
+  }
+
+  @Patch('host/:userId')
+  @SessionsHostSwagger()
+  @UseGuards(SessionTokenValidationGuard)
+  async authorizeHost(@Param('userId', ParseIntPipe) userId: number, @Body() data: UpdateHostDto) {
+    return { user: await this.sessionsAuthService.authorizeHost(userId, data) };
   }
 }
