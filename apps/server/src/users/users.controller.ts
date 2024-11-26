@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
+import { CheckEmailDto } from './dto/check-email.dto';
+import { CheckNicknameDto } from './dto/check-nickname.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EmailValidationDocs, NicknameValidationDocs } from './swagger/check-duplication.swagger';
 import { CreateUserSwagger } from './swagger/create-user.swagger';
@@ -24,19 +26,13 @@ export class UsersController {
 
   @Get('emails/:email')
   @EmailValidationDocs()
-  async checkEmail(
-    @Param('email')
-    email: string,
-  ) {
+  async checkEmail(@Param() { email }: CheckEmailDto) {
     return { exists: await this.usersService.hasEmail(email) };
   }
 
   @Get('nicknames/:nickname')
   @NicknameValidationDocs()
-  async checkNickname(
-    @Param('nickname')
-    nickname: string,
-  ) {
+  async checkNickname(@Param() { nickname }: CheckNicknameDto) {
     return { exists: await this.usersService.hasNickname(nickname) };
   }
 }
