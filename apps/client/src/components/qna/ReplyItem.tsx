@@ -1,4 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
+import { throttle } from 'es-toolkit';
+import { useCallback } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { GrClose, GrLike, GrLikeFill, GrValidate } from 'react-icons/gr';
 import Markdown from 'react-markdown';
@@ -55,22 +57,29 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
       },
     });
 
-  const handleToggleLike = () => {
-    if (
-      expired ||
-      !sessionId ||
-      !sessionToken ||
-      isLikeInProgress ||
-      reply.deleted
-    )
-      return;
+  const handleLike = useCallback(
+    throttle(
+      () => {
+        if (
+          expired ||
+          !sessionId ||
+          !sessionToken ||
+          isLikeInProgress ||
+          reply.deleted
+        )
+          return;
 
-    postReplyLikeQuery({
-      replyId: reply.replyId,
-      sessionId,
-      token: sessionToken,
-    });
-  };
+        postReplyLikeQuery({
+          replyId: reply.replyId,
+          sessionId,
+          token: sessionToken,
+        });
+      },
+      1000,
+      { edges: ['leading'] },
+    ),
+    [],
+  );
 
   const { mutate: deleteReplyQuery, isPending: isDeleteInProgress } =
     useMutation({
@@ -124,7 +133,7 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
           <div className='inline-flex w-full items-center justify-between'>
             <Button
               className='hover:bg-gray-200/50 hover:transition-all'
-              onClick={handleToggleLike}
+              onClick={handleLike}
             >
               <div className='flex flex-row items-center gap-2 text-sm font-medium text-gray-500'>
                 {reply.liked ? (

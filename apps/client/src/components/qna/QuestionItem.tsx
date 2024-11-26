@@ -1,5 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
+import { throttle } from 'es-toolkit';
+import { useCallback } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { GoCheck } from 'react-icons/go';
 import { GrClose, GrLike, GrLikeFill, GrPin } from 'react-icons/gr';
@@ -79,15 +81,22 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
       },
     });
 
-  const handleLike = () => {
-    if (expired || !sessionToken || !sessionId || isLikeInProgress) return;
+  const handleLike = useCallback(
+    throttle(
+      () => {
+        if (expired || !sessionToken || !sessionId || isLikeInProgress) return;
 
-    likeQuestionQuery({
-      questionId: question.questionId,
-      token: sessionToken,
-      sessionId,
-    });
-  };
+        likeQuestionQuery({
+          questionId: question.questionId,
+          token: sessionToken,
+          sessionId,
+        });
+      },
+      1000,
+      { edges: ['leading'] },
+    ),
+    [],
+  );
 
   const { mutate: closeQuestionQuery, isPending: isCloseInProgress } =
     useMutation({
