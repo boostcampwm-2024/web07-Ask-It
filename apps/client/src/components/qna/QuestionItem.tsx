@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { FiEdit2 } from 'react-icons/fi';
 import { GoCheck } from 'react-icons/go';
@@ -52,57 +53,95 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
     });
   };
 
-  const handleLike = () => {
-    if (expired || !sessionToken || !sessionId) return;
+  const { mutate: likeQuestionQuery, isPending: isLikeInProgress } =
+    useMutation({
+      mutationFn: (params: {
+        questionId: number;
+        token: string;
+        sessionId: string;
+      }) =>
+        postQuestionLike(params.questionId, {
+          token: params.token,
+          sessionId: params.sessionId,
+        }),
+      onSuccess: (res) => {
+        addToast({
+          type: 'SUCCESS',
+          message: question.liked
+            ? '좋아요를 취소했습니다.'
+            : '질문에 좋아요를 눌렀습니다.',
+          duration: 3000,
+        });
+        updateQuestion({
+          ...question,
+          ...res,
+        });
+      },
+    });
 
-    postQuestionLike(question.questionId, {
+  const handleLike = () => {
+    if (expired || !sessionToken || !sessionId || isLikeInProgress) return;
+
+    likeQuestionQuery({
+      questionId: question.questionId,
       token: sessionToken,
       sessionId,
-    }).then((res) => {
-      addToast({
-        type: 'SUCCESS',
-        message: question.liked
-          ? '좋아요를 취소했습니다.'
-          : '질문에 좋아요를 눌렀습니다.',
-        duration: 3000,
-      });
-      updateQuestion({
-        ...question,
-        ...res,
-      });
     });
   };
 
-  const handleClose = () => {
-    if (expired || !sessionToken || !sessionId || !isHost) return;
+  const { mutate: closeQuestionQuery, isPending: isCloseInProgress } =
+    useMutation({
+      mutationFn: (params: {
+        questionId: number;
+        token: string;
+        sessionId: string;
+        closed: boolean;
+      }) =>
+        patchQuestionClosed(params.questionId, {
+          token: params.token,
+          sessionId: params.sessionId,
+          closed: params.closed,
+        }),
+      onSuccess: () => {
+        addToast({
+          type: 'SUCCESS',
+          message: question.closed
+            ? '질문 답변 완료를 취소했습니다.'
+            : '질문을 답변 완료했습니다.',
+          duration: 3000,
+        });
+        updateQuestion({
+          ...question,
+          closed: !question.closed,
+        });
+      },
+    });
 
-    patchQuestionClosed(question.questionId, {
+  const handleClose = () => {
+    if (expired || !sessionToken || !sessionId || !isHost || isCloseInProgress)
+      return;
+
+    closeQuestionQuery({
+      questionId: question.questionId,
       token: sessionToken,
       sessionId,
       closed: !question.closed,
-    }).then(() => {
-      addToast({
-        type: 'SUCCESS',
-        message: question.closed
-          ? '질문 답변 완료를 취소했습니다.'
-          : '질문을 답변 완료했습니다.',
-        duration: 3000,
-      });
-      updateQuestion({
-        ...question,
-        closed: !question.closed,
-      });
     });
   };
 
-  const handlePin = () => {
-    if (expired || !sessionToken || !sessionId || !isHost) return;
-
-    patchQuestionPinned(question.questionId, {
-      token: sessionToken,
-      sessionId,
-      pinned: !question.pinned,
-    }).then(() => {
+  const { mutate: pinQuestionQuery, isPending: isPinInProgress } = useMutation({
+    mutationFn: (params: {
+      questionId: number;
+      token: string;
+      sessionId: string;
+      pinned: boolean;
+    }) =>
+      patchQuestionPinned(params.questionId, {
+        token: params.token,
+        sessionId: params.sessionId,
+        pinned: params.pinned,
+      }),
+    onSuccess: () => {
       addToast({
         type: 'SUCCESS',
         message: question.pinned
@@ -114,22 +153,49 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
         ...question,
         pinned: !question.pinned,
       });
+    },
+  });
+
+  const handlePin = () => {
+    if (expired || !sessionToken || !sessionId || !isHost || isPinInProgress)
+      return;
+
+    pinQuestionQuery({
+      questionId: question.questionId,
+      token: sessionToken,
+      sessionId,
+      pinned: !question.pinned,
     });
   };
 
-  const handleDelete = () => {
-    if (expired || !sessionToken || !sessionId) return;
+  const { mutate: deleteQuestionQuery, isPending: isDeleteInProgress } =
+    useMutation({
+      mutationFn: (params: {
+        questionId: number;
+        sessionId: string;
+        token: string;
+      }) =>
+        deleteQuestion(params.questionId, {
+          sessionId: params.sessionId,
+          token: params.token,
+        }),
+      onSuccess: () => {
+        addToast({
+          type: 'SUCCESS',
+          message: '질문을 삭제했습니다.',
+          duration: 3000,
+        });
+        removeQuestion(question.questionId);
+      },
+    });
 
-    deleteQuestion(question.questionId, {
+  const handleDelete = () => {
+    if (expired || !sessionToken || !sessionId || isDeleteInProgress) return;
+
+    deleteQuestionQuery({
+      questionId: question.questionId,
       sessionId,
       token: sessionToken,
-    }).then(() => {
-      addToast({
-        type: 'SUCCESS',
-        message: '질문을 삭제했습니다.',
-        duration: 3000,
-      });
-      removeQuestion(question.questionId);
     });
   };
 

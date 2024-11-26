@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
 
@@ -27,16 +28,10 @@ function CreateQuestionModal({ question }: CreateQuestionModalProps) {
 
   const [body, setBody] = useState('');
 
-  const handleSubmit = () => {
-    if (expired || body.trim().length === 0 || !sessionId || !sessionToken)
-      return;
-
-    if (!question) {
-      postQuestion({
-        token: sessionToken,
-        sessionId,
-        body,
-      }).then((response) => {
+  const { mutate: postQuestionQuery, isPending: isPostInProgress } =
+    useMutation({
+      mutationFn: postQuestion,
+      onSuccess: (response) => {
         addQuestion(response.question);
         addToast({
           type: 'SUCCESS',
@@ -44,13 +39,23 @@ function CreateQuestionModal({ question }: CreateQuestionModalProps) {
           duration: 3000,
         });
         closeModal();
-      });
-    } else {
-      patchQuestionBody(question.questionId, {
-        token: sessionToken,
-        sessionId,
-        body,
-      }).then((response) => {
+      },
+    });
+
+  const { mutate: patchQuestionBodyQuery, isPending: isPatchInProgress } =
+    useMutation({
+      mutationFn: (params: {
+        questionId: number;
+        token: string;
+        sessionId: string;
+        body: string;
+      }) =>
+        patchQuestionBody(params.questionId, {
+          token: params.token,
+          sessionId: params.sessionId,
+          body: params.body,
+        }),
+      onSuccess: (response) => {
         updateQuestion(response.question);
         addToast({
           type: 'SUCCESS',
@@ -58,6 +63,32 @@ function CreateQuestionModal({ question }: CreateQuestionModalProps) {
           duration: 3000,
         });
         closeModal();
+      },
+    });
+
+  const submitDisabled =
+    expired ||
+    body.trim().length === 0 ||
+    !sessionId ||
+    !sessionToken ||
+    isPostInProgress ||
+    isPatchInProgress;
+
+  const handleSubmit = () => {
+    if (submitDisabled) return;
+
+    if (!question) {
+      postQuestionQuery({
+        token: sessionToken,
+        sessionId,
+        body,
+      });
+    } else {
+      patchQuestionBodyQuery({
+        questionId: question.questionId,
+        token: sessionToken,
+        sessionId,
+        body,
       });
     }
   };
@@ -89,7 +120,10 @@ function CreateQuestionModal({ question }: CreateQuestionModalProps) {
         </div>
         <div className='flex h-fit flex-col items-end justify-center gap-2.5 self-stretch'>
           <div className='inline-flex items-center justify-center gap-2.5'>
-            <Button className='bg-indigo-600' onClick={handleSubmit}>
+            <Button
+              className={`${!submitDisabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
+              onClick={handleSubmit}
+            >
               <div className='text-sm font-bold text-white'>
                 {question ? '수정하기' : '생성하기'}
               </div>
