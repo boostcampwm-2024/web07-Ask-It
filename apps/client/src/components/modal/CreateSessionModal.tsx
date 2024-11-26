@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -18,23 +19,29 @@ function CreateSessionModal() {
 
   const navigate = useNavigate();
 
-  const enableCreateSession =
-    sessionName.trim().length > 0 && sessionName.trim().length <= 20;
-
-  const handleCreateSession = () =>
-    enableCreateSession &&
-    postSession({ title: sessionName }).then((res) => {
+  const { mutate, isPending } = useMutation({
+    mutationFn: postSession,
+    onSuccess: (res) => {
       closeModal();
       addToast({
         type: 'SUCCESS',
-        message: `세션( ${sessionName} )이 생성되었습니다.`,
+        message: `세션(${sessionName})이 생성되었습니다.`,
         duration: 3000,
       });
       navigate({
         to: '/session/$sessionId',
         params: { sessionId: res.sessionId },
       });
-    });
+    },
+  });
+
+  const enableCreateSession =
+    sessionName.trim().length > 0 && sessionName.trim().length <= 2;
+
+  const handleCreateSession = () => {
+    if (!enableCreateSession || isPending) return;
+    mutate({ title: sessionName });
+  };
 
   return (
     <Modal>
