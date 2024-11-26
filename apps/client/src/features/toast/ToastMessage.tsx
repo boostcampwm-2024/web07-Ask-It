@@ -72,7 +72,7 @@ function ToastMessage({ toast }: { toast: Toast }) {
 
   return (
     <div
-      className={`w-fit min-w-[200px] max-w-[300px] overflow-hidden p-4 font-medium shadow ${toast.isActive ? 'animate-fadeIn' : 'animate-fadeOut'} ${getToastClass(toast.type)}`}
+      className={`w-fit min-w-[200px] max-w-[300px] overflow-hidden rounded p-4 font-medium shadow ${toast.isActive ? 'animate-fadeIn' : 'animate-fadeOut'} ${getToastClass(toast.type)}`}
     >
       {toast.message}
       <div className='relative mt-2 h-1 rounded-full bg-gray-200'>
