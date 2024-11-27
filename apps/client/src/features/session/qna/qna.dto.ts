@@ -16,7 +16,7 @@ export const GetQuestionsResponseSchema = z.object({
 export const PostQuestionRequestSchema = z.object({
   token: z.string(),
   sessionId: z.string(),
-  body: z.string(),
+  body: z.string().min(1),
 });
 
 export const PostQuestionResponseSchema = z.object({
@@ -26,7 +26,7 @@ export const PostQuestionResponseSchema = z.object({
 export const PatchQuestionBodyRequestSchema = z.object({
   token: z.string(),
   sessionId: z.string(),
-  body: z.string(),
+  body: z.string().min(1),
 });
 
 export const PatchQuestionBodyResponseSchema = z.object({
@@ -96,7 +96,7 @@ export const PostReplyRequestSchema = z.object({
   token: z.string(),
   sessionId: z.string(),
   questionId: z.number(),
-  body: z.string(),
+  body: z.string().min(1),
 });
 
 export const PostReplyResponseSchema = z.object({
@@ -115,7 +115,7 @@ export const PostReplyResponseSchema = z.object({
 export const PatchReplyBodyRequestSchema = z.object({
   token: z.string(),
   sessionId: z.string(),
-  body: z.string(),
+  body: z.string().min(1),
 });
 
 export const PatchReplyBodyResponseSchema = z.object({

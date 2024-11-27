@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 export const PostUserSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(6),
-  nickname: z.string().min(1),
+  password: z.string().min(8).max(20),
+  nickname: z.string().min(3).max(20),
 });
 
 export const GetVerifyEmailSchema = z.object({

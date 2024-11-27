@@ -2,7 +2,7 @@ import { UserSchema } from '@/features/session/session.type';
 import { z } from 'zod';
 
 export const PostSessionRequestSchema = z.object({
-  title: z.string(),
+  title: z.string().min(1),
 });
 
 export const PostSessionResponseSchema = z.object({

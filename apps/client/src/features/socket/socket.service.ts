@@ -17,6 +17,7 @@ import {
   ReplyUpdatedEventPayload,
 } from '@/features/socket/socket.type';
 import { useToastStore } from '@/features/toast';
+import { z } from 'zod';
 
 export class SocketService {
   private socket: Socket;
@@ -152,6 +153,18 @@ export class SocketService {
   }
 
   sendChatMessage(message: string) {
+    const chatMessageSchema = z.string().min(1);
+
+    const result = chatMessageSchema.safeParse(message);
+    if (!result.success) {
+      useToastStore.getState().addToast({
+        type: 'ERROR',
+        message: '메시지를 입력해주세요',
+        duration: 3000,
+      });
+      return;
+    }
+
     this.socket.emit('createChat', message);
   }
 
