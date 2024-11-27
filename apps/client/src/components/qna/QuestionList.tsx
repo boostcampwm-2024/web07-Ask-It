@@ -5,6 +5,7 @@ import { IoClose, IoShareSocialOutline } from 'react-icons/io5';
 
 import { useModal } from '@/features/modal';
 import { useSessionStore } from '@/features/session';
+import { useToastStore } from '@/features/toast';
 
 import {
   Button,
@@ -15,8 +16,16 @@ import QuestionSection from '@/components/qna/QuestionSection';
 import SessionSettingsDropdown from '@/components/qna/SessionSettingsDropdown';
 
 function QuestionList() {
-  const { sessionTitle, expired, isHost, questions, setSelectedQuestionId } =
-    useSessionStore();
+  const {
+    isHost,
+    expired,
+    questions,
+    sessionId,
+    sessionTitle,
+    setSelectedQuestionId,
+  } = useSessionStore();
+
+  const { addToast } = useToastStore();
 
   const { Modal: CreateQuestion, openModal: openCreateQuestionModal } =
     useModal(<CreateQuestionModal />);
@@ -60,7 +69,24 @@ function QuestionList() {
     {
       icon: <IoShareSocialOutline />,
       label: '공유',
-      onClick: () => {},
+      onClick: async () => {
+        const shareUrl = `${window.location.origin}/session/${sessionId}`;
+
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          addToast({
+            type: 'SUCCESS',
+            message: '세션 링크가 클립보드에 복사되었습니다',
+            duration: 3000,
+          });
+        } catch (err) {
+          addToast({
+            type: 'ERROR',
+            message: '링크 복사에 실패했습니다',
+            duration: 3000,
+          });
+        }
+      },
     },
     {
       icon: <GrValidate />,
