@@ -1,17 +1,28 @@
 import { create } from 'zustand';
 
 interface AuthStore {
-  accessToken: string | null;
+  userId?: number;
+  accessToken?: string;
   isLogin: () => boolean;
-  setAccessToken: (accessToken: string) => void;
-  clearAccessToken: () => void;
+  setAuthInformation: ({
+    userId,
+    accessToken,
+  }: {
+    userId?: number;
+    accessToken?: string;
+  }) => void;
+  clearAuthInformation: () => void;
 }
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
-  accessToken: null,
-  sessionToken: null,
-  sessionId: null,
-  isLogin: () => get().accessToken !== null,
-  setAccessToken: (accessToken) => set({ accessToken }),
-  clearAccessToken: () => set({ accessToken: null }),
+  isLogin: () => get().accessToken != null,
+  setAuthInformation: ({
+    userId,
+    accessToken,
+  }: {
+    userId?: number;
+    accessToken?: string;
+  }) => set({ userId, accessToken }),
+  clearAuthInformation: () =>
+    set({ userId: undefined, accessToken: undefined }),
 }));

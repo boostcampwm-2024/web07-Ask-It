@@ -12,7 +12,7 @@ import { ValidationStatusWithMessage } from '@/shared';
 export function useSignInForm() {
   const router = useRouterState();
 
-  const { setAccessToken } = useAuthStore();
+  const { setAuthInformation } = useAuthStore();
 
   const { addToast } = useToastStore();
 
@@ -33,7 +33,7 @@ export function useSignInForm() {
         message: '로그인 되었습니다.',
         duration: 3000,
       });
-      setAccessToken(response.accessToken);
+      setAuthInformation(response);
       if (router.location.pathname.includes('session')) {
         window.location.reload();
       }
