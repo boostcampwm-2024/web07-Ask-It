@@ -4,3 +4,9 @@ export interface Session {
   expired: boolean;
   createdAt: string;
 }
+
+export interface User {
+  userId: number;
+  nickname: string;
+  isHost: boolean;
+}
