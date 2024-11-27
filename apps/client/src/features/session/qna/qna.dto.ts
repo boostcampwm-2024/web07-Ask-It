@@ -1,5 +1,6 @@
-import { QuestionSchema } from '@/features/session/qna/qna.type';
 import { z } from 'zod';
+
+import { QuestionSchema } from '@/features/session/qna/qna.type';
 
 export const GetQuestionsRequestSchema = z.object({
   sessionId: z.string(),

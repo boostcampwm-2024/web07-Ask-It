@@ -1,4 +1,5 @@
 import { io, Socket } from 'socket.io-client';
+import { z } from 'zod';
 
 import { useAuthStore } from '@/features/auth';
 import { useSessionStore } from '@/features/session';
@@ -17,7 +18,6 @@ import {
   ReplyUpdatedEventPayload,
 } from '@/features/socket/socket.type';
 import { useToastStore } from '@/features/toast';
-import { z } from 'zod';
 
 export class SocketService {
   private socket: Socket;

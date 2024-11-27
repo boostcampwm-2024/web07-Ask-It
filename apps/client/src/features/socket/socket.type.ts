@@ -1,6 +1,7 @@
+import { z } from 'zod';
+
 import { QuestionSchema, ReplySchema } from '@/features/session/qna';
 import { UserSchema } from '@/features/session/session.type';
-import { z } from 'zod';
 
 export type SocketEventType =
   | 'questionCreated'

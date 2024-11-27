@@ -1,5 +1,6 @@
-import { UserSchema } from '@/features/session/session.type';
 import { z } from 'zod';
+
+import { UserSchema } from '@/features/session/session.type';
 
 export const PostSessionRequestSchema = z.object({
   title: z.string().min(1),
