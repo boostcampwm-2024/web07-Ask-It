@@ -8,11 +8,13 @@ interface SessionSettingsDropdownProps {
     label: string;
     onClick: () => void;
   }>;
+  triggerRef?: React.RefObject<HTMLButtonElement>;
   onClose: () => void;
 }
 
 function SessionSettingsDropdown({
   buttons,
+  triggerRef,
   onClose,
 }: SessionSettingsDropdownProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -21,7 +23,9 @@ function SessionSettingsDropdown({
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        !dropdownRef.current.contains(event.target as Node) &&
+        triggerRef?.current &&
+        !triggerRef.current?.contains(event.target as Node)
       ) {
         onClose();
       }

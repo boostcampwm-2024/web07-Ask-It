@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { GrValidate } from 'react-icons/gr';
 import { IoClose, IoShareSocialOutline } from 'react-icons/io5';
 
@@ -27,6 +27,8 @@ function QuestionList() {
   } = useModal(<SessionParticipantsModal />);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const sections = [
     {
@@ -84,6 +86,7 @@ function QuestionList() {
               <div className='relative'>
                 {isHost && (
                   <Button
+                    ref={buttonRef}
                     className='hover:bg-gray-200 hover:transition-all'
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
@@ -94,6 +97,7 @@ function QuestionList() {
                   <SessionSettingsDropdown
                     buttons={sessionButtons}
                     onClose={() => setIsDropdownOpen(false)}
+                    triggerRef={buttonRef}
                   />
                 )}
               </div>
