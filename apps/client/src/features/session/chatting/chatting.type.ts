@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const ChatSchema = z.object({
-  chattingId: z.string(),
+  chattingId: z.number(),
   content: z.string(),
   nickname: z.string(),
 });
