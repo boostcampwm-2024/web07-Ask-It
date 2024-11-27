@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { SessionAuthDto } from './dto/session-auth.dto';
 import { UpdateHostDto } from './dto/update-host.dto';
@@ -39,9 +39,15 @@ export class SessionsAuthService {
     if (!(await this.validateSuperHost(sessionId, token)))
       throw new ForbiddenException('세션 생성자만이 호스트 권한을 부여 할 수 있습니다.');
     const targetToken = await this.sessionsAuthRepository.findTokenByUserId(userId, sessionId);
+
     if (!targetToken) {
       throw new NotFoundException('존재하지 않는 userId입니다.');
     }
+
+    if (token === targetToken) {
+      throw new BadRequestException('자신의 권한을 변경하려는 요청은 허용되지 않습니다.');
+    }
+
     const { user, isHost: updatedIsHost } = await this.sessionsAuthRepository.updateIsHost(targetToken, isHost);
     return { userId: user.userId, nickname: user.nickname, isHost: updatedIsHost };
   }
