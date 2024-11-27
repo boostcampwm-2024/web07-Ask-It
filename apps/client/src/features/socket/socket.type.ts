@@ -1,4 +1,5 @@
 import { Question, Reply } from '@/features/session/qna';
+import { User } from '@/features/session/session.type';
 
 export type SocketEventType =
   | 'questionCreated'
@@ -12,7 +13,10 @@ export type SocketEventType =
   | 'createChat'
   | 'chatMessage'
   | 'chatError'
-  | 'invalidConnection';
+  | 'invalidConnection'
+  | 'participantCountUpdated'
+  | 'hostChanged'
+  | 'sessionEnded';
 
 export interface SocketEventPayload {
   type: SocketEventType;
@@ -111,5 +115,20 @@ export interface ChatErrorEventPayload extends SocketEventPayload {
   payload: {
     message: string;
     error: string;
+  };
+}
+
+export interface ParticipantCountUpdatedEventPayload
+  extends SocketEventPayload {
+  type: 'participantCountUpdated';
+  payload: {
+    participantCount: number;
+  };
+}
+
+export interface HostChangedEventPayload extends SocketEventPayload {
+  type: 'hostChanged';
+  payload: {
+    user: User;
   };
 }

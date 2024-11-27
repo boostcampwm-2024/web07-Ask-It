@@ -1,9 +1,12 @@
 import { io, Socket } from 'socket.io-client';
 
+import { useAuthStore } from '@/features/auth';
 import { useSessionStore } from '@/features/session';
 import {
   ChatErrorEventPayload,
   ChatMessageEventPayload,
+  HostChangedEventPayload,
+  ParticipantCountUpdatedEventPayload,
   QuestionCreatedEventPayload,
   QuestionDeletedEventPayload,
   QuestionLikedEventPayload,
@@ -29,6 +32,7 @@ export class SocketService {
 
   public setupSubscriptions() {
     const store = useSessionStore.getState();
+    const authStore = useAuthStore.getState();
 
     this.socket.on(
       'questionCreated',
@@ -122,6 +126,29 @@ export class SocketService {
       window.alert('다른 곳에서 세션에 접속하여 연결을 종료합니다.');
       window.location.href = '/';
     });
+
+    this.socket.on(
+      'participantCountUpdated',
+      (payload: ParticipantCountUpdatedEventPayload['payload']) => {
+        store.setParticipantCount(payload.participantCount);
+      },
+    );
+
+    this.socket.on(
+      'hostChanged',
+      ({
+        user: { nickname, userId, isHost },
+      }: HostChangedEventPayload['payload']) => {
+        if (userId === authStore.userId) store.setIsHost(isHost);
+        store.updateReplyIsHost(userId, isHost);
+        if (isHost)
+          useToastStore.getState().addToast({
+            type: 'INFO',
+            message: `${nickname}님이 호스트로 지정되었습니다.`,
+            duration: 3000,
+          });
+      },
+    );
   }
 
   sendChatMessage(message: string) {
