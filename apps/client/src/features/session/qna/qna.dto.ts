@@ -1,144 +1,196 @@
-import { Question } from '@/features/session/qna/qna.type';
+import { QuestionSchema } from '@/features/session/qna/qna.type';
+import { z } from 'zod';
 
-export interface GetQuestionsRequestDTO {
-  sessionId: string;
-  token?: string;
-}
+export const GetQuestionsRequestSchema = z.object({
+  sessionId: z.string(),
+  token: z.string().optional(),
+});
 
-export interface GetQuestionsResponseDTO {
-  questions: Question[];
-  isHost: boolean;
-  expired: boolean;
-  sessionTitle: string;
-}
+export const GetQuestionsResponseSchema = z.object({
+  questions: z.array(QuestionSchema),
+  isHost: z.boolean(),
+  expired: z.boolean(),
+  sessionTitle: z.string(),
+});
 
-export interface PostQuestionRequestDTO {
-  token: string;
-  sessionId: string;
-  body: string;
-}
+export const PostQuestionRequestSchema = z.object({
+  token: z.string(),
+  sessionId: z.string(),
+  body: z.string(),
+});
 
-export interface PostQuestionResponseDTO {
-  question: Question;
-}
+export const PostQuestionResponseSchema = z.object({
+  question: QuestionSchema,
+});
 
-export interface PatchQuestionBodyRequestDTO {
-  token: string;
-  sessionId: string;
-  body: string;
-}
+export const PatchQuestionBodyRequestSchema = z.object({
+  token: z.string(),
+  sessionId: z.string(),
+  body: z.string(),
+});
 
-export interface PatchQuestionBodyResponseDTO {
-  question: {
-    questionId: number;
-    createUserToken: string;
-    sessionId: string;
-    body: string;
-    closed: boolean;
-    pinned: boolean;
-    createdAt: string;
-  };
-}
+export const PatchQuestionBodyResponseSchema = z.object({
+  question: z.object({
+    questionId: z.number(),
+    createUserToken: z.string(),
+    sessionId: z.string(),
+    body: z.string(),
+    closed: z.boolean(),
+    pinned: z.boolean(),
+    createdAt: z.string(),
+  }),
+});
 
-export interface DeleteQuestionRequestDTO {
-  sessionId: string;
-  token: string;
-}
+export const DeleteQuestionRequestSchema = z.object({
+  sessionId: z.string(),
+  token: z.string(),
+});
 
-export interface PatchQuestionPinnedRequestDTO {
-  token: string;
-  sessionId: string;
-  pinned: boolean;
-}
+export const PatchQuestionPinnedRequestSchema = z.object({
+  token: z.string(),
+  sessionId: z.string(),
+  pinned: z.boolean(),
+});
 
-export interface PatchQuestionPinnedResponseDTO {
-  question: {
-    questionId: number;
-    createUserToken: string;
-    sessionId: string;
-    body: string;
-    closed: boolean;
-    pinned: boolean;
-    createdAt: string;
-  };
-}
+export const PatchQuestionPinnedResponseSchema = z.object({
+  question: z.object({
+    questionId: z.number(),
+    createUserToken: z.string(),
+    sessionId: z.string(),
+    body: z.string(),
+    closed: z.boolean(),
+    pinned: z.boolean(),
+    createdAt: z.string(),
+  }),
+});
 
-export interface PatchQuestionClosedRequestDTO {
-  token: string;
-  sessionId: string;
-  closed: boolean;
-}
+export const PatchQuestionClosedRequestSchema = z.object({
+  token: z.string(),
+  sessionId: z.string(),
+  closed: z.boolean(),
+});
 
-export interface PatchQuestionClosedResponseDTO {
-  question: {
-    questionId: number;
-    createUserToken: string;
-    sessionId: string;
-    body: string;
-    closed: boolean;
-    pinned: boolean;
-    createdAt: string;
-  };
-}
+export const PatchQuestionClosedResponseSchema = z.object({
+  question: z.object({
+    questionId: z.number(),
+    createUserToken: z.string(),
+    sessionId: z.string(),
+    body: z.string(),
+    closed: z.boolean(),
+    pinned: z.boolean(),
+    createdAt: z.string(),
+  }),
+});
 
-export interface PostQuestionLikeRequestDTO {
-  token: string;
-  sessionId: string;
-}
+export const PostQuestionLikeRequestSchema = z.object({
+  token: z.string(),
+  sessionId: z.string(),
+});
 
-export interface PostQuestionLikeResponseDTO {
-  liked: boolean;
-  likesCount: number;
-}
+export const PostQuestionLikeResponseSchema = z.object({
+  liked: z.boolean(),
+  likesCount: z.number(),
+});
 
-export interface PostReplyRequestDTO {
-  token: string;
-  sessionId: string;
-  questionId: number;
-  body: string;
-}
+export const PostReplyRequestSchema = z.object({
+  token: z.string(),
+  sessionId: z.string(),
+  questionId: z.number(),
+  body: z.string(),
+});
 
-export interface PostReplyResponseDTO {
-  reply: {
-    replyId: number;
-    body: string;
-    createdAt: string;
-    isOwner: boolean;
-    likesCount: number;
-    liked: boolean;
-    nickname: string;
-    isHost: boolean;
-  };
-}
+export const PostReplyResponseSchema = z.object({
+  reply: z.object({
+    replyId: z.number(),
+    body: z.string(),
+    createdAt: z.string(),
+    isOwner: z.boolean(),
+    likesCount: z.number(),
+    liked: z.boolean(),
+    nickname: z.string(),
+    isHost: z.boolean(),
+  }),
+});
 
-export interface PatchReplyBodyRequestDTO {
-  token: string;
-  sessionId: string;
-  body: string;
-}
+export const PatchReplyBodyRequestSchema = z.object({
+  token: z.string(),
+  sessionId: z.string(),
+  body: z.string(),
+});
 
-export interface PatchReplyBodyResponseDTO {
-  reply: {
-    replyId: number;
-    createUserToken: string;
-    sessionId: string;
-    questionId: number;
-    body: string;
-    createdAt: string;
-  };
-}
+export const PatchReplyBodyResponseSchema = z.object({
+  reply: z.object({
+    replyId: z.number(),
+    createUserToken: z.string(),
+    sessionId: z.string(),
+    questionId: z.number(),
+    body: z.string(),
+    createdAt: z.string(),
+  }),
+});
 
-export interface DeleteReplyRequestDTO {
-  sessionId: string;
-  token: string;
-}
+export const DeleteReplyRequestSchema = z.object({
+  sessionId: z.string(),
+  token: z.string(),
+});
 
-export interface PostReplyLikeRequestDTO {
-  token: string;
-  sessionId: string;
-}
+export const PostReplyLikeRequestSchema = z.object({
+  token: z.string(),
+  sessionId: z.string(),
+});
 
-export interface PostReplyLikeResponseDTO {
-  liked: boolean;
-  likesCount: number;
-}
+export const PostReplyLikeResponseSchema = z.object({
+  liked: z.boolean(),
+  likesCount: z.number(),
+});
+
+export type GetQuestionsRequestDTO = z.infer<typeof GetQuestionsRequestSchema>;
+export type GetQuestionsResponseDTO = z.infer<
+  typeof GetQuestionsResponseSchema
+>;
+export type PostQuestionRequestDTO = z.infer<typeof PostQuestionRequestSchema>;
+export type PostQuestionResponseDTO = z.infer<
+  typeof PostQuestionResponseSchema
+>;
+export type PatchQuestionBodyRequestDTO = z.infer<
+  typeof PatchQuestionBodyRequestSchema
+>;
+export type PatchQuestionBodyResponseDTO = z.infer<
+  typeof PatchQuestionBodyResponseSchema
+>;
+export type DeleteQuestionRequestDTO = z.infer<
+  typeof DeleteQuestionRequestSchema
+>;
+export type PatchQuestionPinnedRequestDTO = z.infer<
+  typeof PatchQuestionPinnedRequestSchema
+>;
+export type PatchQuestionPinnedResponseDTO = z.infer<
+  typeof PatchQuestionPinnedResponseSchema
+>;
+export type PatchQuestionClosedRequestDTO = z.infer<
+  typeof PatchQuestionClosedRequestSchema
+>;
+export type PatchQuestionClosedResponseDTO = z.infer<
+  typeof PatchQuestionClosedResponseSchema
+>;
+export type PostQuestionLikeRequestDTO = z.infer<
+  typeof PostQuestionLikeRequestSchema
+>;
+export type PostQuestionLikeResponseDTO = z.infer<
+  typeof PostQuestionLikeResponseSchema
+>;
+export type PostReplyRequestDTO = z.infer<typeof PostReplyRequestSchema>;
+export type PostReplyResponseDTO = z.infer<typeof PostReplyResponseSchema>;
+export type PatchReplyBodyRequestDTO = z.infer<
+  typeof PatchReplyBodyRequestSchema
+>;
+export type PatchReplyBodyResponseDTO = z.infer<
+  typeof PatchReplyBodyResponseSchema
+>;
+export type DeleteReplyRequestDTO = z.infer<typeof DeleteReplyRequestSchema>;
+export type PostReplyLikeRequestDTO = z.infer<
+  typeof PostReplyLikeRequestSchema
+>;
+export type PostReplyLikeResponseDTO = z.infer<
+  typeof PostReplyLikeResponseSchema
+>;

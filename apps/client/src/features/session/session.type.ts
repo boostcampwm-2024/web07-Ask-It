@@ -1,12 +1,17 @@
-export interface Session {
-  sessionId: string;
-  title: string;
-  expired: boolean;
-  createdAt: string;
-}
+import { z } from 'zod';
 
-export interface User {
-  userId: number;
-  nickname: string;
-  isHost: boolean;
-}
+export const SessionSchema = z.object({
+  sessionId: z.string(),
+  title: z.string(),
+  expired: z.boolean(),
+  createdAt: z.string(),
+});
+
+export const UserSchema = z.object({
+  userId: z.number(),
+  nickname: z.string(),
+  isHost: z.boolean(),
+});
+
+export type Session = z.infer<typeof SessionSchema>;
+export type User = z.infer<typeof UserSchema>;

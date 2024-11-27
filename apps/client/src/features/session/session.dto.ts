@@ -1,45 +1,67 @@
-import { User } from '@/features/session/session.type';
+import { UserSchema } from '@/features/session/session.type';
+import { z } from 'zod';
 
-export interface PostSessionRequestDTO {
-  title: string;
-}
+export const PostSessionRequestSchema = z.object({
+  title: z.string(),
+});
 
-export interface PostSessionResponseDTO {
-  sessionId: string;
-}
+export const PostSessionResponseSchema = z.object({
+  sessionId: z.string(),
+});
 
-export interface GetSessionsResponseDTO {
-  sessionData: Array<{
-    sessionId: string;
-    title: string;
-    createdAt: {
-      year: number;
-      month: number;
-      date: number;
-    };
-    expired: boolean;
-  }>;
-}
+export const GetSessionsResponseSchema = z.object({
+  sessionData: z.array(
+    z.object({
+      sessionId: z.string(),
+      title: z.string(),
+      createdAt: z.object({
+        year: z.number(),
+        month: z.number(),
+        date: z.number(),
+      }),
+      expired: z.boolean(),
+    }),
+  ),
+});
 
-export interface GetSessionTokenResponseDTO {
-  token: string;
-}
+export const GetSessionTokenResponseSchema = z.object({
+  token: z.string(),
+});
 
-export interface GetSessionUsersRequestDTO {
-  token: string;
-  sessionId: string;
-}
+export const GetSessionUsersRequestSchema = z.object({
+  token: z.string(),
+  sessionId: z.string(),
+});
 
-export interface GetSessionUsersResponseDTO {
-  users: User[];
-}
+export const GetSessionUsersResponseSchema = z.object({
+  users: z.array(UserSchema),
+});
 
-export interface PatchSessionHostRequestDTO {
-  token: string;
-  sessionId: string;
-  isHost: boolean;
-}
+export const PatchSessionHostRequestSchema = z.object({
+  token: z.string(),
+  sessionId: z.string(),
+  isHost: z.boolean(),
+});
 
-export interface PatchSessionHostResponseDTO {
-  user: User;
-}
+export const PatchSessionHostResponseSchema = z.object({
+  user: UserSchema,
+});
+
+export type PostSessionRequestDTO = z.infer<typeof PostSessionRequestSchema>;
+export type PostSessionResponseDTO = z.infer<typeof PostSessionResponseSchema>;
+export type GetSessionsResponseDTO = z.infer<typeof GetSessionsResponseSchema>;
+export type GetSessionTokenResponseDTO = z.infer<
+  typeof GetSessionTokenResponseSchema
+>;
+export type GetSessionUsersRequestDTO = z.infer<
+  typeof GetSessionUsersRequestSchema
+>;
+export type GetSessionUsersResponseDTO = z.infer<
+  typeof GetSessionUsersResponseSchema
+>;
+export type PatchSessionHostRequestDTO = z.infer<
+  typeof PatchSessionHostRequestSchema
+>;
+export type PatchSessionHostResponseDTO = z.infer<
+  typeof PatchSessionHostResponseSchema
+>;
