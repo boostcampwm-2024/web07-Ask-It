@@ -12,7 +12,9 @@ export const postUser = (body: PostUserDTO) => axios.post(USER_BASE_URL, body);
 
 export const getVerifyEmail = (email: string) =>
   axios
-    .get<GetVerifyEmailDTO>(`${USER_BASE_URL}/emails/${email}`)
+    .get<GetVerifyEmailDTO>(
+      `${USER_BASE_URL}/emails/${encodeURIComponent(email)}`,
+    )
     .then((res) => res.data);
 
 export const getVerifyNickname = (nickname: string) =>

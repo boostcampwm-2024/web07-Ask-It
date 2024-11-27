@@ -1,17 +1,13 @@
 import { ValidationStatusWithMessage } from '@/shared/validation/validation-status.type';
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export const validateEmail = (email: string): ValidationStatusWithMessage => {
   if (!email) return { status: 'INITIAL' };
-  if (!emailRegex.test(email))
-    return { status: 'INVALID', message: '이메일 형식이 올바르지 않습니다.' };
   if (email.includes(' '))
     return {
       status: 'INVALID',
       message: '이메일에 공백이 포함될 수 없습니다.',
     };
-  return { status: 'PENDING', message: '중복 여부를 검사 중입니다.' };
+  return { status: 'PENDING', message: '유효 여부를 검사 중입니다.' };
 };
 
 export const validateNickname = (
@@ -28,7 +24,7 @@ export const validateNickname = (
       status: 'INVALID',
       message: '닉네임에 공백이 포함될 수 없습니다.',
     };
-  return { status: 'PENDING', message: '중복 여부를 검사 중입니다.' };
+  return { status: 'PENDING', message: '유효 여부를 검사 중입니다.' };
 };
 
 export const validatePassword = (
