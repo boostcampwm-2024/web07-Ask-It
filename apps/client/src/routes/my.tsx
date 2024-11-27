@@ -6,7 +6,7 @@ import { MyPage } from '@/pages';
 
 export const Route = createFileRoute('/my')({
   component: MyPage,
-  beforeLoad: async () => {
+  beforeLoad: () => {
     const { isLogin, setAuthInformation } = useAuthStore.getState();
 
     if (!isLogin()) {
