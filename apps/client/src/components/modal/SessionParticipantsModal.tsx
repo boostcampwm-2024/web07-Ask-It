@@ -1,7 +1,15 @@
-import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
+import { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 
 import { useModalContext } from '@/features/modal';
+import {
+  getSessionUsers,
+  patchSessionHost,
+  useSessionStore,
+} from '@/features/session';
+import { useToastStore } from '@/features/toast';
 
 import { Button } from '@/components';
 import Participant from '@/components/modal/Participant';
@@ -9,24 +17,89 @@ import Participant from '@/components/modal/Participant';
 function SessionParticipantsModal() {
   const { closeModal } = useModalContext();
 
+  const { addToast } = useToastStore();
+
+  const {
+    sessionUsers,
+    sessionId,
+    sessionToken,
+    setSessionUsers,
+    updateSessionUser,
+  } = useSessionStore();
+
   const [selectedUserId, setSelectedUserId] = useState<number>();
 
-  const participantList = [
-    { id: 1, name: '최정민', isHost: false },
-    { id: 2, name: '이상현', isHost: true },
-    { id: 3, name: '유영재', isHost: false },
-    { id: 4, name: '이지호', isHost: true },
-  ];
+  const selectedUser = sessionUsers.find(
+    ({ userId }) => userId === selectedUserId,
+  );
 
-  const selectedUser = participantList.find(({ id }) => id === selectedUserId);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const { mutate: toggleHost, isPending: isToggleInProgress } = useMutation({
+    mutationFn: (params: {
+      userId: number;
+      sessionId: string;
+      token: string;
+      isHost: boolean;
+    }) =>
+      patchSessionHost(params.userId, {
+        token: params.token,
+        sessionId: params.sessionId,
+        isHost: params.isHost,
+      }),
+    onSuccess: (res) => {
+      updateSessionUser(res.user);
+      addToast({
+        type: 'SUCCESS',
+        message: `${res.user.nickname}님을 호스트${res.user.isHost ? '로 지정' : '에서 해제'}했습니다.`,
+        duration: 3000,
+      });
+    },
+    onError: (error) => {
+      if (!isAxiosError(error)) return;
+      if (error.response?.status === 403) {
+        addToast({
+          type: 'ERROR',
+          message: '세션 생성자만 권한을 수정할 수 있습니다.',
+          duration: 3000,
+        });
+      }
+    },
+    onSettled: () => {
+      setSelectedUserId(undefined);
+    },
+  });
+
+  const handleToggleHost = () => {
+    if (!selectedUser || !sessionId || !sessionToken || isToggleInProgress)
+      return;
+
+    toggleHost({
+      userId: selectedUser.userId,
+      sessionId,
+      token: sessionToken,
+      isHost: !selectedUser.isHost,
+    });
+  };
+
+  useEffect(() => {
+    if (sessionId && sessionToken)
+      getSessionUsers({ sessionId, token: sessionToken }).then(({ users }) => {
+        setSessionUsers(users);
+      });
+  }, [sessionId, sessionToken, setSessionUsers]);
+
+  const users = sessionUsers.filter(({ nickname }) =>
+    nickname.includes(searchQuery),
+  );
 
   return (
     <div className='inline-flex flex-col items-center justify-center gap-2.5 rounded-lg bg-gray-50 p-8 shadow'>
       {selectedUser ? (
-        <div className='flex h-[15dvh] w-full min-w-[25dvw] flex-col justify-center gap-2'>
+        <div className='flex h-[15dvh] min-w-[17.5dvw] flex-col justify-center gap-2'>
           <div className='w-full text-center font-bold'>
             <span>
-              <span className='text-indigo-600'>{selectedUser.name}</span>
+              <span className='text-indigo-600'>{selectedUser.nickname}</span>
               <span>님을</span>
             </span>
             <br />
@@ -36,7 +109,7 @@ function SessionParticipantsModal() {
                 : '호스트로 지정하겠습니까?'}
             </span>
           </div>
-          <div className='mx-auto mt-4 inline-flex min-w-[22.5dvw] items-start justify-center gap-2.5'>
+          <div className='mx-auto mt-4 inline-flex w-full items-start justify-center gap-2.5'>
             <Button
               className='w-full bg-gray-500'
               onClick={() => setSelectedUserId(undefined)}
@@ -47,12 +120,10 @@ function SessionParticipantsModal() {
             </Button>
             <Button
               className='w-full bg-indigo-600 transition-colors duration-200'
-              onClick={() => {
-                // TODO: 호스트 지정 API 호출
-              }}
+              onClick={handleToggleHost}
             >
               <div className='flex-grow text-sm font-medium text-white'>
-                지정하기
+                {selectedUser.isHost ? '해제하기' : '지정하기'}
               </div>
             </Button>
           </div>
@@ -67,12 +138,28 @@ function SessionParticipantsModal() {
               onClick={closeModal}
             />
           </div>
+          <div className='relative w-full'>
+            <input
+              type='text'
+              value={searchQuery}
+              placeholder='유저 이름을 검색하세요'
+              className='w-full rounded border-gray-500 p-2 pr-8 text-sm font-medium text-gray-500 focus:outline-none'
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <IoClose
+                size={20}
+                className='absolute right-2 top-2 cursor-pointer text-gray-500 transition-all duration-100 hover:scale-110 hover:text-gray-700'
+                onClick={() => setSearchQuery('')}
+              />
+            )}
+          </div>
           <ol className='flex w-full flex-col gap-2 overflow-y-auto overflow-x-hidden'>
-            {participantList.map(({ id, name, isHost }) => (
+            {users.map((user) => (
               <Participant
-                name={name}
-                isHost={isHost}
-                onSelect={() => setSelectedUserId(id)}
+                key={user.userId}
+                user={user}
+                onSelect={() => setSelectedUserId(user.userId)}
               />
             ))}
           </ol>

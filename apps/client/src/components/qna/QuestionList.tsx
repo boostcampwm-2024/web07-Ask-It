@@ -1,16 +1,32 @@
 import { motion } from 'motion/react';
+import { useState } from 'react';
+import { GrValidate } from 'react-icons/gr';
+import { IoClose, IoShareSocialOutline } from 'react-icons/io5';
 
 import { useModal } from '@/features/modal';
 import { useSessionStore } from '@/features/session';
 
-import { Button, CreateQuestionModal } from '@/components';
+import {
+  Button,
+  CreateQuestionModal,
+  SessionParticipantsModal,
+} from '@/components';
 import QuestionSection from '@/components/qna/QuestionSection';
+import SessionSettingsDropdown from '@/components/qna/SessionSettingsDropdown';
 
 function QuestionList() {
   const { sessionTitle, expired, questions, setSelectedQuestionId } =
     useSessionStore();
 
-  const { Modal, openModal } = useModal(<CreateQuestionModal />);
+  const { Modal: CreateQuestion, openModal: openCreateQuestionModal } =
+    useModal(<CreateQuestionModal />);
+
+  const {
+    Modal: SessionParticipants,
+    openModal: openSessionParticipantsModal,
+  } = useModal(<SessionParticipantsModal />);
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const sections = [
     {
@@ -40,15 +56,52 @@ function QuestionList() {
     },
   ];
 
+  const sessionButtons = [
+    {
+      icon: <IoShareSocialOutline />,
+      label: '공유',
+      onClick: () => {},
+    },
+    {
+      icon: <GrValidate />,
+      label: '호스트 설정',
+      onClick: () => openSessionParticipantsModal(),
+    },
+    {
+      icon: <IoClose />,
+      label: '세션 종료',
+      onClick: () => {},
+    },
+  ];
+
   return (
     <>
       <div className='inline-flex h-full w-4/5 flex-grow flex-col items-center justify-start rounded-lg bg-white shadow'>
         <div className='inline-flex h-[54px] w-full items-center justify-between border-b border-gray-200 px-8 py-2'>
           <div className='text-lg font-medium text-black'>{sessionTitle}</div>
           {!expired && (
-            <Button className='bg-indigo-600' onClick={openModal}>
-              <div className='text-sm font-bold text-white'>질문하기</div>
-            </Button>
+            <div className='flex flex-row gap-2'>
+              <div className='relative'>
+                <Button
+                  className='hover:bg-gray-200 hover:transition-all'
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
+                  <p className='text-sm font-bold text-black'>설정</p>
+                </Button>
+                {isDropdownOpen && (
+                  <SessionSettingsDropdown
+                    buttons={sessionButtons}
+                    onClose={() => setIsDropdownOpen(false)}
+                  />
+                )}
+              </div>
+              <Button
+                className='bg-indigo-600'
+                onClick={openCreateQuestionModal}
+              >
+                <div className='text-sm font-bold text-white'>질문하기</div>
+              </Button>
+            </div>
           )}
         </div>
         <motion.div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto px-8 py-4'>
@@ -63,7 +116,8 @@ function QuestionList() {
           ))}
         </motion.div>
       </div>
-      {Modal}
+      {CreateQuestion}
+      {SessionParticipants}
     </>
   );
 }

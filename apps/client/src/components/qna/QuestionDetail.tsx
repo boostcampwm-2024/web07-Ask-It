@@ -55,7 +55,12 @@ function QuestionDetail() {
             </Markdown>
           </div>
           {question.replies
-            .sort((a, b) => (b.isHost ? 1 : 0) - (a.isHost ? 1 : 0))
+            .sort((a, b) => {
+              if (b.isHost !== a.isHost) {
+                return b.isHost ? 1 : -1;
+              }
+              return a.replyId - b.replyId;
+            })
             .map((r) => (
               <ReplyItem key={r.replyId} question={question} reply={r} />
             ))}

@@ -7,7 +7,7 @@ import { useToastStore } from '@/features/toast';
 import { Button, SignInModal, SignUpModal } from '@/components';
 
 function Header() {
-  const { isLogin, clearAccessToken } = useAuthStore();
+  const { isLogin, clearAuthInformation: clearAccessToken } = useAuthStore();
 
   const addToast = useToastStore((state) => state.addToast);
 

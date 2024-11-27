@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router';
 
-import { useSessionStore } from '@/features/session';
 import { Session } from '@/features/session/session.type';
 
 import { formatDate } from '@/shared';
@@ -10,10 +9,6 @@ interface SessionRecordProps {
 }
 
 function SessionRecord({ session }: SessionRecordProps) {
-  const setSession = useSessionStore((state) => state.setSession);
-
-  const handleSessionClick = () => setSession(session);
-
   return (
     <div className='flex h-fit flex-col items-start justify-start gap-4 self-stretch border-b border-gray-200 px-2.5 pb-4 pt-2.5'>
       <div className='flex h-fit flex-col items-start justify-center gap-2.5 self-stretch'>
@@ -35,7 +30,6 @@ function SessionRecord({ session }: SessionRecordProps) {
         <Link
           to='/session/$sessionId'
           params={{ sessionId: session.sessionId }}
-          onClick={handleSessionClick}
         >
           <div className='text-base font-medium leading-normal text-black'>
             {session.title}

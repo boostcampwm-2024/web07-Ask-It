@@ -1,12 +1,16 @@
 import { GrValidate } from 'react-icons/gr';
 
+import { User } from '@/features/session/session.type';
+
 interface ParticipantProps {
-  name: string;
-  isHost: boolean;
+  user: User;
   onSelect: () => void;
 }
 
-function Participant({ name, isHost, onSelect }: ParticipantProps) {
+function Participant({
+  user: { nickname, isHost },
+  onSelect,
+}: ParticipantProps) {
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
     <div
@@ -17,7 +21,7 @@ function Participant({ name, isHost, onSelect }: ParticipantProps) {
         <GrValidate
           className={`flex-shrink-0 ${isHost ? 'text-indigo-600' : 'text-black-200'}`}
         />
-        <span className='font-medium'>{name}</span>
+        <span className='font-medium'>{nickname}</span>
       </div>
     </div>
   );
