@@ -39,10 +39,13 @@ export class QuestionsService {
 
   async getQuestionsBySession(data: GetQuestionDto) {
     const { sessionId, token } = data;
-    const questions = await this.questionRepository.findQuestionsWithDetails(sessionId);
-    const session = await this.sessionRepository.findById(sessionId);
+    const [questions, session, sessionHostTokens] = await Promise.all([
+      this.questionRepository.findQuestionsWithDetails(sessionId),
+      this.sessionRepository.findById(sessionId),
+      this.sessionAuthRepository.findHostTokensInSession(sessionId),
+    ]);
+
     const expired = session.expiredAt < new Date();
-    const sessionHostTokens = await this.sessionAuthRepository.findHostTokensInSession(sessionId);
     const isHost = sessionHostTokens.some(({ token: hostToken }) => hostToken === token);
     const mapLikesAndOwnership = <
       T extends {
