@@ -4,9 +4,18 @@ import { useSessionStore } from '@/features/session';
 import { useSocket } from '@/features/socket';
 
 import ChattingMessage from '@/components/qna/ChattingMessage';
+import { getChattingList } from '@/features/session/chatting';
+import { AnimatePresence, motion } from 'motion/react';
 
 function ChattingList() {
-  const { expired, chatting, participantCount } = useSessionStore();
+  const {
+    expired,
+    chatting,
+    participantCount,
+    sessionId,
+    sessionToken,
+    addChattingToFront,
+  } = useSessionStore();
 
   const [message, setMessage] = useState('');
   const [isBottom, setIsBottom] = useState(true);
@@ -16,6 +25,8 @@ function ChattingList() {
   const socket = useSocket();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const checkScrollPosition = useCallback(() => {
     if (messagesEndRef.current) {
@@ -42,6 +53,28 @@ function ChattingList() {
 
   useEffect(() => {
     const handleScroll = () => {
+      const container = messagesEndRef.current;
+      if (!container) return;
+
+      if (container.scrollTop === 0) {
+        if (
+          !sessionId ||
+          !sessionToken ||
+          !chatting[0]?.chattingId ||
+          isLoading
+        )
+          return;
+
+        setIsLoading(true);
+        getChattingList(sessionId, sessionToken, chatting[0]?.chattingId)
+          .then(({ chats }) => {
+            chats.reverse().forEach(addChattingToFront);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      }
+
       userScrolling.current = true;
       checkScrollPosition();
     };
@@ -79,6 +112,19 @@ function ChattingList() {
         className='inline-flex h-full w-full flex-col items-start justify-start overflow-y-auto overflow-x-hidden break-words p-2.5'
         ref={messagesEndRef}
       >
+        <AnimatePresence>
+          {isLoading && (
+            <motion.div
+              className='flex w-full justify-center py-2'
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.1 }}
+            >
+              <div className='h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-blue-500' />
+            </motion.div>
+          )}
+        </AnimatePresence>
         {chatting.map((chat) => (
           <ChattingMessage key={chat.chattingId} chat={chat} />
         ))}
