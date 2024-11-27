@@ -1,13 +1,10 @@
-import { HTMLAttributes, PropsWithChildren, Ref } from 'react';
+import { forwardRef, HTMLAttributes, PropsWithChildren } from 'react';
 
-function Button({
-  ref,
-  children,
-  className,
-  onClick,
-}: PropsWithChildren<HTMLAttributes<HTMLButtonElement>> & {
-  ref?: Ref<HTMLButtonElement>;
-}) {
+type ButtonProps = PropsWithChildren<HTMLAttributes<HTMLButtonElement>>;
+
+const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+  const { children, className, onClick } = props;
+
   return (
     <button
       ref={ref}
@@ -18,6 +15,8 @@ function Button({
       {children}
     </button>
   );
-}
+});
+
+Button.displayName = 'Button';
 
 export default Button;
