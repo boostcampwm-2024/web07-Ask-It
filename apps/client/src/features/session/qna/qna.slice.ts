@@ -16,6 +16,7 @@ export interface QnASlice {
     reply: Partial<Omit<Reply, 'replyId'>> & { replyId: number },
   ) => void;
   removeReply: (replyId: Reply['replyId']) => void;
+  updateReplyIsHost: (userId: number, isHost: boolean) => void;
 }
 
 export const createQnASlice: StateCreator<QnASlice, [], [], QnASlice> = (
@@ -66,6 +67,16 @@ export const createQnASlice: StateCreator<QnASlice, [], [], QnASlice> = (
       questions: state.questions.map((q) => ({
         ...q,
         replies: q.replies.filter((r) => r.replyId !== replyId),
+      })),
+    })),
+  updateReplyIsHost: (userId, isHost) =>
+    set((state) => ({
+      ...state,
+      questions: state.questions.map((q) => ({
+        ...q,
+        replies: q.replies.map((r) =>
+          r.userId === userId ? { ...r, isHost } : r,
+        ),
       })),
     })),
 });

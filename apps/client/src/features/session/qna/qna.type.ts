@@ -1,5 +1,6 @@
 export interface Reply {
   replyId: number;
+  userId?: number;
   body: string;
   createdAt: string;
   isOwner: boolean;
