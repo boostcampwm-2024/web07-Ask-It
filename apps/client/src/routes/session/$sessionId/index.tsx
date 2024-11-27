@@ -5,6 +5,7 @@ import { getSessionToken, useSessionStore } from '@/features/session';
 import { getQuestions } from '@/features/session/qna';
 
 import { QuestionList } from '@/components';
+import { getChattingList } from '@/features/session/chatting';
 
 export const Route = createFileRoute('/session/$sessionId/')({
   component: QuestionList,
@@ -19,6 +20,7 @@ export const Route = createFileRoute('/session/$sessionId/')({
       addQuestion,
       fromDetail,
       setFromDetail,
+      addChatting,
     } = useSessionStore.getState();
     const { isLogin, setAuthInformation } = useAuthStore.getState();
 
@@ -47,9 +49,10 @@ export const Route = createFileRoute('/session/$sessionId/')({
       setIsHost(response.isHost);
       setExpired(response.expired);
       setSessionTitle(response.sessionTitle);
-      response.questions.forEach((question) => {
-        addQuestion(question);
-      });
+      response.questions.forEach(addQuestion);
+
+      const { chats } = await getChattingList(token, sessionId);
+      chats.reverse().forEach(addChatting);
     } catch (e) {
       throw redirect({ to: '/session' });
     }

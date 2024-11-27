@@ -5,6 +5,7 @@ import { getSessionToken, useSessionStore } from '@/features/session';
 import { getQuestions } from '@/features/session/qna';
 
 import { QuestionDetail } from '@/components';
+import { getChattingList } from '@/features/session/chatting';
 
 export const Route = createFileRoute('/session/$sessionId/$questionId/')({
   component: QuestionDetail,
@@ -20,6 +21,7 @@ export const Route = createFileRoute('/session/$sessionId/$questionId/')({
       addQuestion,
       fromDetail,
       setFromDetail,
+      addChatting,
     } = useSessionStore.getState();
     const { isLogin, setAuthInformation } = useAuthStore.getState();
 
@@ -49,9 +51,7 @@ export const Route = createFileRoute('/session/$sessionId/$questionId/')({
       setSessionTitle(response.sessionTitle);
       setSelectedQuestionId(Number(questionId));
       setFromDetail(true);
-      response.questions.forEach((question) => {
-        addQuestion(question);
-      });
+      response.questions.forEach(addQuestion);
 
       if (
         response.questions.every(
@@ -60,6 +60,9 @@ export const Route = createFileRoute('/session/$sessionId/$questionId/')({
       ) {
         throw redirect({ to: `/session/${sessionId}` });
       }
+
+      const { chats } = await getChattingList(token, sessionId);
+      chats.reverse().forEach(addChatting);
     } catch (e) {
       if (isRedirect(e)) throw e;
       throw redirect({ to: '/' });
