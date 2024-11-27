@@ -138,21 +138,20 @@ export class QuestionsService {
   async updateQuestionPinned(questionId: number, updateQuestionPinnedDto: UpdateQuestionPinnedDto) {
     const { sessionId, token, pinned } = updateQuestionPinnedDto;
     const hostTokens = await this.sessionAuthRepository.findHostTokensInSession(sessionId);
-    if (hostTokens.some(({ token: hostToken }) => hostToken === token)) {
+    if (!hostTokens.some(({ token: hostToken }) => hostToken === token))
       throw new ForbiddenException('호스트만 이 작업을 수행할 수 있습니다.');
-    }
+
     return await this.questionRepository.updatePinned(questionId, pinned);
   }
 
   async updateQuestionClosed(questionId: number, updateQuestionClosedDto: UpdateQuestionClosedDto) {
     const { sessionId, token, closed } = updateQuestionClosedDto;
-    if (!closed) {
-      throw new ForbiddenException('이미 완료된 답변입니다.');
-    }
+    if (!closed) throw new ForbiddenException('이미 완료된 답변입니다.');
+
     const hostTokens = await this.sessionAuthRepository.findHostTokensInSession(sessionId);
-    if (hostTokens.some(({ token: hostToken }) => hostToken === token)) {
+    if (!hostTokens.some(({ token: hostToken }) => hostToken === token))
       throw new ForbiddenException('호스트만 이 작업을 수행할 수 있습니다.');
-    }
+
     return await this.questionRepository.updateClosed(questionId, closed);
   }
 
