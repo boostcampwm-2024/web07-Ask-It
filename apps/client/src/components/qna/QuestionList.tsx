@@ -15,7 +15,7 @@ import QuestionSection from '@/components/qna/QuestionSection';
 import SessionSettingsDropdown from '@/components/qna/SessionSettingsDropdown';
 
 function QuestionList() {
-  const { sessionTitle, expired, questions, setSelectedQuestionId } =
+  const { sessionTitle, expired, isHost, questions, setSelectedQuestionId } =
     useSessionStore();
 
   const { Modal: CreateQuestion, openModal: openCreateQuestionModal } =
@@ -82,12 +82,14 @@ function QuestionList() {
           {!expired && (
             <div className='flex flex-row gap-2'>
               <div className='relative'>
-                <Button
-                  className='hover:bg-gray-200 hover:transition-all'
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                >
-                  <p className='text-sm font-bold text-black'>설정</p>
-                </Button>
+                {isHost && (
+                  <Button
+                    className='hover:bg-gray-200 hover:transition-all'
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  >
+                    <p className='text-sm font-bold text-black'>설정</p>
+                  </Button>
+                )}
                 {isDropdownOpen && (
                   <SessionSettingsDropdown
                     buttons={sessionButtons}
