@@ -37,7 +37,8 @@ export class AuthController {
   async token(@Req() request: Request) {
     const refreshToken = request.cookies[this.REFRESH_TOKEN];
     const accessToken = await this.authService.generateAccessToken(refreshToken);
-    return { accessToken };
+    const userId = this.authService.getInfo(refreshToken);
+    return { accessToken, userId };
   }
 
   @Post('logout')

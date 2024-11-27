@@ -65,6 +65,7 @@ export const TokenRefreshSwagger = () =>
       schema: {
         example: {
           accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+          userId: 3,
         },
       },
     }),

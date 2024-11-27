@@ -27,6 +27,11 @@ export class AuthService implements OnModuleInit {
     private readonly usersRepository: UsersRepository,
   ) {}
 
+  getInfo(refreshToken: string) {
+    const user = this.refreshTokens[refreshToken];
+    return user ? user.userId : null;
+  }
+
   getRefreshTokenExpireTime() {
     return this.REFRESH_TOKEN_CONFIG.EXPIRE_INTERVAL;
   }
@@ -82,7 +87,6 @@ export class AuthService implements OnModuleInit {
     const tokenData = this.refreshTokens[refreshToken];
     if (!tokenData) throw RefreshTokenException.invalid();
 
-    //FE측 cookie 만료 시간과 서버 측 만료 시간 간의 오차 대비
     if (tokenData.expiredAt < new Date()) {
       this.removeRefreshToken(refreshToken);
       throw RefreshTokenException.expired();
