@@ -23,6 +23,7 @@
     "react-markdown": "^9.0.1",
     "socket.io-client": "^4.8.1",
     "tailwind-scrollbar-hide": "^1.1.7",
+    "zod": "^3.23.8",
     "zustand": "^5.0.1"
   },
   "devDependencies": {
