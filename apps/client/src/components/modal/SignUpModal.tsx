@@ -57,7 +57,10 @@ function SignUpModal() {
   return (
     <Modal>
       <div className='flex flex-col items-center justify-center gap-4 p-4'>
-        <p className='text-2xl font-bold text-indigo-600'>Ask-It</p>
+        <div className='font-header text-2xl'>
+          <span className='text-indigo-600'>A</span>
+          <span className='text-black'>sk-It</span>
+        </div>
         <InputField
           label='이메일'
           type='email'

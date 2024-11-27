@@ -46,7 +46,10 @@ function CreateSessionModal() {
   return (
     <Modal>
       <div className='flex h-fit flex-col items-center justify-start gap-4 self-stretch rounded p-4'>
-        <div className='text-2xl font-bold text-indigo-600'>Ask-It</div>
+        <div className='font-header text-2xl'>
+          <span className='text-indigo-600'>A</span>
+          <span className='text-black'>sk-It</span>
+        </div>
         <InputField
           label='세션 이름'
           type='text'
