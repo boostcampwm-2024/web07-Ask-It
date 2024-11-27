@@ -7,11 +7,11 @@ import { MyPage } from '@/pages';
 export const Route = createFileRoute('/my')({
   component: MyPage,
   beforeLoad: () => {
-    const { isLogin, setAccessToken } = useAuthStore.getState();
+    const { isLogin, setAuthInformation } = useAuthStore.getState();
     if (!isLogin())
       refresh()
         .then((res) => {
-          setAccessToken(res.accessToken);
+          setAuthInformation(res);
         })
         .catch(() => {
           // eslint-disable-next-line @typescript-eslint/no-throw-literal

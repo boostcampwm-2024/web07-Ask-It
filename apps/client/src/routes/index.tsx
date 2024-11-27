@@ -6,11 +6,11 @@ import { HomePage } from '@/pages';
 
 export const Route = createFileRoute('/')({
   beforeLoad: () => {
-    const { isLogin, setAccessToken } = useAuthStore.getState();
+    const { isLogin, setAuthInformation } = useAuthStore.getState();
 
     if (!isLogin())
       refresh().then((res) => {
-        setAccessToken(res.accessToken);
+        setAuthInformation(res);
       });
   },
   component: HomePage,

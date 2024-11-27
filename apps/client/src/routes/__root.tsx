@@ -7,11 +7,11 @@ import { Header } from '@/components';
 
 export const Route = createRootRoute({
   beforeLoad: () => {
-    const { isLogin, setAccessToken } = useAuthStore.getState();
+    const { isLogin, setAuthInformation } = useAuthStore.getState();
 
     if (!isLogin())
       refresh().then((res) => {
-        setAccessToken(res.accessToken);
+        setAuthInformation(res);
       });
   },
   component: () => (

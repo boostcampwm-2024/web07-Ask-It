@@ -20,7 +20,7 @@ export const Route = createFileRoute('/session/$sessionId/')({
       fromDetail,
       setFromDetail,
     } = useSessionStore.getState();
-    const { isLogin, setAccessToken } = useAuthStore.getState();
+    const { isLogin, setAuthInformation } = useAuthStore.getState();
 
     if (fromDetail) {
       setFromDetail(false);
@@ -30,7 +30,7 @@ export const Route = createFileRoute('/session/$sessionId/')({
     try {
       if (!isLogin()) {
         const res = await refresh();
-        setAccessToken(res.accessToken);
+        setAuthInformation(res);
       }
     } catch (error) {
       console.log(error);

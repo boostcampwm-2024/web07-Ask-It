@@ -33,15 +33,16 @@ axios.interceptors.response.use(
         data: { accessToken: string };
       };
 
-      const { setAccessToken, clearAccessToken } = useAuthStore.getState();
+      const { setAuthInformation, clearAuthInformation } =
+        useAuthStore.getState();
 
       if (type === 'success' && result.accessToken) {
-        setAccessToken(result.accessToken);
+        setAuthInformation(result);
         originalRequest.headers.Authorization = `Bearer ${result.accessToken}`;
         return axios(originalRequest);
       }
 
-      clearAccessToken();
+      clearAuthInformation();
     }
 
     return Promise.reject(error);
