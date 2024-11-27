@@ -73,9 +73,7 @@ export class QuestionsRepository {
           },
           createUserTokenEntity: {
             select: {
-              user: {
-                select: { nickname: true },
-              },
+              user: true,
             },
           },
           replies: {
@@ -83,9 +81,7 @@ export class QuestionsRepository {
             include: {
               createUserTokenEntity: {
                 select: {
-                  user: {
-                    select: { nickname: true },
-                  },
+                  user: true,
                 },
               },
               replyLikes: {

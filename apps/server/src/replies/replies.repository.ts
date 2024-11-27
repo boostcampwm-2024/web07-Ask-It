@@ -24,9 +24,7 @@ export class RepliesRepository {
         include: {
           createUserTokenEntity: {
             select: {
-              user: {
-                select: { nickname: true },
-              },
+              user: true,
             },
           },
         },

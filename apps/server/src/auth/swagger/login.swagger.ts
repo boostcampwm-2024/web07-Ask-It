@@ -27,6 +27,7 @@ export const LoginSwagger = () =>
         example: {
           accessToken:
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1LCJuaWNrbmFtZSI6InVzZXIyIiwiZXhwaXJlZEF0IjoiMjAyNC0xMS0xOVQxOTowNzoxOC41ODdaIiwiaWF0IjoxNzMxNDM4NDQ0LCJleHAiOjE3MzE0MzkzNDR9.yqTC5TMMzfSiSiT1OGZCSjH7LjNZ4VPHSv5m_9VGGf4',
+          userId: 3,
         },
       },
     }),

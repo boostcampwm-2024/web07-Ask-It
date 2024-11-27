@@ -29,7 +29,7 @@ export class AuthController {
       maxAge: this.authService.getRefreshTokenExpireTime(),
     });
 
-    return { accessToken };
+    return { accessToken, userId };
   }
 
   @Post('token')

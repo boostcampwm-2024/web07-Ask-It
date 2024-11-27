@@ -9,9 +9,10 @@ import { SessionTokenValidationGuard } from '@common/guards/session-token-valida
 import { SessionTokenModule } from '@common/guards/session-token.module';
 import { PrismaModule } from '@prisma-alias/prisma.module';
 import { SessionsRepository } from '@sessions/sessions.repository';
+import { SocketModule } from '@socket/socket.module';
 
 @Module({
-  imports: [JwtModule.register({}), PrismaModule, SessionTokenModule],
+  imports: [JwtModule.register({}), PrismaModule, SessionTokenModule, SocketModule],
   controllers: [SessionsAuthController],
   providers: [SessionsAuthService, SessionsAuthRepository, SessionTokenValidationGuard, SessionsRepository],
 })

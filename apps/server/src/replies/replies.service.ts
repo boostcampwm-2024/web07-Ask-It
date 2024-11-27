@@ -1,3 +1,5 @@
+import { create } from 'node:domain';
+
 import { Injectable } from '@nestjs/common';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
@@ -19,6 +21,7 @@ export class RepliesService {
     const { replyId, body, createdAt, createUserTokenEntity, deleted, questionId } =
       await this.repliesRepository.createReply(data);
     return {
+      userId: createUserTokenEntity?.user?.userId || null,
       replyId,
       body,
       createdAt,

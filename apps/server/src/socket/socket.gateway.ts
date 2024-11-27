@@ -30,6 +30,8 @@ export const SOCKET_EVENTS = {
   INVALID_CONNECTION: 'invalidConnection',
   DUPLICATED_CONNECTION: 'duplicatedConnection',
   PARTICIPANT_COUNT_UPDATED: 'participantCountUpdated',
+
+  HOST_CHANGED: 'hostChanged',
 } as const;
 
 interface Client {
@@ -158,4 +160,6 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   broadcastReplyDelete = this.createEventBroadcaster(SOCKET_EVENTS.REPLY_DELETED);
 
   broadcastReplyLike = this.createEventBroadcaster(SOCKET_EVENTS.REPLY_LIKED);
+
+  broadcastHostChange = this.createEventBroadcaster(SOCKET_EVENTS.HOST_CHANGED);
 }

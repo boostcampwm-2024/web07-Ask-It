@@ -48,7 +48,7 @@ export class QuestionsService {
       T extends {
         createUserToken: string;
         likes: { createUserToken: string }[];
-        createUserTokenEntity?: { user?: { nickname?: string } };
+        createUserTokenEntity?: { user?: { userId?: number; nickname?: string } };
       },
     >(
       item: T,
@@ -59,8 +59,9 @@ export class QuestionsService {
       const likesCount = item.likes.length;
       const liked = item.likes.some((like) => like.createUserToken === token);
       const nickname = item.createUserTokenEntity?.user?.nickname || '익명';
+      const userId = item.createUserTokenEntity?.user?.userId || null;
 
-      return { isOwner, likesCount, liked, nickname, isHost };
+      return { isOwner, likesCount, liked, nickname, isHost, userId };
     };
 
     return [

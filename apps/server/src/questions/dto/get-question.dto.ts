@@ -1,2 +1,2 @@
-import { BaseDto } from '@src/common/base.dto';
+import { BaseDto } from '@common/base.dto';
 export class GetQuestionDto extends BaseDto {}
