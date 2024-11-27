@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 
 import { refresh, useAuthStore } from '@/features/auth';
 import { getSessionToken, useSessionStore } from '@/features/session';
@@ -51,7 +51,7 @@ export const Route = createFileRoute('/session/$sessionId/')({
         addQuestion(question);
       });
     } catch (e) {
-      window.location.href = '/';
+      throw redirect({ to: '/session' });
     }
   },
 });

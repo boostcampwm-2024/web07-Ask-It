@@ -27,6 +27,7 @@
       },
       "plugins": ["react-hooks", "react-refresh"],
       "rules": {
+        "@typescript-eslint/no-throw-literal": "off",
         "react/react-in-jsx-scope": "off",
         "react/require-default-props": "off",
         "react-hooks/rules-of-hooks": "error",
