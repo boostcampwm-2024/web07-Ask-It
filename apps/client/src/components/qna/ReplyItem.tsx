@@ -16,6 +16,7 @@ import {
 import { useToastStore } from '@/features/toast';
 
 import { Button, CreateReplyModal } from '@/components';
+import DeleteConfirmModal from '@/components/modal/DeleteConfirmModal';
 
 interface ReplyItemProps {
   question: Question;
@@ -28,7 +29,7 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
   const { sessionId, sessionToken, isHost, expired, updateReply } =
     useSessionStore();
 
-  const { Modal, openModal } = useModal(
+  const { Modal: CreateReply, openModal: openCreateReplyModal } = useModal(
     <CreateReplyModal question={question} reply={reply} />,
   );
 
@@ -116,6 +117,10 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
     });
   };
 
+  const { Modal: DeleteModal, openModal: openDeleteModal } = useModal(
+    <DeleteConfirmModal onConfirm={() => handleDelete()} />,
+  );
+
   return (
     <>
       <div className='flex shrink basis-0 flex-col items-start justify-start gap-4 self-stretch px-12'>
@@ -155,7 +160,7 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
                   {reply.isOwner && (
                     <Button
                       className='bg-gray-200/25 hover:bg-gray-200/50 hover:transition-all'
-                      onClick={openModal}
+                      onClick={openCreateReplyModal}
                     >
                       <FiEdit2 />
                     </Button>
@@ -163,7 +168,7 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
                   {(isHost || reply.isOwner) && (
                     <Button
                       className='bg-red-200/25 text-red-600 hover:bg-red-200/50 hover:transition-all'
-                      onClick={handleDelete}
+                      onClick={openDeleteModal}
                     >
                       <GrClose />
                     </Button>
@@ -174,7 +179,8 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
           </div>
         </div>
       </div>
-      {Modal}
+      {CreateReply}
+      {DeleteModal}
     </>
   );
 }

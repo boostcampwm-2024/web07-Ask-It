@@ -20,6 +20,7 @@ import {
 import { useToastStore } from '@/features/toast';
 
 import { Button, CreateQuestionModal } from '@/components';
+import DeleteConfirmModal from '@/components/modal/DeleteConfirmModal';
 
 interface QuestionItemProps {
   question: Question;
@@ -31,9 +32,8 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
 
   const { addToast } = useToastStore();
 
-  const { Modal, openModal } = useModal(
-    <CreateQuestionModal question={question} />,
-  );
+  const { Modal: CreateQuestion, openModal: openCreateQuestionModal } =
+    useModal(<CreateQuestionModal question={question} />);
 
   const {
     sessionToken,
@@ -208,6 +208,10 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
     });
   };
 
+  const { Modal: DeleteConfirm, openModal: openDeleteConfirmModal } = useModal(
+    <DeleteConfirmModal onConfirm={handleDelete} />,
+  );
+
   return (
     <>
       <div
@@ -289,7 +293,7 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
                   question.replies.length === 0 && (
                     <Button
                       className='bg-gray-200/25 font-medium text-gray-500 hover:bg-gray-200/50 hover:transition-all'
-                      onClick={openModal}
+                      onClick={openCreateQuestionModal}
                     >
                       <FiEdit2 />
                     </Button>
@@ -300,7 +304,7 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
                     question.replies.length === 0)) && (
                   <Button
                     className='bg-red-200/25 text-red-600 hover:bg-red-200/50 hover:transition-all'
-                    onClick={handleDelete}
+                    onClick={openDeleteConfirmModal}
                   >
                     <GrClose />
                   </Button>
@@ -310,7 +314,8 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
           </div>
         </div>
       </div>
-      {Modal}
+      {CreateQuestion}
+      {DeleteConfirm}
     </>
   );
 }
