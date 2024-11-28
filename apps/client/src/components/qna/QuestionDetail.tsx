@@ -54,16 +54,25 @@ function QuestionDetail() {
               {question.body}
             </Markdown>
           </div>
-          {question.replies
-            .sort((a, b) => {
-              if (b.isHost !== a.isHost) {
-                return b.isHost ? 1 : -1;
-              }
-              return a.replyId - b.replyId;
-            })
-            .map((r) => (
-              <ReplyItem key={r.replyId} question={question} reply={r} />
-            ))}
+          {question.replies.length === 0 ? (
+            <div className='inline-flex h-full w-full select-none items-center justify-center'>
+              <div className='font-header text-5xl opacity-30'>
+                <span className='text-indigo-600'>A</span>
+                <span className='text-black'>sk-It</span>
+              </div>
+            </div>
+          ) : (
+            question.replies
+              .sort((a, b) => {
+                if (b.isHost !== a.isHost) {
+                  return b.isHost ? 1 : -1;
+                }
+                return a.replyId - b.replyId;
+              })
+              .map((r) => (
+                <ReplyItem key={r.replyId} question={question} reply={r} />
+              ))
+          )}
         </div>
       </div>
       {Modal}

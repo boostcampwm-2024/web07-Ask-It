@@ -103,8 +103,13 @@ function QuestionList() {
 
   const sessionButtons = [
     {
-      icon: <IoShareSocialOutline />,
-      label: '공유',
+      key: '공유',
+      button: (
+        <div className='flex w-full cursor-pointer flex-row items-center gap-2'>
+          <IoShareSocialOutline />
+          <p>공유</p>
+        </div>
+      ),
       onClick: async () => {
         const shareUrl = `${window.location.origin}/session/${sessionId}`;
 
@@ -125,13 +130,23 @@ function QuestionList() {
       },
     },
     {
-      icon: <GrValidate />,
-      label: '호스트 설정',
+      key: '호스트 설정',
+      button: (
+        <div className='flex w-full cursor-pointer flex-row items-center gap-2'>
+          <GrValidate />
+          <p>호스트 설정</p>
+        </div>
+      ),
       onClick: () => openSessionParticipantsModal(),
     },
     {
-      icon: <IoClose />,
-      label: '세션 종료',
+      key: '세션 종료',
+      button: (
+        <div className='flex w-full cursor-pointer flex-row items-center gap-2 text-red-600'>
+          <IoClose />
+          <p>세션 종료</p>
+        </div>
+      ),
       onClick: () => openSessionTerminateModal(),
     },
   ];
@@ -170,17 +185,26 @@ function QuestionList() {
             </div>
           )}
         </div>
-        <motion.div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto px-8 py-4'>
-          {sections.map((section) => (
-            <QuestionSection
-              key={section.title}
-              title={section.title}
-              initialOpen={section.initialOpen}
-              questions={section.questions}
-              onQuestionSelect={setSelectedQuestionId}
-            />
-          ))}
-        </motion.div>
+        {questions.length === 0 ? (
+          <div className='inline-flex h-full w-full select-none items-center justify-center'>
+            <div className='font-header text-5xl opacity-30'>
+              <span className='text-indigo-600'>A</span>
+              <span className='text-black'>sk-It</span>
+            </div>
+          </div>
+        ) : (
+          <motion.div className='inline-flex h-full w-full flex-col items-start justify-start gap-4 overflow-y-auto px-8 py-4'>
+            {sections.map((section) => (
+              <QuestionSection
+                key={section.title}
+                title={section.title}
+                initialOpen={section.initialOpen}
+                questions={section.questions}
+                onQuestionSelect={setSelectedQuestionId}
+              />
+            ))}
+          </motion.div>
+        )}
       </div>
       {CreateQuestion}
       {SessionParticipants}
