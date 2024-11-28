@@ -4,8 +4,8 @@ import Button from '@/components/Button';
 
 interface SessionSettingsDropdownProps {
   buttons: Array<{
-    icon: React.ReactNode;
-    label: string;
+    key: string;
+    button: React.ReactNode;
     onClick: () => void;
   }>;
   triggerRef?: React.RefObject<HTMLButtonElement>;
@@ -36,26 +36,23 @@ function SessionSettingsDropdown({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose]);
+  }, [onClose, triggerRef]);
 
   return (
     <div
       ref={dropdownRef}
       className='absolute z-10 flex w-max flex-col gap-2 rounded-md bg-white p-4 shadow-lg ring-1 ring-black ring-opacity-5'
     >
-      {buttons.map(({ icon, label, onClick }) => (
+      {buttons.map(({ key, button, onClick }) => (
         <Button
           className='w-full rounded text-sm font-medium text-black transition-all duration-100 hover:bg-gray-100'
-          key={label}
+          key={key}
           onClick={() => {
             onClick();
             onClose();
           }}
         >
-          <div className='flex w-full cursor-pointer flex-row items-center gap-2'>
-            {icon}
-            {label}
-          </div>
+          {button}
         </Button>
       ))}
     </div>
