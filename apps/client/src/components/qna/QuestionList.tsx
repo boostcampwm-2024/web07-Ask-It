@@ -13,6 +13,7 @@ import {
   CreateQuestionModal,
   SessionParticipantsModal,
 } from '@/components';
+import SessionTerminateModal from '@/components/modal/SessionTerminateModal';
 import QuestionSection from '@/components/qna/QuestionSection';
 import SessionSettingsDropdown from '@/components/qna/SessionSettingsDropdown';
 
@@ -37,6 +38,36 @@ function QuestionList() {
     Modal: SessionParticipants,
     openModal: openSessionParticipantsModal,
   } = useModal(<SessionParticipantsModal />);
+
+  const { Modal: SessionTerminate, openModal: openSessionTerminateModal } =
+    useModal(
+      <SessionTerminateModal
+        onConfirm={() => {
+          if (!sessionId || !sessionToken) return;
+
+          postSessionTerminate({ sessionId, token: sessionToken })
+            .then((response) => {
+              if (response.expired) {
+                setExpired(true);
+                addToast({
+                  type: 'SUCCESS',
+                  message: '세션이 종료되었습니다',
+                  duration: 3000,
+                });
+              }
+            })
+            .catch((err) => {
+              if (isAxiosError(err) && err.response?.status === 403) {
+                addToast({
+                  type: 'ERROR',
+                  message: '세션 생성자만 세션을 종료할 수 있습니다',
+                  duration: 3000,
+                });
+              }
+            });
+        }}
+      />,
+    );
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -101,33 +132,7 @@ function QuestionList() {
     {
       icon: <IoClose />,
       label: '세션 종료',
-      onClick: async () => {
-        if (!sessionId || !sessionToken) return;
-
-        try {
-          const response = await postSessionTerminate({
-            sessionId,
-            token: sessionToken,
-          });
-
-          if (response.expired) {
-            setExpired(true);
-            addToast({
-              type: 'SUCCESS',
-              message: '세션이 종료되었습니다',
-              duration: 3000,
-            });
-          }
-        } catch (err) {
-          if (isAxiosError(err) && err.response?.status === 403) {
-            addToast({
-              type: 'ERROR',
-              message: '세션 생성자만 세션을 종료할 수 있습니다',
-              duration: 3000,
-            });
-          }
-        }
-      },
+      onClick: () => openSessionTerminateModal(),
     },
   ];
 
@@ -179,6 +184,7 @@ function QuestionList() {
       </div>
       {CreateQuestion}
       {SessionParticipants}
+      {SessionTerminate}
     </>
   );
 }
