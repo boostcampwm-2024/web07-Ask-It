@@ -46,7 +46,7 @@ export class SessionsRepository {
           createdAt: true,
         },
         orderBy: {
-          sessionId: 'desc',
+          createdAt: 'desc',
         },
       });
       return sessions;
