@@ -2,10 +2,10 @@ import { createFileRoute, isRedirect, redirect } from '@tanstack/react-router';
 
 import { refresh, useAuthStore } from '@/features/auth';
 import { getSessionToken, useSessionStore } from '@/features/session';
+import { getChattingList } from '@/features/session/chatting';
 import { getQuestions } from '@/features/session/qna';
 
 import { QuestionDetail } from '@/components';
-import { getChattingList } from '@/features/session/chatting';
 
 export const Route = createFileRoute('/session/$sessionId/$questionId/')({
   component: QuestionDetail,

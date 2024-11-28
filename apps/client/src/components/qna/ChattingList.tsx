@@ -1,11 +1,11 @@
+import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useSessionStore } from '@/features/session';
+import { getChattingList } from '@/features/session/chatting';
 import { useSocket } from '@/features/socket';
 
 import ChattingMessage from '@/components/qna/ChattingMessage';
-import { getChattingList } from '@/features/session/chatting';
-import { AnimatePresence, motion } from 'motion/react';
 
 function ChattingList() {
   const {

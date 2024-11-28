@@ -1,5 +1,6 @@
-import { GetChattingListResponseDTO } from '@/features/session/chatting/chatting.dto';
 import axios from 'axios';
+
+import { GetChattingListResponseDTO } from '@/features/session/chatting/chatting.dto';
 
 export const getChattingList = (
   token: string,
