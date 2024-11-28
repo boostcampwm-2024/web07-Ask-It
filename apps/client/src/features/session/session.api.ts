@@ -2,22 +2,35 @@ import axios from 'axios';
 
 import {
   GetSessionsResponseDTO,
+  GetSessionsResponseSchema,
   GetSessionTokenResponseDTO,
+  GetSessionTokenResponseSchema,
   GetSessionUsersRequestDTO,
+  GetSessionUsersRequestSchema,
   GetSessionUsersResponseDTO,
+  GetSessionUsersResponseSchema,
   PatchSessionHostRequestDTO,
+  PatchSessionHostRequestSchema,
   PatchSessionHostResponseDTO,
+  PatchSessionHostResponseSchema,
   PostSessionRequestDTO,
+  PostSessionRequestSchema,
   PostSessionResponseDTO,
+  PostSessionResponseSchema,
 } from '@/features/session/session.dto';
 
 export const postSession = (body: PostSessionRequestDTO) =>
   axios
-    .post<PostSessionResponseDTO>('/api/sessions', body)
-    .then((res) => res.data);
+    .post<PostSessionResponseDTO>(
+      '/api/sessions',
+      PostSessionRequestSchema.parse(body),
+    )
+    .then((res) => PostSessionResponseSchema.parse(res.data));
 
 export const getSessions = () =>
-  axios.get<GetSessionsResponseDTO>('/api/sessions').then((res) => res.data);
+  axios
+    .get<GetSessionsResponseDTO>('/api/sessions')
+    .then((res) => GetSessionsResponseSchema.parse(res.data));
 
 export const getSessionToken = (sessionId: string) => {
   const tokens = JSON.parse(
@@ -33,7 +46,7 @@ export const getSessionToken = (sessionId: string) => {
         token,
       },
     })
-    .then((res) => res.data)
+    .then((res) => GetSessionTokenResponseSchema.parse(res.data))
     .then((data) => {
       localStorage.setItem(
         'sessionTokens',
@@ -43,15 +56,12 @@ export const getSessionToken = (sessionId: string) => {
     });
 };
 
-export const getSessionUsers = ({
-  token,
-  sessionId,
-}: GetSessionUsersRequestDTO) =>
+export const getSessionUsers = (params: GetSessionUsersRequestDTO) =>
   axios
     .get<GetSessionUsersResponseDTO>('/api/sessions-auth/users', {
-      params: { token, sessionId },
+      params: GetSessionUsersRequestSchema.parse(params),
     })
-    .then((res) => res.data);
+    .then((res) => GetSessionUsersResponseSchema.parse(res.data));
 
 export const patchSessionHost = (
   userId: number,
@@ -60,6 +70,6 @@ export const patchSessionHost = (
   axios
     .patch<PatchSessionHostResponseDTO>(
       `/api/sessions-auth/host/${userId}`,
-      body,
+      PatchSessionHostRequestSchema.parse(body),
     )
-    .then((res) => res.data);
+    .then((res) => PatchSessionHostResponseSchema.parse(res.data));

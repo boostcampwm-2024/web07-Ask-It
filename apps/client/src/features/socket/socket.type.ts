@@ -38,127 +38,81 @@ export const SocketEventTypeSchema = z.enum([
   'sessionEnded',
 ]);
 
-export const SocketEventPayloadSchema = z.object({
-  type: SocketEventTypeSchema,
-  payload: z.unknown(),
+export const QuestionCreatedEventPayloadSchema = z.object({
+  question: QuestionSchema,
 });
 
-export const QuestionCreatedEventPayloadSchema =
-  SocketEventPayloadSchema.extend({
-    type: z.literal('questionCreated'),
-    payload: z.object({
-      question: QuestionSchema,
-    }),
-  });
-
-export const QuestionUpdatedEventPayloadSchema =
-  SocketEventPayloadSchema.extend({
-    type: z.literal('questionUpdated'),
-    payload: z.object({
-      question: z.object({
-        questionId: z.number(),
-        createUserToken: z.string(),
-        sessionId: z.string(),
-        body: z.string(),
-        closed: z.boolean(),
-        pinned: z.boolean(),
-        createdAt: z.string(),
-      }),
-    }),
-  });
-
-export const QuestionDeletedEventPayloadSchema =
-  SocketEventPayloadSchema.extend({
-    type: z.literal('questionDeleted'),
-    payload: z.object({
-      questionId: z.number(),
-    }),
-  });
-
-export const QuestionLikedEventPayloadSchema = SocketEventPayloadSchema.extend({
-  type: z.literal('questionLiked'),
-  payload: z.object({
+export const QuestionUpdatedEventPayloadSchema = z.object({
+  question: z.object({
     questionId: z.number(),
-    liked: z.boolean(),
-    likesCount: z.number(),
+    createUserToken: z.string(),
+    sessionId: z.string(),
+    body: z.string(),
+    closed: z.boolean(),
+    pinned: z.boolean(),
+    createdAt: z.string(),
   }),
 });
 
-export const ReplyCreatedEventPayloadSchema = SocketEventPayloadSchema.extend({
-  type: z.literal('replyCreated'),
-  payload: z.object({
-    reply: ReplySchema.extend({
-      questionId: z.number(),
-    }),
-  }),
+export const QuestionDeletedEventPayloadSchema = z.object({
+  questionId: z.number(),
 });
 
-export const ReplyUpdatedEventPayloadSchema = SocketEventPayloadSchema.extend({
-  type: z.literal('replyUpdated'),
-  payload: z.object({
-    reply: z.object({
-      replyId: z.number(),
-      createUserToken: z.string(),
-      sessionId: z.string(),
-      questionId: z.number(),
-      body: z.string(),
-      createdAt: z.string(),
-      deleted: z.boolean(),
-    }),
-  }),
+export const QuestionLikedEventPayloadSchema = z.object({
+  questionId: z.number(),
+  liked: z.boolean(),
+  likesCount: z.number(),
 });
 
-export const ReplyDeletedEventPayloadSchema = SocketEventPayloadSchema.extend({
-  type: z.literal('replyDeleted'),
-  payload: z.object({
+export const ReplyCreatedEventPayloadSchema = z.object({
+  reply: ReplySchema.extend({
     questionId: z.number(),
+  }),
+});
+
+export const ReplyUpdatedEventPayloadSchema = z.object({
+  reply: z.object({
     replyId: z.number(),
-  }),
-});
-
-export const ReplyLikedEventPayloadSchema = SocketEventPayloadSchema.extend({
-  type: z.literal('replyLiked'),
-  payload: z.object({
+    createUserToken: z.string(),
+    sessionId: z.string(),
     questionId: z.number(),
-    replyId: z.number(),
-    liked: z.boolean(),
-    likesCount: z.number(),
+    body: z.string(),
+    createdAt: z.string(),
+    deleted: z.boolean(),
   }),
 });
 
-export const ChatMessageEventPayloadSchema = SocketEventPayloadSchema.extend({
-  type: z.literal('chatMessage'),
-  payload: z.object({
-    chattingId: z.string(),
-    content: z.string(),
-    nickname: z.string(),
-  }),
+export const ReplyDeletedEventPayloadSchema = z.object({
+  questionId: z.number(),
+  replyId: z.number(),
 });
 
-export const ChatErrorEventPayloadSchema = SocketEventPayloadSchema.extend({
-  type: z.literal('chatError'),
-  payload: z.object({
-    message: z.string(),
-    error: z.string(),
-  }),
+export const ReplyLikedEventPayloadSchema = z.object({
+  questionId: z.number(),
+  replyId: z.number(),
+  liked: z.boolean(),
+  likesCount: z.number(),
 });
 
-export const ParticipantCountUpdatedEventPayloadSchema =
-  SocketEventPayloadSchema.extend({
-    type: z.literal('participantCountUpdated'),
-    payload: z.object({
-      participantCount: z.number(),
-    }),
-  });
-
-export const HostChangedEventPayloadSchema = SocketEventPayloadSchema.extend({
-  type: z.literal('hostChanged'),
-  payload: z.object({
-    user: UserSchema,
-  }),
+export const ChatMessageEventPayloadSchema = z.object({
+  chattingId: z.number(),
+  content: z.string(),
+  nickname: z.string(),
 });
 
-export type SocketEventPayload = z.infer<typeof SocketEventPayloadSchema>;
+export const ChatErrorEventPayloadSchema = z.object({
+  message: z.string(),
+  error: z.string(),
+});
+
+export const ParticipantCountUpdatedEventPayloadSchema = z.object({
+  participantCount: z.number(),
+});
+
+export const HostChangedEventPayloadSchema = z.object({
+  user: UserSchema,
+});
+
 export type QuestionCreatedEventPayload = z.infer<
   typeof QuestionCreatedEventPayloadSchema
 >;

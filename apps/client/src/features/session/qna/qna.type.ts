@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const ReplySchema = z.object({
   replyId: z.number(),
-  userId: z.number().optional(),
+  userId: z.number().nullable(),
   body: z.string(),
   createdAt: z.string(),
   isOwner: z.boolean(),

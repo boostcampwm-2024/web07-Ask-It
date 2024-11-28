@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-import { GetChattingListResponseDTO } from '@/features/session/chatting/chatting.dto';
+import {
+  GetChattingListResponseDTO,
+  GetChattingListResponseSchema,
+} from '@/features/session/chatting/chatting.dto';
 
 export const getChattingList = (
   token: string,
@@ -12,4 +15,4 @@ export const getChattingList = (
       `/api/chats${chatId ? `/${chatId}` : ''}`,
       { params: { token, sessionId } },
     )
-    .then((res) => res.data);
+    .then((res) => GetChattingListResponseSchema.parse(res.data));

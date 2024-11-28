@@ -2,35 +2,56 @@ import axios from 'axios';
 
 import {
   DeleteQuestionRequestDTO,
+  DeleteQuestionRequestSchema,
+  DeleteReplyRequestSchema,
   GetQuestionsRequestDTO,
+  GetQuestionsRequestSchema,
   GetQuestionsResponseDTO,
+  GetQuestionsResponseSchema,
   PatchQuestionBodyRequestDTO,
+  PatchQuestionBodyRequestSchema,
   PatchQuestionBodyResponseDTO,
+  PatchQuestionBodyResponseSchema,
   PatchQuestionClosedRequestDTO,
+  PatchQuestionClosedRequestSchema,
   PatchQuestionClosedResponseDTO,
+  PatchQuestionClosedResponseSchema,
   PatchQuestionPinnedRequestDTO,
+  PatchQuestionPinnedRequestSchema,
   PatchQuestionPinnedResponseDTO,
+  PatchQuestionPinnedResponseSchema,
   PatchReplyBodyRequestDTO,
+  PatchReplyBodyRequestSchema,
   PatchReplyBodyResponseDTO,
+  PatchReplyBodyResponseSchema,
   PostQuestionLikeRequestDTO,
+  PostQuestionLikeRequestSchema,
   PostQuestionLikeResponseDTO,
+  PostQuestionLikeResponseSchema,
   PostQuestionRequestDTO,
+  PostQuestionRequestSchema,
   PostQuestionResponseDTO,
+  PostQuestionResponseSchema,
   PostReplyRequestDTO,
+  PostReplyRequestSchema,
   PostReplyResponseDTO,
+  PostReplyResponseSchema,
 } from '@/features/session/qna/qna.dto';
 
-export const getQuestions = ({ sessionId, token }: GetQuestionsRequestDTO) =>
+export const getQuestions = (params: GetQuestionsRequestDTO) =>
   axios
     .get<GetQuestionsResponseDTO>('/api/questions', {
-      params: { sessionId, token },
+      params: GetQuestionsRequestSchema.parse(params),
     })
-    .then((res) => res.data);
+    .then((res) => GetQuestionsResponseSchema.parse(res.data));
 
 export const postQuestion = (body: PostQuestionRequestDTO) =>
   axios
-    .post<PostQuestionResponseDTO>(`/api/questions`, body)
-    .then((res) => res.data);
+    .post<PostQuestionResponseDTO>(
+      '/api/questions',
+      PostQuestionRequestSchema.parse(body),
+    )
+    .then((res) => PostQuestionResponseSchema.parse(res.data));
 
 export const patchQuestionBody = (
   questionId: number,
@@ -39,20 +60,17 @@ export const patchQuestionBody = (
   axios
     .patch<PatchQuestionBodyResponseDTO>(
       `/api/questions/${questionId}/body`,
-      body,
+      PatchQuestionBodyRequestSchema.parse(body),
     )
-    .then((res) => res.data);
+    .then((res) => PatchQuestionBodyResponseSchema.parse(res.data));
 
 export const deleteQuestion = (
   questionId: number,
-  { sessionId, token }: DeleteQuestionRequestDTO,
+  params: DeleteQuestionRequestDTO,
 ) =>
   axios
     .delete(`/api/questions/${questionId}`, {
-      params: {
-        sessionId,
-        token,
-      },
+      params: DeleteQuestionRequestSchema.parse(params),
     })
     .then((res) => res.data);
 
@@ -63,9 +81,9 @@ export const patchQuestionPinned = (
   axios
     .patch<PatchQuestionPinnedResponseDTO>(
       `/api/questions/${questionId}/pinned`,
-      body,
+      PatchQuestionPinnedRequestSchema.parse(body),
     )
-    .then((res) => res.data);
+    .then((res) => PatchQuestionPinnedResponseSchema.parse(res.data));
 
 export const patchQuestionClosed = (
   questionId: number,
@@ -74,9 +92,9 @@ export const patchQuestionClosed = (
   axios
     .patch<PatchQuestionClosedResponseDTO>(
       `/api/questions/${questionId}/closed`,
-      body,
+      PatchQuestionClosedRequestSchema.parse(body),
     )
-    .then((res) => res.data);
+    .then((res) => PatchQuestionClosedResponseSchema.parse(res.data));
 
 export const postQuestionLike = (
   questionId: number,
@@ -85,33 +103,36 @@ export const postQuestionLike = (
   axios
     .post<PostQuestionLikeResponseDTO>(
       `/api/questions/${questionId}/likes`,
-      body,
+      PostQuestionLikeRequestSchema.parse(body),
     )
-    .then((res) => res.data);
+    .then((res) => PostQuestionLikeResponseSchema.parse(res.data));
 
 export const postReply = (body: PostReplyRequestDTO) =>
   axios
-    .post<PostReplyResponseDTO>(`/api/replies`, body)
-    .then((res) => res.data);
+    .post<PostReplyResponseDTO>(
+      `/api/replies`,
+      PostReplyRequestSchema.parse(body),
+    )
+    .then((res) => PostReplyResponseSchema.parse(res.data));
 
 export const patchReplyBody = (
   replyId: number,
   body: PatchReplyBodyRequestDTO,
 ) =>
   axios
-    .patch<PatchReplyBodyResponseDTO>(`/api/replies/${replyId}/body`, body)
-    .then((res) => res.data);
+    .patch<PatchReplyBodyResponseDTO>(
+      `/api/replies/${replyId}/body`,
+      PatchReplyBodyRequestSchema.parse(body),
+    )
+    .then((res) => PatchReplyBodyResponseSchema.parse(res.data));
 
 export const deleteReply = (
   replyId: number,
-  { sessionId, token }: DeleteQuestionRequestDTO,
+  params: DeleteQuestionRequestDTO,
 ) =>
   axios
     .delete(`/api/replies/${replyId}`, {
-      params: {
-        sessionId,
-        token,
-      },
+      params: DeleteReplyRequestSchema.parse(params),
     })
     .then((res) => res.data);
 
@@ -120,5 +141,8 @@ export const postReplyLike = (
   body: PostQuestionLikeRequestDTO,
 ) =>
   axios
-    .post<PostQuestionLikeResponseDTO>(`/api/replies/${replyId}/likes`, body)
-    .then((res) => res.data);
+    .post<PostQuestionLikeResponseDTO>(
+      `/api/replies/${replyId}/likes`,
+      PostQuestionLikeRequestSchema.parse(body),
+    )
+    .then((res) => PostQuestionLikeResponseSchema.parse(res.data));

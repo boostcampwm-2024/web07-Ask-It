@@ -37,28 +37,28 @@ export class SocketService {
 
     this.socket.on(
       'questionCreated',
-      (payload: QuestionCreatedEventPayload['payload']) => {
+      (payload: QuestionCreatedEventPayload) => {
         store.addQuestion({ ...payload.question, isOwner: false });
       },
     );
 
     this.socket.on(
       'questionUpdated',
-      (payload: QuestionUpdatedEventPayload['payload']) => {
+      (payload: QuestionUpdatedEventPayload) => {
         store.updateQuestion(payload.question);
       },
     );
 
     this.socket.on(
       'questionDeleted',
-      (payload: QuestionDeletedEventPayload['payload']) => {
+      (payload: QuestionDeletedEventPayload) => {
         store.removeQuestion(payload.questionId);
       },
     );
 
     this.socket.on(
       'questionLiked',
-      ({ questionId, likesCount }: QuestionLikedEventPayload['payload']) => {
+      ({ questionId, likesCount }: QuestionLikedEventPayload) => {
         store.updateQuestion({
           questionId,
           likesCount,
@@ -66,40 +66,27 @@ export class SocketService {
       },
     );
 
-    this.socket.on(
-      'replyCreated',
-      (payload: ReplyCreatedEventPayload['payload']) => {
-        store.addReply(payload.reply.questionId, {
-          ...payload.reply,
-          isOwner: false,
-        });
-      },
-    );
+    this.socket.on('replyCreated', (payload: ReplyCreatedEventPayload) => {
+      store.addReply(payload.reply.questionId, {
+        ...payload.reply,
+        isOwner: false,
+      });
+    });
 
-    this.socket.on(
-      'replyUpdated',
-      (payload: ReplyUpdatedEventPayload['payload']) => {
-        store.updateReply(payload.reply.questionId, payload.reply);
-      },
-    );
+    this.socket.on('replyUpdated', (payload: ReplyUpdatedEventPayload) => {
+      store.updateReply(payload.reply.questionId, payload.reply);
+    });
 
-    this.socket.on(
-      'replyDeleted',
-      (payload: ReplyDeletedEventPayload['payload']) => {
-        store.updateReply(payload.questionId, {
-          replyId: payload.replyId,
-          deleted: true,
-        });
-      },
-    );
+    this.socket.on('replyDeleted', (payload: ReplyDeletedEventPayload) => {
+      store.updateReply(payload.questionId, {
+        replyId: payload.replyId,
+        deleted: true,
+      });
+    });
 
     this.socket.on(
       'replyLiked',
-      ({
-        questionId,
-        replyId,
-        likesCount,
-      }: ReplyLikedEventPayload['payload']) => {
+      ({ questionId, replyId, likesCount }: ReplyLikedEventPayload) => {
         store.updateReply(questionId, {
           replyId,
           likesCount,
@@ -107,14 +94,11 @@ export class SocketService {
       },
     );
 
-    this.socket.on(
-      'chatMessage',
-      (payload: ChatMessageEventPayload['payload']) => {
-        store.addChatting(payload);
-      },
-    );
+    this.socket.on('chatMessage', (payload: ChatMessageEventPayload) => {
+      store.addChatting(payload);
+    });
 
-    this.socket.on('chatError', (payload: ChatErrorEventPayload['payload']) => {
+    this.socket.on('chatError', (payload: ChatErrorEventPayload) => {
       useToastStore.getState().addToast({
         type: 'ERROR',
         message: payload.message,
@@ -130,16 +114,14 @@ export class SocketService {
 
     this.socket.on(
       'participantCountUpdated',
-      (payload: ParticipantCountUpdatedEventPayload['payload']) => {
+      (payload: ParticipantCountUpdatedEventPayload) => {
         store.setParticipantCount(payload.participantCount);
       },
     );
 
     this.socket.on(
       'hostChanged',
-      ({
-        user: { nickname, userId, isHost },
-      }: HostChangedEventPayload['payload']) => {
+      ({ user: { nickname, userId, isHost } }: HostChangedEventPayload) => {
         if (userId === authStore.userId) store.setIsHost(isHost);
         store.updateReplyIsHost(userId, isHost);
         if (isHost)
