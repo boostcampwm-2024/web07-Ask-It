@@ -25,7 +25,8 @@ interface ReplyItemProps {
 function ReplyItem({ question, reply }: ReplyItemProps) {
   const { addToast } = useToastStore();
 
-  const { sessionId, sessionToken, expired, updateReply } = useSessionStore();
+  const { sessionId, sessionToken, isHost, expired, updateReply } =
+    useSessionStore();
 
   const { Modal, openModal } = useModal(
     <CreateReplyModal question={question} reply={reply} />,
@@ -149,20 +150,24 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
               </div>
             </Button>
             <div className='inline-flex items-center justify-start gap-2 px-2'>
-              {!expired && reply.isOwner && !reply.deleted && (
+              {!expired && !reply.deleted && (
                 <>
-                  <Button
-                    className='bg-gray-200/25 hover:bg-gray-200/50 hover:transition-all'
-                    onClick={openModal}
-                  >
-                    <FiEdit2 />
-                  </Button>
-                  <Button
-                    className='bg-red-200/25 text-red-600 hover:bg-red-200/50 hover:transition-all'
-                    onClick={handleDelete}
-                  >
-                    <GrClose />
-                  </Button>
+                  {!expired && reply.isOwner && (
+                    <Button
+                      className='bg-gray-200/25 hover:bg-gray-200/50 hover:transition-all'
+                      onClick={openModal}
+                    >
+                      <FiEdit2 />
+                    </Button>
+                  )}
+                  {!expired && (isHost || reply.isOwner) && (
+                    <Button
+                      className='bg-red-200/25 text-red-600 hover:bg-red-200/50 hover:transition-all'
+                      onClick={handleDelete}
+                    >
+                      <GrClose />
+                    </Button>
+                  )}
                 </>
               )}
             </div>

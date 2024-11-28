@@ -281,26 +281,34 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
             </Button>
           </div>
 
-          <div className='inline-flex items-center justify-start gap-2 px-2'>
-            {!expired &&
-              question.isOwner &&
-              !question.closed &&
-              question.replies.length === 0 && (
-                <>
-                  <Button
-                    className='bg-gray-200/25 font-medium text-gray-500 hover:bg-gray-200/50 hover:transition-all'
-                    onClick={openModal}
-                  >
-                    <FiEdit2 />
-                  </Button>
+          <div className='inline-flex items-center justify-start gap-2 px-2.5'>
+            {(isHost ||
+              (!expired &&
+                question.isOwner &&
+                !question.closed &&
+                question.replies.length === 0)) && (
+              <>
+                {!expired &&
+                  question.isOwner &&
+                  !question.closed &&
+                  question.replies.length === 0 && (
+                    <Button
+                      className='bg-gray-200/25 font-medium text-gray-500 hover:bg-gray-200/50 hover:transition-all'
+                      onClick={openModal}
+                    >
+                      <FiEdit2 />
+                    </Button>
+                  )}
+                {isHost && (
                   <Button
                     className='bg-red-200/25 text-red-600 hover:bg-red-200/50 hover:transition-all'
                     onClick={handleDelete}
                   >
                     <GrClose />
                   </Button>
-                </>
-              )}
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>
