@@ -24,7 +24,9 @@ function ChattingList() {
 
   const socket = useSocket();
 
+  const hasMoreRef = useRef(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const prevHeightRef = useRef(0);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -61,14 +63,24 @@ function ChattingList() {
           !sessionId ||
           !sessionToken ||
           !chatting[0]?.chattingId ||
+          !hasMoreRef.current ||
           isLoading
         )
           return;
 
+        prevHeightRef.current = container.scrollHeight;
+
         setIsLoading(true);
-        getChattingList(sessionId, sessionToken, chatting[0]?.chattingId)
+        getChattingList(sessionToken, sessionId, chatting[0]?.chattingId)
           .then(({ chats }) => {
-            chats.reverse().forEach(addChattingToFront);
+            if (chats.length < 20) hasMoreRef.current = false;
+            chats.forEach(addChattingToFront);
+
+            requestAnimationFrame(() => {
+              const newHeight = container.scrollHeight;
+              const heightDiff = newHeight - prevHeightRef.current;
+              container.scrollTop = heightDiff;
+            });
           })
           .finally(() => {
             setIsLoading(false);
@@ -85,7 +97,7 @@ function ChattingList() {
     return () => {
       messageContainer?.removeEventListener('scroll', handleScroll);
     };
-  }, [autoScrolling, checkScrollPosition]);
+  }, [checkScrollPosition, chatting]);
 
   useEffect(() => {
     if (isBottom && !userScrolling.current) {
