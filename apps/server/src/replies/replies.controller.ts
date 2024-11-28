@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -68,10 +69,10 @@ export class RepliesController {
 
   @Delete(':replyId')
   @DeleteReplySwagger()
-  @UseGuards(SessionTokenValidationGuard, ReplyExistenceGuard, ReplyOwnershipGuard)
-  async delete(@Param('replyId', ParseIntPipe) replyId: number, @Query() data: BaseDto) {
-    const { questionId } = await this.repliesService.deleteReply(replyId);
+  @UseGuards(SessionTokenValidationGuard, ReplyExistenceGuard)
+  async delete(@Param('replyId', ParseIntPipe) replyId: number, @Query() data: BaseDto, @Req() request: Request) {
     const { sessionId, token } = data;
+    const { questionId } = await this.repliesService.deleteReply(replyId, token, request['reply']);
     const resultForOther = { replyId, questionId };
     this.socketGateway.broadcastReplyDelete(sessionId, token, resultForOther);
     return {};
