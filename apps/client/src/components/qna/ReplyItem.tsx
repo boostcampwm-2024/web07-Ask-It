@@ -152,7 +152,7 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
             <div className='inline-flex items-center justify-start gap-2 px-2'>
               {!expired && !reply.deleted && (
                 <>
-                  {!expired && reply.isOwner && (
+                  {reply.isOwner && (
                     <Button
                       className='bg-gray-200/25 hover:bg-gray-200/50 hover:transition-all'
                       onClick={openModal}
@@ -160,7 +160,7 @@ function ReplyItem({ question, reply }: ReplyItemProps) {
                       <FiEdit2 />
                     </Button>
                   )}
-                  {!expired && (isHost || reply.isOwner) && (
+                  {(isHost || reply.isOwner) && (
                     <Button
                       className='bg-red-200/25 text-red-600 hover:bg-red-200/50 hover:transition-all'
                       onClick={handleDelete}

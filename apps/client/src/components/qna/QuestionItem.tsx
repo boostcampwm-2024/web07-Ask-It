@@ -282,14 +282,9 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
           </div>
 
           <div className='inline-flex items-center justify-start gap-2 px-2.5'>
-            {(isHost ||
-              (!expired &&
-                question.isOwner &&
-                !question.closed &&
-                question.replies.length === 0)) && (
+            {!expired && (isHost || question.isOwner) && (
               <>
-                {!expired &&
-                  question.isOwner &&
+                {question.isOwner &&
                   !question.closed &&
                   question.replies.length === 0 && (
                     <Button
@@ -299,7 +294,10 @@ function QuestionItem({ question, onQuestionSelect }: QuestionItemProps) {
                       <FiEdit2 />
                     </Button>
                   )}
-                {isHost && (
+                {(isHost ||
+                  (question.isOwner &&
+                    !question.closed &&
+                    question.replies.length === 0)) && (
                   <Button
                     className='bg-red-200/25 text-red-600 hover:bg-red-200/50 hover:transition-all'
                     onClick={handleDelete}
