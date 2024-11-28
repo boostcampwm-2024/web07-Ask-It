@@ -51,4 +51,17 @@ export class SessionsRepository {
       throw DatabaseException.read('UserSessionToken');
     }
   }
+
+  async updateSessionExpiredAt(sessionId: string, expireTime: Date) {
+    try {
+      await this.prisma.session.update({
+        where: {
+          sessionId,
+        },
+        data: { expiredAt: expireTime },
+      });
+    } catch (error) {
+      throw DatabaseException.update('session');
+    }
+  }
 }

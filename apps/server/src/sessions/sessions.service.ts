@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 
 import { CreateSessionDto } from './dto/create-session.dto';
 import { SessionCreateData } from './interface/session-create-data.interface';
@@ -51,5 +51,19 @@ export class SessionsService {
       };
     });
     return transformedSessions;
+  }
+
+  async terminateSession(sessionId: string, token: string) {
+    const [{ createUserId }, { userId }] = await Promise.all([
+      this.sessionRepository.findById(sessionId),
+      this.sessionsAuthRepository.findByToken(token),
+    ]);
+
+    if (createUserId !== userId) {
+      throw new ForbiddenException('세션 생성자만이 이 작업을 수행할 수 있습니다.');
+    }
+    const expireTime = new Date();
+    await this.sessionRepository.updateSessionExpiredAt(sessionId, expireTime);
+    return { expired: true };
   }
 }

@@ -12,7 +12,7 @@ export class SessionTokenValidationGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
-    const sessionId = request.body?.sessionId || request.query?.sessionId;
+    const sessionId = request.body?.sessionId || request.query?.sessionId || request.params?.sessionId;
     const token = request.body?.token || request.query?.token;
 
     if (!sessionId || !token) {

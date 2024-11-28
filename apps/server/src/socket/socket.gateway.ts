@@ -32,6 +32,7 @@ export const SOCKET_EVENTS = {
   PARTICIPANT_COUNT_UPDATED: 'participantCountUpdated',
 
   HOST_CHANGED: 'hostChanged',
+  SESSION_ENDED: 'sessionEnded',
 } as const;
 
 interface Client {
@@ -162,4 +163,6 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   broadcastReplyLike = this.createEventBroadcaster(SOCKET_EVENTS.REPLY_LIKED);
 
   broadcastHostChange = this.createEventBroadcaster(SOCKET_EVENTS.HOST_CHANGED);
+
+  broadcastSessionEnd = this.createEventBroadcaster(SOCKET_EVENTS.SESSION_ENDED);
 }
