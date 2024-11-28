@@ -132,6 +132,15 @@ export class SocketService {
           });
       },
     );
+
+    this.socket.on('sessionEnded', () => {
+      store.setExpired(true);
+      useToastStore.getState().addToast({
+        type: 'INFO',
+        message: '세션이 종료되었습니다.',
+        duration: 3000,
+      });
+    });
   }
 
   sendChatMessage(message: string) {

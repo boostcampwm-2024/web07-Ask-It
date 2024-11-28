@@ -48,6 +48,14 @@ export const PatchSessionHostResponseSchema = z.object({
   user: UserSchema,
 });
 
+export const PostSessionTerminateRequestSchema = z.object({
+  token: z.string(),
+});
+
+export const PostSessionTerminateResponseSchema = z.object({
+  expired: z.boolean(),
+});
+
 export type PostSessionRequestDTO = z.infer<typeof PostSessionRequestSchema>;
 export type PostSessionResponseDTO = z.infer<typeof PostSessionResponseSchema>;
 export type GetSessionsResponseDTO = z.infer<typeof GetSessionsResponseSchema>;
@@ -65,4 +73,10 @@ export type PatchSessionHostRequestDTO = z.infer<
 >;
 export type PatchSessionHostResponseDTO = z.infer<
   typeof PatchSessionHostResponseSchema
+>;
+export type PostSessionTerminateRequestDTO = z.infer<
+  typeof PostSessionTerminateRequestSchema
+>;
+export type PostSessionTerminateResponseDTO = z.infer<
+  typeof PostSessionTerminateResponseSchema
 >;

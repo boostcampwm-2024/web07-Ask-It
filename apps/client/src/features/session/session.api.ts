@@ -17,6 +17,9 @@ import {
   PostSessionRequestSchema,
   PostSessionResponseDTO,
   PostSessionResponseSchema,
+  PostSessionTerminateRequestDTO,
+  PostSessionTerminateRequestSchema,
+  PostSessionTerminateResponseSchema,
 } from '@/features/session/session.dto';
 
 export const postSession = (body: PostSessionRequestDTO) =>
@@ -73,3 +76,14 @@ export const patchSessionHost = (
       PatchSessionHostRequestSchema.parse(body),
     )
     .then((res) => PatchSessionHostResponseSchema.parse(res.data));
+
+export const postSessionTerminate = ({
+  token,
+  sessionId,
+}: PostSessionTerminateRequestDTO & { sessionId: string }) =>
+  axios
+    .post(
+      `/api/sessions/${sessionId}/terminate`,
+      PostSessionTerminateRequestSchema.parse({ token }),
+    )
+    .then((res) => PostSessionTerminateResponseSchema.parse(res.data));
