@@ -5,6 +5,7 @@ import { CreateQuestionDto } from './dto/create-question.dto';
 import { GetQuestionDto } from './dto/get-question.dto';
 import { QuestionsRepository } from './questions.repository';
 
+import { BaseDto } from '@common/base.dto';
 import {
   UpdateQuestionBodyDto,
   UpdateQuestionClosedDto,
@@ -127,13 +128,20 @@ export class QuestionsService {
     return await this.questionRepository.updateBody(questionId, body);
   }
 
-  async deleteQuestion(questionId: number, question: Question) {
-    const isReplied = await this.repliesRepository.findReplyByQuestionId(questionId);
-    if (isReplied) {
-      throw new ForbiddenException('답변이 달린 질문은 삭제할 수 없습니다.');
-    }
-    if (question.closed) {
-      throw new ForbiddenException('이미 완료된 답변은 삭제할 수 없습니다.');
+  async deleteQuestion(questionId: number, question: Question, { token }: BaseDto) {
+    const { isHost } = await this.sessionAuthRepository.findByToken(token);
+
+    if (!isHost) {
+      if (question.createUserToken !== token) {
+        throw new ForbiddenException('권한이 없습니다.');
+      }
+      const isReplied = await this.repliesRepository.findReplyByQuestionId(questionId);
+      if (isReplied) {
+        throw new ForbiddenException('답변이 달린 질문은 삭제할 수 없습니다.');
+      }
+      if (question.closed) {
+        throw new ForbiddenException('이미 완료된 답변은 삭제할 수 없습니다.');
+      }
     }
     return await this.questionRepository.deleteQuestion(questionId);
   }

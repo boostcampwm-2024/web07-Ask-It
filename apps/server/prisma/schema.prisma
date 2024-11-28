@@ -81,7 +81,7 @@ model Reply {
   deleted              Boolean  @default(false)
 
   session              Session          @relation("SessionReplies", fields: [sessionId], references: [sessionId])
-  question             Question         @relation("QuestionReplies", fields: [questionId], references: [questionId])
+  question             Question         @relation("QuestionReplies", fields: [questionId], references: [questionId], onDelete: Cascade)
   createUserTokenEntity UserSessionToken @relation("TokenReplies", fields: [createUserToken], references: [token])
   replyLikes           ReplyLike[]      @relation("ReplyLikes")
 }

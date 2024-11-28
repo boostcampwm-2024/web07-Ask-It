@@ -92,10 +92,10 @@ export class QuestionsController {
 
   @Delete(':questionId')
   @DeleteQuestionSwagger()
-  @UseGuards(SessionTokenValidationGuard, QuestionExistenceGuard, QuestionOwnershipGuard)
+  @UseGuards(SessionTokenValidationGuard, QuestionExistenceGuard)
   async deleteQuestion(@Param('questionId', ParseIntPipe) questionId: number, @Query() data: BaseDto, @Req() req: any) {
-    await this.questionsService.deleteQuestion(questionId, req.question);
     const { sessionId, token } = data;
+    await this.questionsService.deleteQuestion(questionId, req.question, data);
     const resultForOther = { questionId };
     this.socketGateway.broadcastQuestionDelete(sessionId, token, resultForOther);
     return {};
