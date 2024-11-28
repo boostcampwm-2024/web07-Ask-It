@@ -34,7 +34,11 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
     mutationFn: postReply,
     onSuccess: (res) => {
       if (!reply && question) {
-        addReply(question.questionId, { ...res.reply, deleted: false });
+        addReply(question.questionId, {
+          ...res.reply,
+          userId: null,
+          deleted: false,
+        });
         addToast({
           type: 'SUCCESS',
           message: '답변이 성공적으로 등록되었습니다.',
