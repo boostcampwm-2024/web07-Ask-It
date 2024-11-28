@@ -97,7 +97,7 @@ function ChattingList() {
     return () => {
       messageContainer?.removeEventListener('scroll', handleScroll);
     };
-  }, [checkScrollPosition, chatting]);
+  }, [checkScrollPosition, chatting, isLoading]);
 
   useEffect(() => {
     if (isBottom && !userScrolling.current) {
