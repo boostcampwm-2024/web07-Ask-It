@@ -59,7 +59,13 @@ function SessionParticipantsModal() {
     },
     onError: (error) => {
       if (!isAxiosError(error)) return;
-      if (error.response?.status === 403) {
+      if (error.response?.status === 400) {
+        addToast({
+          type: 'ERROR',
+          message: '자신의 권한을 변경하려는 요청은 허용되지 않습니다.',
+          duration: 3000,
+        });
+      } else if (error.response?.status === 403) {
         addToast({
           type: 'ERROR',
           message: '세션 생성자만 권한을 수정할 수 있습니다.',
