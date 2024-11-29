@@ -58,7 +58,7 @@ export function useSignInForm() {
   const isLoginEnabled = email.length > 0 && password.length > 7 && !isPending;
 
   const handleLogin = (callback: () => void) =>
-    loginQuery({ email, password }, { onSettled: callback });
+    loginQuery({ email, password }, { onSuccess: callback });
 
   return {
     email,

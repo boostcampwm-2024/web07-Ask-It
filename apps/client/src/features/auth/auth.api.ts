@@ -2,9 +2,7 @@ import axios from 'axios';
 
 import {
   PostLoginRequestDTO,
-  PostLoginRequestSchema,
   PostLoginResponseDTO,
-  PostLoginResponseSchema,
   PostRefreshResponseDTO,
   PostRefreshResponseSchema,
 } from '@/features/auth/auth.dto';
@@ -13,11 +11,8 @@ const AUTH_BASE_URL = '/api/auth';
 
 export const login = (body: PostLoginRequestDTO) =>
   axios
-    .post<PostLoginResponseDTO>(
-      `${AUTH_BASE_URL}/login`,
-      PostLoginRequestSchema.parse(body),
-    )
-    .then((res) => PostLoginResponseSchema.parse(res.data));
+    .post<PostLoginResponseDTO>(`${AUTH_BASE_URL}/login`, body)
+    .then((res) => res.data);
 
 export const logout = () => axios.post(`${AUTH_BASE_URL}/logout`);
 
