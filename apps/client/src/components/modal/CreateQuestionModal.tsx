@@ -12,7 +12,6 @@ import {
 import { useToastStore } from '@/features/toast';
 
 import { Button } from '@/components';
-import Modal from '@/components/modal/Modal';
 
 interface CreateQuestionModalProps {
   question?: Question;
@@ -100,12 +99,12 @@ function CreateQuestionModal({ question }: CreateQuestionModalProps) {
   }, [question]);
 
   return (
-    <Modal>
-      <div className='inline-flex h-[40dvh] w-[600px] flex-col items-center justify-center gap-2.5'>
+    <div className='inline-flex min-h-[45dvh] min-w-[45dvw] flex-col items-center justify-center gap-2.5 rounded-lg bg-gray-50 p-8 shadow'>
+      <div className='inline-flex h-full w-full flex-grow flex-col items-center justify-center gap-2.5'>
         <div className='inline-flex items-center justify-start gap-2.5 self-stretch border-b border-gray-200 pb-1'>
           <div className='text-lg font-semibold text-black'>질문하기</div>
         </div>
-        <div className='inline-flex h-[30dvh] shrink grow basis-0 items-center justify-center gap-2.5 self-stretch'>
+        <div className='inline-flex h-full shrink grow basis-0 items-center justify-center gap-2.5 self-stretch'>
           <textarea
             className='shrink grow basis-0 resize-none flex-col items-start justify-start gap-2 self-stretch whitespace-pre-wrap rounded border border-gray-200 bg-white p-4 focus:outline-none'
             value={body}
@@ -136,7 +135,7 @@ function CreateQuestionModal({ question }: CreateQuestionModalProps) {
           </div>
         </div>
       </div>
-    </Modal>
+    </div>
   );
 }
 

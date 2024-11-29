@@ -13,7 +13,6 @@ import {
 import { useToastStore } from '@/features/toast';
 
 import Button from '@/components/Button';
-import Modal from '@/components/modal/Modal';
 
 interface CreateReplyModalProps {
   question?: Question;
@@ -110,19 +109,26 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
   }, [reply]);
 
   return (
-    <Modal>
-      <div className='inline-flex h-[40dvh] w-[600px] flex-col items-center justify-center gap-2.5'>
+    <div className='inline-flex min-h-[45dvh] min-w-[45dvw] flex-col items-center justify-center gap-2.5 rounded-lg bg-gray-50 p-8 shadow'>
+      <div className='inline-flex h-full w-full flex-grow flex-col items-center justify-center gap-4'>
         <div className='inline-flex items-center justify-start gap-2.5 self-stretch border-b border-gray-200 pb-1'>
           <div className='text-lg font-semibold text-black'>답변하기</div>
         </div>
-        <div className='inline-flex h-[30dvh] shrink grow basis-0 items-center justify-center gap-2.5 self-stretch'>
+        <div className='max-h-[20dvh] self-stretch overflow-y-auto border-b border-gray-200 py-4 text-left font-medium text-gray-700'>
+          {question && (
+            <Markdown className='prose prose-stone flex w-full flex-col gap-3 prose-img:rounded-md'>
+              {question.body}
+            </Markdown>
+          )}
+        </div>
+        <div className='inline-flex h-full shrink grow basis-0 items-center justify-center gap-2.5 self-stretch'>
           <textarea
-            className='shrink grow basis-0 resize-none flex-col items-start justify-start gap-2 self-stretch whitespace-pre-wrap rounded border border-gray-200 bg-white p-4 focus:outline-none'
+            className='h-full shrink grow basis-0 resize-none flex-col items-start justify-start gap-2 self-stretch whitespace-pre-wrap rounded border border-gray-200 bg-white p-4 focus:outline-none'
             value={body}
             onChange={(e) => setBody(e.target.value)}
             placeholder={`**답변을 남겨주세요**\n**(마크다운 지원)**`}
           />
-          <div className='inline-flex shrink grow basis-0 flex-col items-start justify-start gap-2 self-stretch overflow-y-auto rounded border border-gray-200 bg-white p-4'>
+          <div className='inline-flex h-full shrink grow basis-0 flex-col items-start justify-start gap-2 self-stretch overflow-y-auto rounded border border-gray-200 bg-white p-4'>
             <Markdown className='prose prose-stone flex w-full flex-col gap-3 prose-img:rounded-md'>
               {body.length === 0
                 ? `**답변을 남겨주세요**\n\n**(마크다운 지원)**`
@@ -146,7 +152,7 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
           </div>
         </div>
       </div>
-    </Modal>
+    </div>
   );
 }
 
