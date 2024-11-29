@@ -172,7 +172,7 @@ function QuestionList() {
                     <p className='text-sm font-bold text-black'>설정</p>
                   </Button>
                 )}
-                {isDropdownOpen && (
+                {isHost && isDropdownOpen && (
                   <SessionSettingsDropdown
                     buttons={sessionButtons}
                     onClose={() => setIsDropdownOpen(false)}
