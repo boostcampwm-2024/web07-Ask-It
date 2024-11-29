@@ -25,6 +25,7 @@ function SessionParticipantsModal() {
     sessionToken,
     setSessionUsers,
     updateSessionUser,
+    updateReplyIsHost,
   } = useSessionStore();
 
   const [selectedUserId, setSelectedUserId] = useState<number>();
@@ -48,6 +49,7 @@ function SessionParticipantsModal() {
         isHost: params.isHost,
       }),
     onSuccess: (res) => {
+      updateReplyIsHost(res.user.userId, res.user.isHost);
       updateSessionUser(res.user);
       addToast({
         type: 'SUCCESS',
