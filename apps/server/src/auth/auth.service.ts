@@ -93,12 +93,6 @@ export class AuthService implements OnModuleInit {
     }
   }
 
-  hasValidRefreshToken(userId: number, nickname: string) {
-    return Object.values(this.refreshTokens).some(
-      (data) => data.userId === userId && data.nickname === nickname && data.expiredAt > new Date(),
-    );
-  }
-
   removeRefreshToken(refreshToken: string) {
     delete this.refreshTokens[refreshToken];
   }
