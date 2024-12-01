@@ -1,6 +1,6 @@
 # Ask-it
 
-## [링크로 바로가기](#링크)
+## [바로가기로 이동](#바로가기)
 
 <img src='https://github.com/user-attachments/assets/935d4951-55f8-47ff-b7c5-53ef1bcd7593' alt='배너' width='100%' />
 
@@ -23,7 +23,21 @@
 | 백엔드     | ![NestJS](https://img.shields.io/badge/-NestJS-E0234E?logo=nestjs&logoColor=white) ![Prisma](https://img.shields.io/badge/-Prisma-2D3748?logo=prisma&logoColor=white) ![Socket.IO](https://img.shields.io/badge/-Socket.IO-010101?logo=socket.io&logoColor=white) ![Winston](https://img.shields.io/badge/-Winston-000000?logo=winston&logoColor=white) ![Class Validator](https://img.shields.io/badge/-Class%20Validator-000000?logo=class-validator&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?logo=postgresql&logoColor=white) ![Swagger](https://img.shields.io/badge/-Swagger-85EA2D?logo=swagger&logoColor=white)                                                                                                                                                                           |
 | 협업 도구  | ![Figma](https://img.shields.io/badge/-Figma-F24E1E?logo=figma&logoColor=white) ![Notion](https://img.shields.io/badge/-Notion-000000?logo=notion&logoColor=white) ![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=github&logoColor=white) ![Slack](https://img.shields.io/badge/-Slack-4A154B?logo=slack&logoColor=white)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
-## 링크
+## 시스템 아키텍처
 
-- [Ask-it](https://ask-it.site)
-- [방명록](https://ask-it.site/session/44d77e5c-3116-400b-a904-a4f455d3aa27)
+![architecture](https://github.com/user-attachments/assets/7b4ce0db-4457-4885-86c2-092b435908f6)
+
+
+## 바로가기
+
+저희 서비스를 직접 경험해보세요!
+
+### 🌐 메인 서비스
+[![Ask-it 로고](https://img.shields.io/badge/Ask--it-방문하기-4A90E2?style=for-the-badge&logo=safari&logoColor=white)](https://ask-it.site)
+
+### 📝 방명록 남기기
+> 여러분의 소중한 의견을 기다립니다
+>
+[![방명록](https://img.shields.io/badge/방명록-의견_남기기-FF69B4?style=for-the-badge&logo=bookstack&logoColor=white)](https://ask-it.site/session/44d77e5c-3116-400b-a904-a4f455d3aa27)
+
+---
