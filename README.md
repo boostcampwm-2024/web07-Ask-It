@@ -1,6 +1,6 @@
 # Ask-it
 
-## [바로가기로 이동](#바로가기)
+## [링크로 바로가기](#링크)
 
 <img src='https://github.com/user-attachments/assets/935d4951-55f8-47ff-b7c5-53ef1bcd7593' alt='배너' width='100%' />
 
@@ -28,7 +28,7 @@
 ![architecture](https://github.com/user-attachments/assets/7b4ce0db-4457-4885-86c2-092b435908f6)
 
 
-## 바로가기
+## 링크
 
 저희 서비스를 직접 경험해보세요!
 
