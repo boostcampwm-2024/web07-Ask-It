@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { useAuthStore } from '@/features/auth';
+import { PostRefreshResponseDTO } from '@/features/auth/auth.dto';
 
 axios.interceptors.request.use(
   (config) => {
@@ -28,17 +29,15 @@ axios.interceptors.response.use(
         credentials: 'include',
       });
 
-      const { type, data: result } = (await response.json()) as {
-        type: 'success' | 'fail';
-        data: { accessToken: string };
-      };
+      const { accessToken, userId } =
+        (await response.json()) as PostRefreshResponseDTO;
 
       const { setAuthInformation, clearAuthInformation } =
         useAuthStore.getState();
 
-      if (type === 'success' && result.accessToken) {
-        setAuthInformation(result);
-        originalRequest.headers.Authorization = `Bearer ${result.accessToken}`;
+      if (accessToken) {
+        setAuthInformation({ accessToken, userId });
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return axios(originalRequest);
       }
 
