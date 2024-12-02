@@ -55,7 +55,7 @@ export const Route = createFileRoute('/session/$sessionId/')({
       chats.reverse().forEach(addChatting);
     } catch (e) {
       console.error(e);
-      throw redirect({ to: '/session' });
+      throw redirect({ to: '/' });
     }
   },
 });
