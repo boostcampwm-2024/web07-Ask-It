@@ -2,9 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 import { ChatsRepository } from './chats.repository';
 
-import { DatabaseException } from '@common/exceptions/resource.exception';
-import { PrismaService } from '@prisma-alias/prisma.service';
-
 export interface ChatSaveDto {
   sessionId: string;
   token: string;
@@ -13,10 +10,7 @@ export interface ChatSaveDto {
 
 @Injectable()
 export class ChatsService {
-  constructor(
-    private readonly chatsRepository: ChatsRepository,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly chatsRepository: ChatsRepository) {}
 
   async saveChat(data: ChatSaveDto) {
     const chat = await this.chatsRepository.save(data);
@@ -25,36 +19,17 @@ export class ChatsService {
   }
 
   async getChatsForInfiniteScroll(sessionId: string, count: number, chatId?: number) {
-    try {
-      const chats = await this.prisma.chatting.findMany({
-        where: {
-          sessionId,
-          ...(chatId && { chattingId: { lt: chatId } }),
-        },
-        include: {
-          createUserTokenEntity: {
-            include: {
-              user: true,
-            },
-          },
-        },
-        orderBy: {
-          chattingId: 'desc',
-        },
-        take: count,
-      });
-      return chats.map((x) => {
-        const { createUserTokenEntity, chattingId, body: content } = x;
-        const { user } = createUserTokenEntity;
-        const nickname = user?.nickname || '익명';
-        return {
-          chattingId,
-          nickname,
-          content,
-        };
-      });
-    } catch (error) {
-      throw DatabaseException.read('chatting');
-    }
+    const chats = await this.chatsRepository.getChatsForInfiniteScroll(sessionId, count, chatId);
+
+    return chats.map((x) => {
+      const { createUserTokenEntity, chattingId, body: content } = x;
+      const { user } = createUserTokenEntity;
+      const nickname = user?.nickname || '익명';
+      return {
+        chattingId,
+        nickname,
+        content,
+      };
+    });
   }
 }

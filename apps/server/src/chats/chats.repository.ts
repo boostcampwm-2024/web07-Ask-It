@@ -24,4 +24,27 @@ export class ChatsRepository {
       throw DatabaseException.create('chat');
     }
   }
+  async getChatsForInfiniteScroll(sessionId: string, count: number, chatId?: number) {
+    try {
+      return await this.prisma.chatting.findMany({
+        where: {
+          sessionId,
+          ...(chatId && { chattingId: { lt: chatId } }),
+        },
+        include: {
+          createUserTokenEntity: {
+            include: {
+              user: true,
+            },
+          },
+        },
+        orderBy: {
+          chattingId: 'desc',
+        },
+        take: count,
+      });
+    } catch (error) {
+      throw new Error('Error retrieving chats from database');
+    }
+  }
 }

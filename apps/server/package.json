@@ -89,6 +89,22 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "@src/(.*)$": "<rootDir>/$1",
+      "@users/(.*)$": "<rootDir>/users/$1",
+      "@sessions/(.*)$": "<rootDir>/sessions/$1",
+      "@sessions-auth/(.*)$": "<rootDir>/sessions-auth/$1",
+      "@questions/(.*)$": "<rootDir>/questions/$1",
+      "@replies/(.*)$": "<rootDir>/replies/$1",
+      "@common/(.*)$": "<rootDir>/common/$1",
+      "@auth/(.*)$": "<rootDir>/auth/$1",
+      "@upload/(.*)$": "<rootDir>/upload/$1",
+      "@chats/(.*)$": "<rootDir>/chats/$1",
+      "@socket/(.*)$": "<rootDir>/socket/$1",
+      "@logger/(.*)$": "<rootDir>/logger/$1",
+      "@prisma-alias/(.*)$": "<rootDir>/prisma/$1",
+      "@main/(.*)$": "<rootDir>/main/$1"
+    }
   }
 }
