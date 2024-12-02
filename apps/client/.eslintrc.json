@@ -5,7 +5,8 @@
     "dist",
     "vite.config.ts",
     "vite-env.d.ts",
-    "routeTree.gen.ts"
+    "routeTree.gen.ts",
+    "playwright.config.ts"
   ],
   "extends": [
     "eslint:recommended",
