@@ -130,12 +130,12 @@ describe('QuestionsService', () => {
           body: 'Test question',
           closed: false,
           pinned: false,
-          createdAt: new Date(),
+          createdAt: new Date('2024-12-02T09:40:17.170Z'),
           createUserToken: 'test-token',
           createUserTokenEntity: {
             user: {
               userId: 1,
-              createdAt: new Date(),
+              createdAt: new Date('2024-12-02T09:39:17.170Z'),
               email: 'test@example.com',
               password: 'hashedPassword',
               nickname: 'TestUser',
@@ -153,7 +153,7 @@ describe('QuestionsService', () => {
               createUserToken: 'reply-token',
               questionId: 1,
               sessionId: 'test-session',
-              createdAt: new Date(),
+              createdAt: new Date('2024-12-02T09:41:17.170Z'),
               deleted: false,
               replyLikes: [
                 {
@@ -163,7 +163,7 @@ describe('QuestionsService', () => {
               createUserTokenEntity: {
                 user: {
                   userId: 1,
-                  createdAt: new Date(),
+                  createdAt: new Date('2024-12-02T09:40:17.170Z'),
                   email: 'test@example.com',
                   password: 'hashedPassword',
                   nickname: 'ReplyUser',
@@ -174,11 +174,12 @@ describe('QuestionsService', () => {
         },
       ];
 
+      const date = new Date('2024-12-02T09:40:17.170Z');
       const mockSession = {
         sessionId: 'test-session',
-        createdAt: new Date(),
+        createdAt: new Date('2024-12-02T09:40:17.170Z'),
         title: 'Test Session',
-        expiredAt: new Date(),
+        expiredAt: new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000),
         createUserId: 1,
       };
 
