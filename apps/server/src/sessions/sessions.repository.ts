@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 import { SessionCreateData } from './interface/session-create-data.interface';
 
-import { DatabaseException } from '@common/exceptions/resource.exception';
 import { PrismaService } from '@prisma-alias/prisma.service';
 
 @Injectable()
@@ -10,61 +9,43 @@ export class SessionsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: SessionCreateData) {
-    try {
-      return await this.prisma.session.create({ data });
-    } catch (error) {
-      throw DatabaseException.create('session');
-    }
+    return await this.prisma.session.create({ data });
   }
 
   async findById(sessionId: string) {
-    try {
-      return await this.prisma.session.findUnique({
-        where: { sessionId },
-      });
-    } catch (error) {
-      throw DatabaseException.read('session');
-    }
+    return await this.prisma.session.findUnique({
+      where: { sessionId },
+    });
   }
 
   async getSessionsById(userId: number) {
-    try {
-      const userSessions = await this.prisma.userSessionToken.findMany({
-        where: { userId },
-        select: {
-          sessionId: true,
-        },
-      });
-      const sessionIds = userSessions.map((session) => session.sessionId);
-
-      const sessions = await this.prisma.session.findMany({
-        where: { sessionId: { in: sessionIds } },
-        select: {
-          sessionId: true,
-          title: true,
-          expiredAt: true,
-          createdAt: true,
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      });
-      return sessions;
-    } catch (error) {
-      throw DatabaseException.read('UserSessionToken');
-    }
+    const userSessions = await this.prisma.userSessionToken.findMany({
+      where: { userId },
+      select: {
+        sessionId: true,
+      },
+    });
+    const sessionIds = userSessions.map((session) => session.sessionId);
+    return await this.prisma.session.findMany({
+      where: { sessionId: { in: sessionIds } },
+      select: {
+        sessionId: true,
+        title: true,
+        expiredAt: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
   }
 
   async updateSessionExpiredAt(sessionId: string, expireTime: Date) {
-    try {
-      await this.prisma.session.update({
-        where: {
-          sessionId,
-        },
-        data: { expiredAt: expireTime },
-      });
-    } catch (error) {
-      throw DatabaseException.update('session');
-    }
+    await this.prisma.session.update({
+      where: {
+        sessionId,
+      },
+      data: { expiredAt: expireTime },
+    });
   }
 }

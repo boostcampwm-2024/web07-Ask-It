@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuid4 } from 'uuid';
 
-import { DatabaseException } from '@common/exceptions/resource.exception';
 import { PrismaService } from '@prisma-alias/prisma.service';
 
 @Injectable()
@@ -34,11 +33,7 @@ export class SessionsAuthRepository {
   }
 
   async findHostTokensInSession(sessionId: string) {
-    try {
-      return await this.prisma.userSessionToken.findMany({ where: { sessionId, isHost: true } });
-    } catch (error) {
-      throw DatabaseException.read('UserSessionToken');
-    }
+    return await this.prisma.userSessionToken.findMany({ where: { sessionId, isHost: true } });
   }
 
   async findTokenByToken(sessionId: string, token: string) {
@@ -56,15 +51,11 @@ export class SessionsAuthRepository {
   }
 
   async findByToken(token: string) {
-    try {
-      return await this.prisma.userSessionToken.findFirst({
-        where: {
-          token,
-        },
-      });
-    } catch (error) {
-      throw DatabaseException.read('UserSessionToken');
-    }
+    return await this.prisma.userSessionToken.findFirst({
+      where: {
+        token,
+      },
+    });
   }
 
   async findTokenByUserIdAndToken(userId: number, sessionId: string, token: string) {
@@ -83,49 +74,37 @@ export class SessionsAuthRepository {
   }
 
   async findByIdAndSession(replyId: number, sessionId: string) {
-    try {
-      return await this.prisma.reply.findUnique({
-        where: { replyId, sessionId },
-      });
-    } catch (error) {
-      throw DatabaseException.read('reply');
-    }
+    return await this.prisma.reply.findUnique({
+      where: { replyId, sessionId },
+    });
   }
 
   async findUsersBySessionId(sessionId: string) {
-    try {
-      return await this.prisma.userSessionToken.findMany({
-        where: {
-          sessionId,
-          userId: {
-            not: null,
+    return await this.prisma.userSessionToken.findMany({
+      where: {
+        sessionId,
+        userId: {
+          not: null,
+        },
+      },
+      include: {
+        user: {
+          select: {
+            userId: true,
+            nickname: true,
           },
         },
-        include: {
-          user: {
-            select: {
-              userId: true,
-              nickname: true,
-            },
-          },
-        },
-      });
-    } catch (error) {
-      throw DatabaseException.read('UserSessionToken');
-    }
+      },
+    });
   }
 
   async updateIsHost(token: string, isHost: boolean) {
-    try {
-      return await this.prisma.userSessionToken.update({
-        where: {
-          token,
-        },
-        data: { isHost },
-        select: { user: true, isHost: true },
-      });
-    } catch (error) {
-      throw DatabaseException.update('UserSessionToken');
-    }
+    return await this.prisma.userSessionToken.update({
+      where: {
+        token,
+      },
+      data: { isHost },
+      select: { user: true, isHost: true },
+    });
   }
 }

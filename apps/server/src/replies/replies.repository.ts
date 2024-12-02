@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 import { CreateReplyDto } from './dto/create-reply.dto';
 
-import { DatabaseException, ResourceNotFoundException } from '@common/exceptions/resource.exception';
-import { PRISMA_ERROR_CODE } from '@prisma-alias/prisma.error';
 import { PrismaService } from '@prisma-alias/prisma.service';
 
 @Injectable()
@@ -18,42 +15,30 @@ export class RepliesRepository {
       sessionId,
       body,
     };
-    try {
-      return await this.prisma.reply.create({
-        data: replyData,
-        include: {
-          createUserTokenEntity: {
-            select: {
-              user: true,
-            },
+    return await this.prisma.reply.create({
+      data: replyData,
+      include: {
+        createUserTokenEntity: {
+          select: {
+            user: true,
           },
         },
-      });
-    } catch (error) {
-      throw DatabaseException.create('Reply');
-    }
+      },
+    });
   }
 
   async updateBody(replyId: number, body: string) {
-    try {
-      return await this.prisma.reply.update({
-        where: { replyId },
-        data: { body },
-      });
-    } catch (error) {
-      throw DatabaseException.update('reply');
-    }
+    return await this.prisma.reply.update({
+      where: { replyId },
+      data: { body },
+    });
   }
 
   async deleteReply(replyId: number) {
-    try {
-      return await this.prisma.reply.update({
-        where: { replyId },
-        data: { deleted: true },
-      });
-    } catch (error) {
-      throw DatabaseException.delete('reply');
-    }
+    return await this.prisma.reply.update({
+      where: { replyId },
+      data: { deleted: true },
+    });
   }
 
   async findReplyByQuestionId(questionId: number) {
@@ -64,71 +49,44 @@ export class RepliesRepository {
   }
 
   async findReplyByIdAndSessionId(replyId: number, sessionId: string) {
-    try {
-      return await this.prisma.reply.findFirst({
-        where: { replyId, sessionId, deleted: false },
-      });
-    } catch (error) {
-      throw DatabaseException.read('reply');
-    }
+    return await this.prisma.reply.findFirst({
+      where: { replyId, sessionId, deleted: false },
+    });
   }
 
   async findLike(replyId: number, createUserToken: string) {
-    try {
-      return await this.prisma.replyLike.findFirst({
-        where: {
-          replyId,
-          createUserToken,
-        },
-      });
-    } catch (error) {
-      throw DatabaseException.read('replyLike');
-    }
+    return await this.prisma.replyLike.findFirst({
+      where: {
+        replyId,
+        createUserToken,
+      },
+    });
   }
 
   async createLike(replyId: number, createUserToken: string) {
-    try {
-      return await this.prisma.replyLike.create({
-        data: {
-          replyId,
-          createUserToken,
-        },
-        include: {
-          reply: true,
-        },
-      });
-    } catch (error) {
-      if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === PRISMA_ERROR_CODE.FOREIGN_KEY_CONSTRAINT_VIOLATION
-      ) {
-        if (error.message.includes('replyId')) throw new ResourceNotFoundException('replyId');
-        if (error.message.includes('createUserToken')) throw new ResourceNotFoundException('createUserToken');
-      }
-      throw DatabaseException.create('replyLike');
-    }
+    return await this.prisma.replyLike.create({
+      data: {
+        replyId,
+        createUserToken,
+      },
+      include: {
+        reply: true,
+      },
+    });
   }
 
   async deleteLike(replyLikeId: number) {
-    try {
-      return await this.prisma.replyLike.delete({
-        where: { replyLikeId },
-        include: {
-          reply: true,
-        },
-      });
-    } catch (error) {
-      throw DatabaseException.delete('replyLike');
-    }
+    return await this.prisma.replyLike.delete({
+      where: { replyLikeId },
+      include: {
+        reply: true,
+      },
+    });
   }
 
   async getLikesCount(replyId: number) {
-    try {
-      return await this.prisma.replyLike.count({
-        where: { replyId },
-      });
-    } catch (error) {
-      throw DatabaseException.read('replyLike');
-    }
+    return await this.prisma.replyLike.count({
+      where: { replyId },
+    });
   }
 }

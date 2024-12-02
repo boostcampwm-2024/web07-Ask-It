@@ -10,6 +10,7 @@ import {
 import { Server, Socket } from 'socket.io';
 
 import { ChatsService } from '@chats/chats.service';
+import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
 import { LoggerService } from '@logger/logger.service';
 
 export const SOCKET_EVENTS = {
@@ -52,17 +53,21 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly chatsService: ChatsService,
     private readonly logger: LoggerService,
+    private readonly sessionTokenValidationGuard: SessionTokenValidationGuard,
   ) {}
 
-  handleConnection(socket: Socket) {
+  async handleConnection(socket: Socket) {
     const sessionId = socket.handshake.query.sessionId as string;
     const token = socket.handshake.query.token as string;
-    const originalSocket = this.tokenToSocketMap.get(token);
 
-    if (!sessionId || !token) {
-      this.logger.warn(`Connection rejected: missing sessionId or token`, 'SocketGateway');
+    try {
+      await this.sessionTokenValidationGuard.validateSessionToken(sessionId, token);
+    } catch (error) {
+      this.logger.warn(`Connection rejected: invalid sessionId or token`, 'SocketGateway');
       return socket.disconnect();
     }
+
+    const originalSocket = this.tokenToSocketMap.get(token);
 
     if (originalSocket) {
       this.logger.warn(

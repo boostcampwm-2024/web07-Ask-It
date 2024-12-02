@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Question } from '@prisma/client';
 
 import { CreateQuestionDto } from './dto/create-question.dto';
@@ -46,6 +46,9 @@ export class QuestionsService {
       this.sessionAuthRepository.findHostTokensInSession(sessionId),
     ]);
 
+    if (!session) {
+      throw new NotFoundException('존재하지않는 세션입니다.');
+    }
     const expired = session.expiredAt < new Date();
     const isHost = sessionHostTokens.some(({ token: hostToken }) => hostToken === token);
     const mapLikesAndOwnership = <
