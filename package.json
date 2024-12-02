@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "질문과 답변을 넘어, 함께 만드는 인사이트, ‘Ask-It’",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "turbo run test --filter='./apps/client/'"
   },
   "repository": {
     "type": "git",
