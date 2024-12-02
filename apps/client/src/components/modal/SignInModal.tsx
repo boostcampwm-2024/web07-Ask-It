@@ -62,6 +62,7 @@ function SignInModal() {
             </div>
           </Button>
           <Button
+            disabled={!isLoginEnabled}
             className={`transition-colors duration-200 ${isLoginEnabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
             onClick={login}
           >

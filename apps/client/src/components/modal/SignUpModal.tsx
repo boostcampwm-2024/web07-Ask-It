@@ -92,6 +92,7 @@ function SignUpModal() {
             </div>
           </Button>
           <Button
+            disabled={!isSignUpButtonEnabled}
             className={`transition-colors duration-200 ${isSignUpButtonEnabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
             onClick={handleSignUp}
           >
