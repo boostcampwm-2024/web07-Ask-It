@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
+import { useEffect } from 'react';
 
 import { refresh, useAuthStore } from '@/features/auth';
 import { getSessionToken, useSessionStore } from '@/features/session';
@@ -7,8 +8,18 @@ import { getQuestions } from '@/features/session/qna';
 
 import { QuestionList } from '@/components';
 
+function SessionComponent() {
+  const { sessionTitle } = useSessionStore();
+
+  useEffect(() => {
+    if (sessionTitle) document.title = `Ask-It - ${sessionTitle}`;
+  }, [sessionTitle]);
+
+  return <QuestionList />;
+}
+
 export const Route = createFileRoute('/session/$sessionId/')({
-  component: QuestionList,
+  component: SessionComponent,
   beforeLoad: async ({ params: { sessionId } }) => {
     const {
       reset,
