@@ -173,6 +173,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('질문 목록이 올바르게 표시되는지 확인', async ({ page }) => {
+  await expect(page.locator('text=진행 중인 세션')).toBeVisible();
   await expect(page.locator('text=테스트 세션 제목')).toBeVisible();
 });
 
