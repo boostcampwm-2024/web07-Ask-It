@@ -13,12 +13,12 @@ function SessionRecord({ session }: SessionRecordProps) {
     <div className='flex h-fit flex-col items-start justify-start gap-4 self-stretch border-b border-gray-200 px-2.5 pb-4 pt-2.5'>
       <div className='flex h-fit flex-col items-start justify-center gap-2.5 self-stretch'>
         {session.expired ? (
-          <div className='inline-flex items-center justify-center gap-2.5 rounded bg-green-100 px-2 py-1'>
-            <div className='text-base font-medium text-green-800'>만료된 세션</div>
+          <div className='inline-flex items-center justify-center gap-2.5 rounded bg-red-100 px-2 py-1'>
+            <div className='text-base font-medium text-red-600'>만료된 세션</div>
           </div>
         ) : (
-          <div className='inline-flex items-center justify-center gap-2.5 rounded bg-blue-100 px-2 py-1'>
-            <div className='text-base font-medium text-blue-800'>진행 중인 세션</div>
+          <div className='inline-flex items-center justify-center gap-2.5 rounded bg-green-100 px-2 py-1'>
+            <div className='text-base font-medium text-green-800'>진행 중인 세션</div>
           </div>
         )}
       </div>

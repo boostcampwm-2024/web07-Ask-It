@@ -97,7 +97,7 @@ function ChattingList() {
       <div className='inline-flex h-[54px] w-full items-center justify-between border-b border-gray-200 px-4 py-3'>
         <div className='shrink grow basis-0 text-lg font-medium text-black'>실시간 채팅</div>
         {!expired && (
-          <div className='max-w-[100px] overflow-x-auto whitespace-nowrap bg-green-100 px-2 py-1 transition-colors duration-150 scrollbar-hide'>
+          <div className='max-w-[100px] overflow-x-auto whitespace-nowrap bg-green-100 px-2 py-1 scrollbar-hide'>
             <p className='text-[10px] font-medium text-green-800'>{participantCount}명 참여중</p>
           </div>
         )}

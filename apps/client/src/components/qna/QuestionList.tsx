@@ -144,7 +144,14 @@ function QuestionList() {
     <>
       <div className='inline-flex h-full w-4/5 flex-grow flex-col items-center justify-start rounded-lg bg-white shadow'>
         <div className='inline-flex h-[54px] w-full items-center justify-between border-b border-gray-200 px-8 py-2'>
-          <div className='text-lg font-medium text-black'>{sessionTitle}</div>
+          <div className='inline-flex h-full w-fit gap-4'>
+            <div className='self-center text-lg font-medium text-black'>{sessionTitle}</div>
+            <div className={`self-center rounded ${expired ? 'bg-red-100' : 'bg-green-100'} px-2 py-1`}>
+              <p className={`text-xs font-medium ${expired ? 'text-red-600' : 'text-green-800'}`}>
+                {expired ? '만료된 세션' : '진행 중인 세션'}
+              </p>
+            </div>
+          </div>
           {!expired && (
             <div className='flex flex-row gap-2'>
               <div className='relative'>
