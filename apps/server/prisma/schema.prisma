@@ -8,22 +8,22 @@ datasource db {
 }
 
 model User {
-  userId        Int      @id @default(autoincrement()) @map("user_id")
-  email         String   @unique
-  password      String
-  nickname      String   @unique
-  createdAt     DateTime @default(now()) @map("created_at")
+  userId    Int      @id @default(autoincrement()) @map("user_id")
+  email     String   @unique
+  password  String
+  nickname  String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
 
   sessions          Session[]          @relation("UserSessions")
   userSessionTokens UserSessionToken[] @relation("UserTokens")
 }
 
 model Session {
-  sessionId     String   @id @default(uuid()) @map("session_id")
-  title         String
-  expiredAt     DateTime @map("expired_at")
-  createdAt     DateTime @default(now()) @map("created_at")
-  createUserId  Int      @map("create_user_id")
+  sessionId    String   @id @default(uuid()) @map("session_id")
+  title        String
+  expiredAt    DateTime @map("expired_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+  createUserId Int      @map("create_user_id")
 
   user              User               @relation("UserSessions", fields: [createUserId], references: [userId])
   userSessionTokens UserSessionToken[] @relation("SessionTokens")
@@ -33,75 +33,80 @@ model Session {
 }
 
 model UserSessionToken {
-  token          String @id @default(uuid())
-  userId         Int?   @map("user_id")
-  sessionId      String @map("session_id")
-  isHost         Boolean @default(false) @map("is_host")
+  token     String  @id @default(uuid())
+  userId    Int?    @map("user_id")
+  sessionId String  @map("session_id")
+  isHost    Boolean @default(false) @map("is_host")
 
-  user           User?          @relation("UserTokens", fields: [userId], references: [userId])
-  session        Session        @relation("SessionTokens", fields: [sessionId], references: [sessionId])
-  questions      Question[]     @relation("TokenQuestions")
-  questionLikes  QuestionLike[] @relation("TokenQuestionLikes")
-  replies        Reply[]        @relation("TokenReplies")
-  replyLikes     ReplyLike[]    @relation("TokenReplyLikes")
-  chattings      Chatting[]     @relation("TokenChattings")
+  user          User?          @relation("UserTokens", fields: [userId], references: [userId])
+  session       Session        @relation("SessionTokens", fields: [sessionId], references: [sessionId])
+  questions     Question[]     @relation("TokenQuestions")
+  questionLikes QuestionLike[] @relation("TokenQuestionLikes")
+  replies       Reply[]        @relation("TokenReplies")
+  replyLikes    ReplyLike[]    @relation("TokenReplyLikes")
+  chattings     Chatting[]     @relation("TokenChattings")
 }
 
 model Question {
-  questionId        Int      @id @default(autoincrement()) @map("question_id")
-  createUserToken   String   @map("create_user_token")
-  sessionId         String   @map("session_id")
-  body              String
-  closed            Boolean
-  pinned            Boolean
-  createdAt         DateTime @default(now()) @map("created_at")
+  questionId      Int      @id @default(autoincrement()) @map("question_id")
+  createUserToken String   @map("create_user_token")
+  sessionId       String   @map("session_id")
+  body            String
+  closed          Boolean
+  pinned          Boolean
+  createdAt       DateTime @default(now()) @map("created_at")
 
-  session           Session          @relation("SessionQuestions", fields: [sessionId], references: [sessionId])
-  createUserTokenEntity   UserSessionToken @relation("TokenQuestions", fields: [createUserToken], references: [token])
-  questionLikes     QuestionLike[]   @relation("QuestionLikes")
-  replies           Reply[]          @relation("QuestionReplies")
+  session               Session          @relation("SessionQuestions", fields: [sessionId], references: [sessionId])
+  createUserTokenEntity UserSessionToken @relation("TokenQuestions", fields: [createUserToken], references: [token])
+  questionLikes         QuestionLike[]   @relation("QuestionLikes")
+  replies               Reply[]          @relation("QuestionReplies")
+
+  @@index([sessionId])
 }
 
 model QuestionLike {
-  questionLikeId        Int    @id @default(autoincrement()) @map("question_like_id")
-  createUserToken       String @map("create_user_token")
-  questionId            Int    @map("question_id")
+  questionLikeId  Int    @id @default(autoincrement()) @map("question_like_id")
+  createUserToken String @map("create_user_token")
+  questionId      Int    @map("question_id")
 
   question              Question         @relation("QuestionLikes", fields: [questionId], references: [questionId], onDelete: Cascade)
   createUserTokenEntity UserSessionToken @relation("TokenQuestionLikes", fields: [createUserToken], references: [token])
 }
 
 model Reply {
-  replyId              Int      @id @default(autoincrement()) @map("reply_id")
-  createUserToken      String   @map("create_user_token")
-  sessionId            String   @map("session_id")
-  questionId           Int      @map("question_id")
-  body                 String
-  createdAt            DateTime @default(now()) @map("created_at")
-  deleted              Boolean  @default(false)
+  replyId         Int      @id @default(autoincrement()) @map("reply_id")
+  createUserToken String   @map("create_user_token")
+  sessionId       String   @map("session_id")
+  questionId      Int      @map("question_id")
+  body            String
+  createdAt       DateTime @default(now()) @map("created_at")
+  deleted         Boolean  @default(false)
 
-  session              Session          @relation("SessionReplies", fields: [sessionId], references: [sessionId])
-  question             Question         @relation("QuestionReplies", fields: [questionId], references: [questionId], onDelete: Cascade)
+  session               Session          @relation("SessionReplies", fields: [sessionId], references: [sessionId])
+  question              Question         @relation("QuestionReplies", fields: [questionId], references: [questionId], onDelete: Cascade)
   createUserTokenEntity UserSessionToken @relation("TokenReplies", fields: [createUserToken], references: [token])
-  replyLikes           ReplyLike[]      @relation("ReplyLikes")
+  replyLikes            ReplyLike[]      @relation("ReplyLikes")
 }
 
 model ReplyLike {
-  replyLikeId          Int    @id @default(autoincrement()) @map("reply_like_id")
-  createUserToken      String @map("create_user_token")
-  replyId              Int    @map("reply_id")
+  replyLikeId     Int    @id @default(autoincrement()) @map("reply_like_id")
+  createUserToken String @map("create_user_token")
+  replyId         Int    @map("reply_id")
 
-  reply                Reply            @relation("ReplyLikes", fields: [replyId], references: [replyId], onDelete: Cascade)
+  reply                 Reply            @relation("ReplyLikes", fields: [replyId], references: [replyId], onDelete: Cascade)
   createUserTokenEntity UserSessionToken @relation("TokenReplyLikes", fields: [createUserToken], references: [token])
 }
 
 model Chatting {
-  chattingId           Int      @id @default(autoincrement()) @map("chatting_id")
-  createUserToken      String   @map("create_user_token")
-  body                 String
-  createdAt            DateTime @default(now()) @map("created_at")
-  sessionId            String   @map("session_id")
+  chattingId      Int      @id @default(autoincrement()) @map("chatting_id")
+  createUserToken String   @map("create_user_token")
+  body            String
+  createdAt       DateTime @default(now()) @map("created_at")
+  sessionId       String   @map("session_id")
 
-  session              Session          @relation("SessionChattings", fields: [sessionId], references: [sessionId])
+  session               Session          @relation("SessionChattings", fields: [sessionId], references: [sessionId])
   createUserTokenEntity UserSessionToken @relation("TokenChattings", fields: [createUserToken], references: [token])
+
+  @@index([sessionId])
+  @@index([sessionId, chattingId(Sort.desc)])
 }
