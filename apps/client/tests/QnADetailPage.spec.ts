@@ -240,5 +240,6 @@ test('답글 수정', async ({ page }) => {
 
   const response = await responsePromise;
   expect(response.status()).toBe(200);
+  await expect(page.getByRole('button', { name: '수정하기' })).toBeHidden();
   await expect(page.getByText('수정된 리플 내용')).toBeVisible();
 });
