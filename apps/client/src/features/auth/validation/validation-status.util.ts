@@ -1,4 +1,6 @@
-import { ValidationStatusWithMessage } from '@/shared/validation/validation-status.type';
+import { z } from 'zod';
+
+import { ValidationStatusWithMessage } from '@/features/auth/validation/validation-status.type';
 
 export const validateEmail = (email: string): ValidationStatusWithMessage => {
   if (!email) return { status: 'INITIAL' };
@@ -7,12 +9,18 @@ export const validateEmail = (email: string): ValidationStatusWithMessage => {
       status: 'INVALID',
       message: '이메일에 공백이 포함될 수 없습니다.',
     };
+  try {
+    z.string().email().parse(email);
+  } catch (error) {
+    return {
+      status: 'INVALID',
+      message: '올바른 이메일 형식이 아닙니다.',
+    };
+  }
   return { status: 'PENDING', message: '유효 여부를 검사 중입니다.' };
 };
 
-export const validateNickname = (
-  nickname: string,
-): ValidationStatusWithMessage => {
+export const validateNickname = (nickname: string): ValidationStatusWithMessage => {
   if (!nickname) return { status: 'INITIAL' };
   if (nickname.length < 3 || nickname.length > 20)
     return {
@@ -27,9 +35,7 @@ export const validateNickname = (
   return { status: 'PENDING', message: '유효 여부를 검사 중입니다.' };
 };
 
-export const validatePassword = (
-  password: string,
-): ValidationStatusWithMessage => {
+export const validatePassword = (password: string): ValidationStatusWithMessage => {
   if (!password) return { status: 'INITIAL' };
   if (password.length < 8 || password.length > 20)
     return {
