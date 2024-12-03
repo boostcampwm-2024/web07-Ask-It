@@ -53,11 +53,7 @@ export const Route = createFileRoute('/session/$sessionId/$questionId/')({
       setFromDetail(true);
       response.questions.forEach(addQuestion);
 
-      if (
-        response.questions.every(
-          (question) => question.questionId !== Number(questionId),
-        )
-      ) {
+      if (response.questions.every((question) => question.questionId !== Number(questionId))) {
         throw redirect({ to: `/session/${sessionId}` });
       }
 

@@ -59,24 +59,10 @@ export const PostSessionTerminateResponseSchema = z.object({
 export type PostSessionRequestDTO = z.infer<typeof PostSessionRequestSchema>;
 export type PostSessionResponseDTO = z.infer<typeof PostSessionResponseSchema>;
 export type GetSessionsResponseDTO = z.infer<typeof GetSessionsResponseSchema>;
-export type GetSessionTokenResponseDTO = z.infer<
-  typeof GetSessionTokenResponseSchema
->;
-export type GetSessionUsersRequestDTO = z.infer<
-  typeof GetSessionUsersRequestSchema
->;
-export type GetSessionUsersResponseDTO = z.infer<
-  typeof GetSessionUsersResponseSchema
->;
-export type PatchSessionHostRequestDTO = z.infer<
-  typeof PatchSessionHostRequestSchema
->;
-export type PatchSessionHostResponseDTO = z.infer<
-  typeof PatchSessionHostResponseSchema
->;
-export type PostSessionTerminateRequestDTO = z.infer<
-  typeof PostSessionTerminateRequestSchema
->;
-export type PostSessionTerminateResponseDTO = z.infer<
-  typeof PostSessionTerminateResponseSchema
->;
+export type GetSessionTokenResponseDTO = z.infer<typeof GetSessionTokenResponseSchema>;
+export type GetSessionUsersRequestDTO = z.infer<typeof GetSessionUsersRequestSchema>;
+export type GetSessionUsersResponseDTO = z.infer<typeof GetSessionUsersResponseSchema>;
+export type PatchSessionHostRequestDTO = z.infer<typeof PatchSessionHostRequestSchema>;
+export type PatchSessionHostResponseDTO = z.infer<typeof PatchSessionHostResponseSchema>;
+export type PostSessionTerminateRequestDTO = z.infer<typeof PostSessionTerminateRequestSchema>;
+export type PostSessionTerminateResponseDTO = z.infer<typeof PostSessionTerminateResponseSchema>;

@@ -2,10 +2,7 @@ import { forwardRef, HTMLAttributes, PropsWithChildren } from 'react';
 
 type ButtonProps = PropsWithChildren<HTMLAttributes<HTMLButtonElement>>;
 
-const Button = forwardRef<
-  HTMLButtonElement,
-  ButtonProps & { disabled?: boolean }
->((props, ref) => {
+const Button = forwardRef<HTMLButtonElement, ButtonProps & { disabled?: boolean }>((props, ref) => {
   const { children, className, disabled, onClick } = props;
 
   return (

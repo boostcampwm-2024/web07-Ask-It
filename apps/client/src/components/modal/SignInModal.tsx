@@ -9,15 +9,7 @@ import Modal from '@/components/modal/Modal';
 function SignInModal() {
   const { closeModal } = useModalContext();
 
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    isLoginEnabled,
-    handleLogin,
-    loginFailed,
-  } = useSignInForm();
+  const { email, setEmail, password, setPassword, isLoginEnabled, handleLogin, loginFailed } = useSignInForm();
 
   const login = () => {
     if (isLoginEnabled) handleLogin(() => closeModal());
@@ -57,18 +49,14 @@ function SignInModal() {
         />
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button className='bg-gray-500' onClick={closeModal}>
-            <div className='w-[150px] text-sm font-medium text-white'>
-              취소하기
-            </div>
+            <div className='w-[150px] text-sm font-medium text-white'>취소하기</div>
           </Button>
           <Button
             disabled={!isLoginEnabled}
             className={`transition-colors duration-200 ${isLoginEnabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
             onClick={login}
           >
-            <div className='w-[150px] text-sm font-medium text-white'>
-              로그인
-            </div>
+            <div className='w-[150px] text-sm font-medium text-white'>로그인</div>
           </Button>
         </div>
       </div>

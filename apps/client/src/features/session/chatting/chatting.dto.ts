@@ -6,6 +6,4 @@ export const GetChattingListResponseSchema = z.object({
   chats: z.array(ChatSchema),
 });
 
-export type GetChattingListResponseDTO = z.infer<
-  typeof GetChattingListResponseSchema
->;
+export type GetChattingListResponseDTO = z.infer<typeof GetChattingListResponseSchema>;

@@ -4,11 +4,7 @@ import { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 
 import { useModalContext } from '@/features/modal';
-import {
-  getSessionUsers,
-  patchSessionHost,
-  useSessionStore,
-} from '@/features/session';
+import { getSessionUsers, patchSessionHost, useSessionStore } from '@/features/session';
 import { useToastStore } from '@/features/toast';
 
 import { Button } from '@/components';
@@ -19,30 +15,17 @@ function SessionParticipantsModal() {
 
   const { addToast } = useToastStore();
 
-  const {
-    sessionUsers,
-    sessionId,
-    sessionToken,
-    setSessionUsers,
-    updateSessionUser,
-    updateReplyIsHost,
-  } = useSessionStore();
+  const { sessionUsers, sessionId, sessionToken, setSessionUsers, updateSessionUser, updateReplyIsHost } =
+    useSessionStore();
 
   const [selectedUserId, setSelectedUserId] = useState<number>();
 
-  const selectedUser = sessionUsers.find(
-    ({ userId }) => userId === selectedUserId,
-  );
+  const selectedUser = sessionUsers.find(({ userId }) => userId === selectedUserId);
 
   const [searchQuery, setSearchQuery] = useState('');
 
   const { mutate: toggleHost, isPending: isToggleInProgress } = useMutation({
-    mutationFn: (params: {
-      userId: number;
-      sessionId: string;
-      token: string;
-      isHost: boolean;
-    }) =>
+    mutationFn: (params: { userId: number; sessionId: string; token: string; isHost: boolean }) =>
       patchSessionHost(params.userId, {
         token: params.token,
         sessionId: params.sessionId,
@@ -79,8 +62,7 @@ function SessionParticipantsModal() {
   });
 
   const handleToggleHost = () => {
-    if (!selectedUser || !sessionId || !sessionToken || isToggleInProgress)
-      return;
+    if (!selectedUser || !sessionId || !sessionToken || isToggleInProgress) return;
 
     toggleHost({
       userId: selectedUser.userId,
@@ -99,9 +81,7 @@ function SessionParticipantsModal() {
         .catch(console.error);
   }, [sessionId, sessionToken, setSessionUsers]);
 
-  const users = sessionUsers.filter(({ nickname }) =>
-    nickname.includes(searchQuery),
-  );
+  const users = sessionUsers.filter(({ nickname }) => nickname.includes(searchQuery));
 
   return (
     <div className='inline-flex flex-col items-center justify-center gap-2.5 rounded-lg bg-gray-50 p-8 shadow'>
@@ -113,25 +93,13 @@ function SessionParticipantsModal() {
               <span>님을</span>
             </span>
             <br />
-            <span>
-              {selectedUser.isHost
-                ? '호스트를 해제하겠습니까?'
-                : '호스트로 지정하겠습니까?'}
-            </span>
+            <span>{selectedUser.isHost ? '호스트를 해제하겠습니까?' : '호스트로 지정하겠습니까?'}</span>
           </div>
           <div className='mx-auto mt-4 inline-flex w-full items-start justify-center gap-2.5'>
-            <Button
-              className='w-full bg-gray-500'
-              onClick={() => setSelectedUserId(undefined)}
-            >
-              <div className='flex-grow text-sm font-medium text-white'>
-                취소하기
-              </div>
+            <Button className='w-full bg-gray-500' onClick={() => setSelectedUserId(undefined)}>
+              <div className='flex-grow text-sm font-medium text-white'>취소하기</div>
             </Button>
-            <Button
-              className='w-full bg-indigo-600 transition-colors duration-200'
-              onClick={handleToggleHost}
-            >
+            <Button className='w-full bg-indigo-600 transition-colors duration-200' onClick={handleToggleHost}>
               <div className='flex-grow text-sm font-medium text-white'>
                 {selectedUser.isHost ? '해제하기' : '지정하기'}
               </div>
@@ -166,11 +134,7 @@ function SessionParticipantsModal() {
           </div>
           <ol className='flex w-full flex-col gap-2 overflow-y-auto overflow-x-hidden'>
             {users.map((user) => (
-              <Participant
-                key={user.userId}
-                user={user}
-                onSelect={() => setSelectedUserId(user.userId)}
-              />
+              <Participant key={user.userId} user={user} onSelect={() => setSelectedUserId(user.userId)} />
             ))}
           </ol>
         </div>

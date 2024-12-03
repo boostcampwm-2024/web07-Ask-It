@@ -113,37 +113,15 @@ export const HostChangedEventPayloadSchema = z.object({
   user: UserSchema,
 });
 
-export type QuestionCreatedEventPayload = z.infer<
-  typeof QuestionCreatedEventPayloadSchema
->;
-export type QuestionUpdatedEventPayload = z.infer<
-  typeof QuestionUpdatedEventPayloadSchema
->;
-export type QuestionDeletedEventPayload = z.infer<
-  typeof QuestionDeletedEventPayloadSchema
->;
-export type QuestionLikedEventPayload = z.infer<
-  typeof QuestionLikedEventPayloadSchema
->;
-export type ReplyCreatedEventPayload = z.infer<
-  typeof ReplyCreatedEventPayloadSchema
->;
-export type ReplyUpdatedEventPayload = z.infer<
-  typeof ReplyUpdatedEventPayloadSchema
->;
-export type ReplyDeletedEventPayload = z.infer<
-  typeof ReplyDeletedEventPayloadSchema
->;
-export type ReplyLikedEventPayload = z.infer<
-  typeof ReplyLikedEventPayloadSchema
->;
-export type ChatMessageEventPayload = z.infer<
-  typeof ChatMessageEventPayloadSchema
->;
+export type QuestionCreatedEventPayload = z.infer<typeof QuestionCreatedEventPayloadSchema>;
+export type QuestionUpdatedEventPayload = z.infer<typeof QuestionUpdatedEventPayloadSchema>;
+export type QuestionDeletedEventPayload = z.infer<typeof QuestionDeletedEventPayloadSchema>;
+export type QuestionLikedEventPayload = z.infer<typeof QuestionLikedEventPayloadSchema>;
+export type ReplyCreatedEventPayload = z.infer<typeof ReplyCreatedEventPayloadSchema>;
+export type ReplyUpdatedEventPayload = z.infer<typeof ReplyUpdatedEventPayloadSchema>;
+export type ReplyDeletedEventPayload = z.infer<typeof ReplyDeletedEventPayloadSchema>;
+export type ReplyLikedEventPayload = z.infer<typeof ReplyLikedEventPayloadSchema>;
+export type ChatMessageEventPayload = z.infer<typeof ChatMessageEventPayloadSchema>;
 export type ChatErrorEventPayload = z.infer<typeof ChatErrorEventPayloadSchema>;
-export type ParticipantCountUpdatedEventPayload = z.infer<
-  typeof ParticipantCountUpdatedEventPayloadSchema
->;
-export type HostChangedEventPayload = z.infer<
-  typeof HostChangedEventPayloadSchema
->;
+export type ParticipantCountUpdatedEventPayload = z.infer<typeof ParticipantCountUpdatedEventPayloadSchema>;
+export type HostChangedEventPayload = z.infer<typeof HostChangedEventPayloadSchema>;

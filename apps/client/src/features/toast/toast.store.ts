@@ -25,9 +25,7 @@ export const useToastStore = create<ToastStore>((set) => ({
 
     setTimeout(() => {
       set((state) => ({
-        toasts: state.toasts.map((t) =>
-          t.id === id ? { ...t, isActive: false } : t,
-        ),
+        toasts: state.toasts.map((t) => (t.id === id ? { ...t, isActive: false } : t)),
       }));
 
       setTimeout(() => {

@@ -35,36 +35,24 @@ export class SocketService {
     const store = useSessionStore.getState();
     const authStore = useAuthStore.getState();
 
-    this.socket.on(
-      'questionCreated',
-      (payload: QuestionCreatedEventPayload) => {
-        store.addQuestion({ ...payload.question, isOwner: false });
-      },
-    );
+    this.socket.on('questionCreated', (payload: QuestionCreatedEventPayload) => {
+      store.addQuestion({ ...payload.question, isOwner: false });
+    });
 
-    this.socket.on(
-      'questionUpdated',
-      (payload: QuestionUpdatedEventPayload) => {
-        store.updateQuestion(payload.question);
-      },
-    );
+    this.socket.on('questionUpdated', (payload: QuestionUpdatedEventPayload) => {
+      store.updateQuestion(payload.question);
+    });
 
-    this.socket.on(
-      'questionDeleted',
-      (payload: QuestionDeletedEventPayload) => {
-        store.removeQuestion(payload.questionId);
-      },
-    );
+    this.socket.on('questionDeleted', (payload: QuestionDeletedEventPayload) => {
+      store.removeQuestion(payload.questionId);
+    });
 
-    this.socket.on(
-      'questionLiked',
-      ({ questionId, likesCount }: QuestionLikedEventPayload) => {
-        store.updateQuestion({
-          questionId,
-          likesCount,
-        });
-      },
-    );
+    this.socket.on('questionLiked', ({ questionId, likesCount }: QuestionLikedEventPayload) => {
+      store.updateQuestion({
+        questionId,
+        likesCount,
+      });
+    });
 
     this.socket.on('replyCreated', (payload: ReplyCreatedEventPayload) => {
       store.addReply(payload.reply.questionId, {
@@ -84,15 +72,12 @@ export class SocketService {
       });
     });
 
-    this.socket.on(
-      'replyLiked',
-      ({ questionId, replyId, likesCount }: ReplyLikedEventPayload) => {
-        store.updateReply(questionId, {
-          replyId,
-          likesCount,
-        });
-      },
-    );
+    this.socket.on('replyLiked', ({ questionId, replyId, likesCount }: ReplyLikedEventPayload) => {
+      store.updateReply(questionId, {
+        replyId,
+        likesCount,
+      });
+    });
 
     this.socket.on('chatMessage', (payload: ChatMessageEventPayload) => {
       store.addChatting(payload);
@@ -112,26 +97,20 @@ export class SocketService {
       window.location.href = '/';
     });
 
-    this.socket.on(
-      'participantCountUpdated',
-      (payload: ParticipantCountUpdatedEventPayload) => {
-        store.setParticipantCount(payload.participantCount);
-      },
-    );
+    this.socket.on('participantCountUpdated', (payload: ParticipantCountUpdatedEventPayload) => {
+      store.setParticipantCount(payload.participantCount);
+    });
 
-    this.socket.on(
-      'hostChanged',
-      ({ user: { nickname, userId, isHost } }: HostChangedEventPayload) => {
-        if (userId === authStore.userId) store.setIsHost(isHost);
-        store.updateReplyIsHost(userId, isHost);
-        if (isHost)
-          useToastStore.getState().addToast({
-            type: 'INFO',
-            message: `${nickname}님이 호스트로 지정되었습니다.`,
-            duration: 3000,
-          });
-      },
-    );
+    this.socket.on('hostChanged', ({ user: { nickname, userId, isHost } }: HostChangedEventPayload) => {
+      if (userId === authStore.userId) store.setIsHost(isHost);
+      store.updateReplyIsHost(userId, isHost);
+      if (isHost)
+        useToastStore.getState().addToast({
+          type: 'INFO',
+          message: `${nickname}님이 호스트로 지정되었습니다.`,
+          duration: 3000,
+        });
+    });
 
     this.socket.on('sessionEnded', () => {
       store.setExpired(true);

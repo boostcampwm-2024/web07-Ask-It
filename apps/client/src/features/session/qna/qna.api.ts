@@ -47,16 +47,10 @@ export const getQuestions = (params: GetQuestionsRequestDTO) =>
 
 export const postQuestion = (body: PostQuestionRequestDTO) =>
   axios
-    .post<PostQuestionResponseDTO>(
-      '/api/questions',
-      PostQuestionRequestSchema.parse(body),
-    )
+    .post<PostQuestionResponseDTO>('/api/questions', PostQuestionRequestSchema.parse(body))
     .then((res) => PostQuestionResponseSchema.parse(res.data));
 
-export const patchQuestionBody = (
-  questionId: number,
-  body: PatchQuestionBodyRequestDTO,
-) =>
+export const patchQuestionBody = (questionId: number, body: PatchQuestionBodyRequestDTO) =>
   axios
     .patch<PatchQuestionBodyResponseDTO>(
       `/api/questions/${questionId}/body`,
@@ -64,20 +58,14 @@ export const patchQuestionBody = (
     )
     .then((res) => PatchQuestionBodyResponseSchema.parse(res.data));
 
-export const deleteQuestion = (
-  questionId: number,
-  params: DeleteQuestionRequestDTO,
-) =>
+export const deleteQuestion = (questionId: number, params: DeleteQuestionRequestDTO) =>
   axios
     .delete(`/api/questions/${questionId}`, {
       params: DeleteQuestionRequestSchema.parse(params),
     })
     .then((res) => res.data);
 
-export const patchQuestionPinned = (
-  questionId: number,
-  body: PatchQuestionPinnedRequestDTO,
-) =>
+export const patchQuestionPinned = (questionId: number, body: PatchQuestionPinnedRequestDTO) =>
   axios
     .patch<PatchQuestionPinnedResponseDTO>(
       `/api/questions/${questionId}/pinned`,
@@ -85,10 +73,7 @@ export const patchQuestionPinned = (
     )
     .then((res) => PatchQuestionPinnedResponseSchema.parse(res.data));
 
-export const patchQuestionClosed = (
-  questionId: number,
-  body: PatchQuestionClosedRequestDTO,
-) =>
+export const patchQuestionClosed = (questionId: number, body: PatchQuestionClosedRequestDTO) =>
   axios
     .patch<PatchQuestionClosedResponseDTO>(
       `/api/questions/${questionId}/closed`,
@@ -96,53 +81,29 @@ export const patchQuestionClosed = (
     )
     .then((res) => PatchQuestionClosedResponseSchema.parse(res.data));
 
-export const postQuestionLike = (
-  questionId: number,
-  body: PostQuestionLikeRequestDTO,
-) =>
+export const postQuestionLike = (questionId: number, body: PostQuestionLikeRequestDTO) =>
   axios
-    .post<PostQuestionLikeResponseDTO>(
-      `/api/questions/${questionId}/likes`,
-      PostQuestionLikeRequestSchema.parse(body),
-    )
+    .post<PostQuestionLikeResponseDTO>(`/api/questions/${questionId}/likes`, PostQuestionLikeRequestSchema.parse(body))
     .then((res) => PostQuestionLikeResponseSchema.parse(res.data));
 
 export const postReply = (body: PostReplyRequestDTO) =>
   axios
-    .post<PostReplyResponseDTO>(
-      `/api/replies`,
-      PostReplyRequestSchema.parse(body),
-    )
+    .post<PostReplyResponseDTO>(`/api/replies`, PostReplyRequestSchema.parse(body))
     .then((res) => PostReplyResponseSchema.parse(res.data));
 
-export const patchReplyBody = (
-  replyId: number,
-  body: PatchReplyBodyRequestDTO,
-) =>
+export const patchReplyBody = (replyId: number, body: PatchReplyBodyRequestDTO) =>
   axios
-    .patch<PatchReplyBodyResponseDTO>(
-      `/api/replies/${replyId}/body`,
-      PatchReplyBodyRequestSchema.parse(body),
-    )
+    .patch<PatchReplyBodyResponseDTO>(`/api/replies/${replyId}/body`, PatchReplyBodyRequestSchema.parse(body))
     .then((res) => PatchReplyBodyResponseSchema.parse(res.data));
 
-export const deleteReply = (
-  replyId: number,
-  params: DeleteQuestionRequestDTO,
-) =>
+export const deleteReply = (replyId: number, params: DeleteQuestionRequestDTO) =>
   axios
     .delete(`/api/replies/${replyId}`, {
       params: DeleteReplyRequestSchema.parse(params),
     })
     .then((res) => res.data);
 
-export const postReplyLike = (
-  replyId: number,
-  body: PostQuestionLikeRequestDTO,
-) =>
+export const postReplyLike = (replyId: number, body: PostQuestionLikeRequestDTO) =>
   axios
-    .post<PostQuestionLikeResponseDTO>(
-      `/api/replies/${replyId}/likes`,
-      PostQuestionLikeRequestSchema.parse(body),
-    )
+    .post<PostQuestionLikeResponseDTO>(`/api/replies/${replyId}/likes`, PostQuestionLikeRequestSchema.parse(body))
     .then((res) => PostQuestionLikeResponseSchema.parse(res.data));

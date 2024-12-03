@@ -57,28 +57,14 @@ interface QuestionSectionProps {
   onQuestionSelect: (questionId: number) => void;
 }
 
-function QuestionSection({
-  title,
-  questions,
-  initialOpen,
-  onQuestionSelect,
-}: QuestionSectionProps) {
+function QuestionSection({ title, questions, initialOpen, onQuestionSelect }: QuestionSectionProps) {
   const [isExpanded, setIsExpanded] = useState(initialOpen);
 
   if (questions.length === 0) return null;
 
   return (
-    <motion.div
-      className='w-full'
-      key={`${title}-section`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
-      <QuestionDivider
-        description={title}
-        isExpanded={isExpanded}
-        onClick={() => setIsExpanded(!isExpanded)}
-      />
+    <motion.div className='w-full' key={`${title}-section`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <QuestionDivider description={title} isExpanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} />
       <AnimatePresence initial={false}>
         {isExpanded && (
           <motion.div
@@ -89,15 +75,8 @@ function QuestionSection({
             variants={sectionVariants}
           >
             {questions.map((question) => (
-              <motion.div
-                key={question.questionId}
-                variants={itemVariants}
-                layout
-              >
-                <QuestionItem
-                  question={question}
-                  onQuestionSelect={() => onQuestionSelect(question.questionId)}
-                />
+              <motion.div key={question.questionId} variants={itemVariants} layout>
+                <QuestionItem question={question} onQuestionSelect={() => onQuestionSelect(question.questionId)} />
               </motion.div>
             ))}
           </motion.div>

@@ -17,9 +17,7 @@ function QuestionDetail() {
 
   const question = questions.find((q) => q.questionId === selectedQuestionId);
 
-  const { Modal, openModal } = useModal(
-    <CreateReplyModal question={question} />,
-  );
+  const { Modal, openModal } = useModal(<CreateReplyModal question={question} />);
 
   if (!question) {
     return null;
@@ -69,9 +67,7 @@ function QuestionDetail() {
                 }
                 return a.replyId - b.replyId;
               })
-              .map((r) => (
-                <ReplyItem key={r.replyId} question={question} reply={r} />
-              ))
+              .map((r) => <ReplyItem key={r.replyId} question={question} reply={r} />)
           )}
         </div>
       </div>

@@ -35,7 +35,5 @@ export function SocketProvider({ children }: SocketProviderProps) {
     };
   }, [expired, sessionId, sessionToken]);
 
-  return (
-    <SocketContext.Provider value={value}>{children}</SocketContext.Provider>
-  );
+  return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
 }

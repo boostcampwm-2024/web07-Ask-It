@@ -35,8 +35,5 @@ export default {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('tailwind-scrollbar-hide'),
-  ],
+  plugins: [require('@tailwindcss/typography'), require('tailwind-scrollbar-hide')],
 };

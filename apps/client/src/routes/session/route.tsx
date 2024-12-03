@@ -1,9 +1,4 @@
-import {
-  createFileRoute,
-  Outlet,
-  redirect,
-  ScrollRestoration,
-} from '@tanstack/react-router';
+import { createFileRoute, Outlet, redirect, ScrollRestoration } from '@tanstack/react-router';
 
 import { SocketProvider } from '@/features/socket';
 

@@ -8,14 +8,7 @@ import { useSocket } from '@/features/socket';
 import ChattingMessage from '@/components/qna/ChattingMessage';
 
 function ChattingList() {
-  const {
-    expired,
-    chatting,
-    participantCount,
-    sessionId,
-    sessionToken,
-    addChattingToFront,
-  } = useSessionStore();
+  const { expired, chatting, participantCount, sessionId, sessionToken, addChattingToFront } = useSessionStore();
 
   const [message, setMessage] = useState('');
   const [isBottom, setIsBottom] = useState(true);
@@ -59,14 +52,7 @@ function ChattingList() {
       if (!container) return;
 
       if (container.scrollTop === 0) {
-        if (
-          !sessionId ||
-          !sessionToken ||
-          !chatting[0]?.chattingId ||
-          !hasMoreRef.current ||
-          isLoading
-        )
-          return;
+        if (!sessionId || !sessionToken || !chatting[0]?.chattingId || !hasMoreRef.current || isLoading) return;
 
         prevHeightRef.current = container.scrollHeight;
 
@@ -109,14 +95,10 @@ function ChattingList() {
   return (
     <div className='inline-flex h-full w-1/5 min-w-[240px] flex-col items-center justify-start rounded-lg bg-white shadow'>
       <div className='inline-flex h-[54px] w-full items-center justify-between border-b border-gray-200 px-4 py-3'>
-        <div className='shrink grow basis-0 text-lg font-medium text-black'>
-          실시간 채팅
-        </div>
+        <div className='shrink grow basis-0 text-lg font-medium text-black'>실시간 채팅</div>
         {!expired && (
           <div className='max-w-[100px] overflow-x-auto whitespace-nowrap bg-green-100 px-2 py-1 transition-colors duration-150 scrollbar-hide'>
-            <p className='text-[10px] font-medium text-green-800'>
-              {participantCount}명 참여중
-            </p>
+            <p className='text-[10px] font-medium text-green-800'>{participantCount}명 참여중</p>
           </div>
         )}
       </div>
@@ -151,12 +133,7 @@ function ChattingList() {
             className='absolute bottom-[110%] rounded-full bg-indigo-500 p-2 text-white shadow-lg transition-all hover:bg-indigo-600'
             aria-label='맨 아래로 스크롤'
           >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-5 w-5'
-              viewBox='0 0 20 20'
-              fill='currentColor'
-            >
+            <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5' viewBox='0 0 20 20' fill='currentColor'>
               <path
                 fillRule='evenodd'
                 d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'
@@ -170,11 +147,7 @@ function ChattingList() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={(e) => {
-              if (
-                e.key === 'Enter' &&
-                !e.nativeEvent.isComposing &&
-                message.trim().length
-              ) {
+              if (e.key === 'Enter' && !e.nativeEvent.isComposing && message.trim().length) {
                 socket?.sendChatMessage(message);
                 setMessage('');
               }

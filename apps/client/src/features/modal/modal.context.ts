@@ -5,6 +5,4 @@ export interface ModalContextProps {
   closeModal: () => void;
 }
 
-export const ModalContext = createContext<ModalContextProps | undefined>(
-  undefined,
-);
+export const ModalContext = createContext<ModalContextProps | undefined>(undefined);

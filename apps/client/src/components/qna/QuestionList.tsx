@@ -9,69 +9,54 @@ import { postSessionTerminate, useSessionStore } from '@/features/session';
 import { useSocket } from '@/features/socket';
 import { useToastStore } from '@/features/toast';
 
-import {
-  Button,
-  CreateQuestionModal,
-  SessionParticipantsModal,
-} from '@/components';
+import { Button, CreateQuestionModal, SessionParticipantsModal } from '@/components';
 import SessionTerminateModal from '@/components/modal/SessionTerminateModal';
 import QuestionSection from '@/components/qna/QuestionSection';
 import SessionSettingsDropdown from '@/components/qna/SessionSettingsDropdown';
 
 function QuestionList() {
-  const {
-    isHost,
-    expired,
-    questions,
-    sessionId,
-    sessionTitle,
-    sessionToken,
-    setExpired,
-    setSelectedQuestionId,
-  } = useSessionStore();
+  const { isHost, expired, questions, sessionId, sessionTitle, sessionToken, setExpired, setSelectedQuestionId } =
+    useSessionStore();
 
   const socket = useSocket();
 
   const { addToast } = useToastStore();
 
-  const { Modal: CreateQuestion, openModal: openCreateQuestionModal } =
-    useModal(<CreateQuestionModal />);
+  const { Modal: CreateQuestion, openModal: openCreateQuestionModal } = useModal(<CreateQuestionModal />);
 
-  const {
-    Modal: SessionParticipants,
-    openModal: openSessionParticipantsModal,
-  } = useModal(<SessionParticipantsModal />);
+  const { Modal: SessionParticipants, openModal: openSessionParticipantsModal } = useModal(
+    <SessionParticipantsModal />,
+  );
 
-  const { Modal: SessionTerminate, openModal: openSessionTerminateModal } =
-    useModal(
-      <SessionTerminateModal
-        onConfirm={() => {
-          if (!sessionId || !sessionToken) return;
+  const { Modal: SessionTerminate, openModal: openSessionTerminateModal } = useModal(
+    <SessionTerminateModal
+      onConfirm={() => {
+        if (!sessionId || !sessionToken) return;
 
-          postSessionTerminate({ sessionId, token: sessionToken })
-            .then((response) => {
-              if (response.expired) {
-                socket?.disconnect();
-                setExpired(true);
-                addToast({
-                  type: 'SUCCESS',
-                  message: '세션이 종료되었습니다',
-                  duration: 3000,
-                });
-              }
-            })
-            .catch((err) => {
-              if (isAxiosError(err) && err.response?.status === 403) {
-                addToast({
-                  type: 'ERROR',
-                  message: '세션 생성자만 세션을 종료할 수 있습니다',
-                  duration: 3000,
-                });
-              }
-            });
-        }}
-      />,
-    );
+        postSessionTerminate({ sessionId, token: sessionToken })
+          .then((response) => {
+            if (response.expired) {
+              socket?.disconnect();
+              setExpired(true);
+              addToast({
+                type: 'SUCCESS',
+                message: '세션이 종료되었습니다',
+                duration: 3000,
+              });
+            }
+          })
+          .catch((err) => {
+            if (isAxiosError(err) && err.response?.status === 403) {
+              addToast({
+                type: 'ERROR',
+                message: '세션 생성자만 세션을 종료할 수 있습니다',
+                duration: 3000,
+              });
+            }
+          });
+      }}
+    />,
+  );
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -180,10 +165,7 @@ function QuestionList() {
                   />
                 )}
               </div>
-              <Button
-                className='bg-indigo-600'
-                onClick={openCreateQuestionModal}
-              >
+              <Button className='bg-indigo-600' onClick={openCreateQuestionModal}>
                 <div className='text-sm font-bold text-white'>질문하기</div>
               </Button>
             </div>

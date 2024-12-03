@@ -4,11 +4,7 @@ import Markdown from 'react-markdown';
 
 import { useModalContext } from '@/features/modal';
 import { useSessionStore } from '@/features/session';
-import {
-  patchQuestionBody,
-  postQuestion,
-  Question,
-} from '@/features/session/qna';
+import { patchQuestionBody, postQuestion, Question } from '@/features/session/qna';
 import { useToastStore } from '@/features/toast';
 
 import { Button } from '@/components';
@@ -22,58 +18,45 @@ function CreateQuestionModal({ question }: CreateQuestionModalProps) {
 
   const { closeModal } = useModalContext();
 
-  const { sessionId, sessionToken, expired, addQuestion, updateQuestion } =
-    useSessionStore();
+  const { sessionId, sessionToken, expired, addQuestion, updateQuestion } = useSessionStore();
 
   const [body, setBody] = useState('');
 
-  const { mutate: postQuestionQuery, isPending: isPostInProgress } =
-    useMutation({
-      mutationFn: postQuestion,
-      onSuccess: (response) => {
-        addQuestion(response.question);
-        addToast({
-          type: 'SUCCESS',
-          message: '질문이 성공적으로 등록되었습니다.',
-          duration: 3000,
-        });
-        closeModal();
-      },
-      onError: console.error,
-    });
+  const { mutate: postQuestionQuery, isPending: isPostInProgress } = useMutation({
+    mutationFn: postQuestion,
+    onSuccess: (response) => {
+      addQuestion(response.question);
+      addToast({
+        type: 'SUCCESS',
+        message: '질문이 성공적으로 등록되었습니다.',
+        duration: 3000,
+      });
+      closeModal();
+    },
+    onError: console.error,
+  });
 
-  const { mutate: patchQuestionBodyQuery, isPending: isPatchInProgress } =
-    useMutation({
-      mutationFn: (params: {
-        questionId: number;
-        token: string;
-        sessionId: string;
-        body: string;
-      }) =>
-        patchQuestionBody(params.questionId, {
-          token: params.token,
-          sessionId: params.sessionId,
-          body: params.body,
-        }),
-      onSuccess: (response) => {
-        updateQuestion(response.question);
-        addToast({
-          type: 'SUCCESS',
-          message: '질문이 성공적으로 수정되었습니다.',
-          duration: 3000,
-        });
-        closeModal();
-      },
-      onError: console.error,
-    });
+  const { mutate: patchQuestionBodyQuery, isPending: isPatchInProgress } = useMutation({
+    mutationFn: (params: { questionId: number; token: string; sessionId: string; body: string }) =>
+      patchQuestionBody(params.questionId, {
+        token: params.token,
+        sessionId: params.sessionId,
+        body: params.body,
+      }),
+    onSuccess: (response) => {
+      updateQuestion(response.question);
+      addToast({
+        type: 'SUCCESS',
+        message: '질문이 성공적으로 수정되었습니다.',
+        duration: 3000,
+      });
+      closeModal();
+    },
+    onError: console.error,
+  });
 
   const submitDisabled =
-    expired ||
-    body.trim().length === 0 ||
-    !sessionId ||
-    !sessionToken ||
-    isPostInProgress ||
-    isPatchInProgress;
+    expired || body.trim().length === 0 || !sessionId || !sessionToken || isPostInProgress || isPatchInProgress;
 
   const handleSubmit = () => {
     if (submitDisabled) return;
@@ -113,9 +96,7 @@ function CreateQuestionModal({ question }: CreateQuestionModalProps) {
           />
           <div className='inline-flex shrink grow basis-0 flex-col items-start justify-start gap-2 self-stretch overflow-y-auto rounded border border-gray-200 bg-white p-4'>
             <Markdown className='prose prose-stone flex w-full flex-col gap-3 prose-img:rounded-md'>
-              {body.length === 0
-                ? `**질문을 남겨주세요**\n\n**(마크다운 지원)**`
-                : body}
+              {body.length === 0 ? `**질문을 남겨주세요**\n\n**(마크다운 지원)**` : body}
             </Markdown>
           </div>
         </div>
@@ -128,9 +109,7 @@ function CreateQuestionModal({ question }: CreateQuestionModalProps) {
               className={`${!submitDisabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
               onClick={handleSubmit}
             >
-              <div className='text-sm font-bold text-white'>
-                {question ? '수정하기' : '생성하기'}
-              </div>
+              <div className='text-sm font-bold text-white'>{question ? '수정하기' : '생성하기'}</div>
             </Button>
           </div>
         </div>

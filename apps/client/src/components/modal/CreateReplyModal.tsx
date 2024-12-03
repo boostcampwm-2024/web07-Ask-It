@@ -4,12 +4,7 @@ import Markdown from 'react-markdown';
 
 import { useModalContext } from '@/features/modal';
 import { useSessionStore } from '@/features/session';
-import {
-  patchReplyBody,
-  postReply,
-  Question,
-  Reply,
-} from '@/features/session/qna';
+import { patchReplyBody, postReply, Question, Reply } from '@/features/session/qna';
 import { useToastStore } from '@/features/toast';
 
 import Button from '@/components/Button';
@@ -24,8 +19,7 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
 
   const { addToast } = useToastStore();
 
-  const { sessionToken, sessionId, expired, addReply, updateReply } =
-    useSessionStore();
+  const { sessionToken, sessionId, expired, addReply, updateReply } = useSessionStore();
 
   const [body, setBody] = useState('');
 
@@ -49,40 +43,29 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
     onError: console.error,
   });
 
-  const { mutate: patchReplyBodyQuery, isPending: isPatchInProgress } =
-    useMutation({
-      mutationFn: (params: {
-        replyId: number;
-        token: string;
-        sessionId: string;
-        body: string;
-      }) =>
-        patchReplyBody(params.replyId, {
-          token: params.token,
-          sessionId: params.sessionId,
-          body: params.body,
-        }),
-      onSuccess: (res) => {
-        if (reply && question) {
-          updateReply(question.questionId, res.reply);
-          addToast({
-            type: 'SUCCESS',
-            message: '답변이 성공적으로 수정되었습니다.',
-            duration: 3000,
-          });
-          closeModal();
-        }
-      },
-      onError: console.error,
-    });
+  const { mutate: patchReplyBodyQuery, isPending: isPatchInProgress } = useMutation({
+    mutationFn: (params: { replyId: number; token: string; sessionId: string; body: string }) =>
+      patchReplyBody(params.replyId, {
+        token: params.token,
+        sessionId: params.sessionId,
+        body: params.body,
+      }),
+    onSuccess: (res) => {
+      if (reply && question) {
+        updateReply(question.questionId, res.reply);
+        addToast({
+          type: 'SUCCESS',
+          message: '답변이 성공적으로 수정되었습니다.',
+          duration: 3000,
+        });
+        closeModal();
+      }
+    },
+    onError: console.error,
+  });
 
   const submitDisabled =
-    expired ||
-    body.trim().length === 0 ||
-    !sessionId ||
-    !sessionToken ||
-    isPostInProgress ||
-    isPatchInProgress;
+    expired || body.trim().length === 0 || !sessionId || !sessionToken || isPostInProgress || isPatchInProgress;
 
   const handleSubmit = () => {
     if (submitDisabled) return;
@@ -130,9 +113,7 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
           />
           <div className='inline-flex h-full shrink grow basis-0 flex-col items-start justify-start gap-2 self-stretch overflow-y-auto rounded border border-gray-200 bg-white p-4'>
             <Markdown className='prose prose-stone flex w-full flex-col gap-3 prose-img:rounded-md'>
-              {body.length === 0
-                ? `**답변을 남겨주세요**\n\n**(마크다운 지원)**`
-                : body}
+              {body.length === 0 ? `**답변을 남겨주세요**\n\n**(마크다운 지원)**` : body}
             </Markdown>
           </div>
         </div>
@@ -145,9 +126,7 @@ function CreateReplyModal({ question, reply }: CreateReplyModalProps) {
               className={`${!submitDisabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
               onClick={handleSubmit}
             >
-              <div className='text-sm font-bold text-white'>
-                {reply ? '수정하기' : '생성하기'}
-              </div>
+              <div className='text-sm font-bold text-white'>{reply ? '수정하기' : '생성하기'}</div>
             </Button>
           </div>
         </div>

@@ -146,52 +146,22 @@ export const PostReplyLikeResponseSchema = z.object({
 });
 
 export type GetQuestionsRequestDTO = z.infer<typeof GetQuestionsRequestSchema>;
-export type GetQuestionsResponseDTO = z.infer<
-  typeof GetQuestionsResponseSchema
->;
+export type GetQuestionsResponseDTO = z.infer<typeof GetQuestionsResponseSchema>;
 export type PostQuestionRequestDTO = z.infer<typeof PostQuestionRequestSchema>;
-export type PostQuestionResponseDTO = z.infer<
-  typeof PostQuestionResponseSchema
->;
-export type PatchQuestionBodyRequestDTO = z.infer<
-  typeof PatchQuestionBodyRequestSchema
->;
-export type PatchQuestionBodyResponseDTO = z.infer<
-  typeof PatchQuestionBodyResponseSchema
->;
-export type DeleteQuestionRequestDTO = z.infer<
-  typeof DeleteQuestionRequestSchema
->;
-export type PatchQuestionPinnedRequestDTO = z.infer<
-  typeof PatchQuestionPinnedRequestSchema
->;
-export type PatchQuestionPinnedResponseDTO = z.infer<
-  typeof PatchQuestionPinnedResponseSchema
->;
-export type PatchQuestionClosedRequestDTO = z.infer<
-  typeof PatchQuestionClosedRequestSchema
->;
-export type PatchQuestionClosedResponseDTO = z.infer<
-  typeof PatchQuestionClosedResponseSchema
->;
-export type PostQuestionLikeRequestDTO = z.infer<
-  typeof PostQuestionLikeRequestSchema
->;
-export type PostQuestionLikeResponseDTO = z.infer<
-  typeof PostQuestionLikeResponseSchema
->;
+export type PostQuestionResponseDTO = z.infer<typeof PostQuestionResponseSchema>;
+export type PatchQuestionBodyRequestDTO = z.infer<typeof PatchQuestionBodyRequestSchema>;
+export type PatchQuestionBodyResponseDTO = z.infer<typeof PatchQuestionBodyResponseSchema>;
+export type DeleteQuestionRequestDTO = z.infer<typeof DeleteQuestionRequestSchema>;
+export type PatchQuestionPinnedRequestDTO = z.infer<typeof PatchQuestionPinnedRequestSchema>;
+export type PatchQuestionPinnedResponseDTO = z.infer<typeof PatchQuestionPinnedResponseSchema>;
+export type PatchQuestionClosedRequestDTO = z.infer<typeof PatchQuestionClosedRequestSchema>;
+export type PatchQuestionClosedResponseDTO = z.infer<typeof PatchQuestionClosedResponseSchema>;
+export type PostQuestionLikeRequestDTO = z.infer<typeof PostQuestionLikeRequestSchema>;
+export type PostQuestionLikeResponseDTO = z.infer<typeof PostQuestionLikeResponseSchema>;
 export type PostReplyRequestDTO = z.infer<typeof PostReplyRequestSchema>;
 export type PostReplyResponseDTO = z.infer<typeof PostReplyResponseSchema>;
-export type PatchReplyBodyRequestDTO = z.infer<
-  typeof PatchReplyBodyRequestSchema
->;
-export type PatchReplyBodyResponseDTO = z.infer<
-  typeof PatchReplyBodyResponseSchema
->;
+export type PatchReplyBodyRequestDTO = z.infer<typeof PatchReplyBodyRequestSchema>;
+export type PatchReplyBodyResponseDTO = z.infer<typeof PatchReplyBodyResponseSchema>;
 export type DeleteReplyRequestDTO = z.infer<typeof DeleteReplyRequestSchema>;
-export type PostReplyLikeRequestDTO = z.infer<
-  typeof PostReplyLikeRequestSchema
->;
-export type PostReplyLikeResponseDTO = z.infer<
-  typeof PostReplyLikeResponseSchema
->;
+export type PostReplyLikeRequestDTO = z.infer<typeof PostReplyLikeRequestSchema>;
+export type PostReplyLikeResponseDTO = z.infer<typeof PostReplyLikeResponseSchema>;

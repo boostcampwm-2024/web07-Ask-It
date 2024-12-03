@@ -29,11 +29,9 @@ axios.interceptors.response.use(
         credentials: 'include',
       });
 
-      const { accessToken, userId } =
-        (await response.json()) as PostRefreshResponseDTO;
+      const { accessToken, userId } = (await response.json()) as PostRefreshResponseDTO;
 
-      const { setAuthInformation, clearAuthInformation } =
-        useAuthStore.getState();
+      const { setAuthInformation, clearAuthInformation } = useAuthStore.getState();
 
       if (accessToken) {
         setAuthInformation({ accessToken, userId });

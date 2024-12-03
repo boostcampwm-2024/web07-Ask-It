@@ -133,10 +133,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
   await page.evaluate(() => {
-    localStorage.setItem(
-      'sessionTokens',
-      JSON.stringify({ 'fake-session-id': 'session-token' }),
-    );
+    localStorage.setItem('sessionTokens', JSON.stringify({ 'fake-session-id': 'session-token' }));
   });
 
   await page.goto('/session/fake-session-id/1', {
@@ -155,9 +152,7 @@ test('답변 좋아요', async ({ page }) => {
   await expect(page.getByText('리플 내용')).toBeVisible();
   await expect(page.getByText('리플 작성자')).toBeVisible();
 
-  const responsePromise = page.waitForResponse(async (response) =>
-    response.url().includes('/api/replies/1/likes'),
-  );
+  const responsePromise = page.waitForResponse(async (response) => response.url().includes('/api/replies/1/likes'));
 
   const likeButton = page.getByRole('button', { name: '0' });
   await likeButton.waitFor();
@@ -175,9 +170,7 @@ test('답변 삭제', async ({ page }) => {
   await expect(page.getByText('리플 작성자')).toBeVisible();
 
   const responsePromise = page.waitForResponse(
-    async (response) =>
-      response.url().includes('/api/replies/1') &&
-      response.request().method() === 'DELETE',
+    async (response) => response.url().includes('/api/replies/1') && response.request().method() === 'DELETE',
   );
 
   const deleteButton = page.getByRole('main').getByRole('button').nth(4);
@@ -206,9 +199,7 @@ test('답글 생성', async ({ page }) => {
   await textarea.waitFor();
   await textarea.fill('새로운 리플 내용');
 
-  const responsePromise = page.waitForResponse(async (response) =>
-    response.url().includes('/api/replies'),
-  );
+  const responsePromise = page.waitForResponse(async (response) => response.url().includes('/api/replies'));
 
   const submitButton = page.getByRole('button', { name: '생성하기' });
   await submitButton.waitFor();
@@ -221,9 +212,7 @@ test('답글 생성', async ({ page }) => {
 });
 
 test('답글 수정', async ({ page }) => {
-  const editButton = page
-    .locator('div:nth-child(2) > .inline-flex > button')
-    .first();
+  const editButton = page.locator('div:nth-child(2) > .inline-flex > button').first();
   await editButton.waitFor();
   await editButton.click();
 
@@ -231,9 +220,7 @@ test('답글 수정', async ({ page }) => {
   await textarea.waitFor();
   await textarea.fill('수정된 리플 내용');
 
-  const responsePromise = page.waitForResponse(async (response) =>
-    response.url().includes('/api/replies/1/body'),
-  );
+  const responsePromise = page.waitForResponse(async (response) => response.url().includes('/api/replies/1/body'));
   const submitButton = page.getByRole('button', { name: '수정하기' });
   await submitButton.waitFor();
   await submitButton.click();

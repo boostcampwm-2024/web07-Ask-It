@@ -7,10 +7,7 @@ interface SessionTerminateModalProps {
   onConfirm?: () => void;
 }
 
-function SessionTerminateModal({
-  onCancel,
-  onConfirm,
-}: SessionTerminateModalProps) {
+function SessionTerminateModal({ onCancel, onConfirm }: SessionTerminateModalProps) {
   const { closeModal } = useModalContext();
 
   return (
@@ -27,9 +24,7 @@ function SessionTerminateModal({
               closeModal();
             }}
           >
-            <span className='flex-grow text-sm font-medium text-white'>
-              취소하기
-            </span>
+            <span className='flex-grow text-sm font-medium text-white'>취소하기</span>
           </Button>
           <Button
             className='w-full bg-indigo-600 transition-colors duration-200'
@@ -38,9 +33,7 @@ function SessionTerminateModal({
               closeModal();
             }}
           >
-            <span className='flex-grow text-sm font-medium text-white'>
-              종료하기
-            </span>
+            <span className='flex-grow text-sm font-medium text-white'>종료하기</span>
           </Button>
         </div>
       </div>

@@ -87,18 +87,14 @@ function SignUpModal() {
         />
         <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
           <Button className='bg-gray-500' onClick={closeModal}>
-            <div className='w-[150px] text-sm font-medium text-white'>
-              취소하기
-            </div>
+            <div className='w-[150px] text-sm font-medium text-white'>취소하기</div>
           </Button>
           <Button
             disabled={!isSignUpButtonEnabled}
             className={`transition-colors duration-200 ${isSignUpButtonEnabled ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
             onClick={handleSignUp}
           >
-            <div className='w-[150px] text-sm font-medium text-white'>
-              회원 가입
-            </div>
+            <div className='w-[150px] text-sm font-medium text-white'>회원 가입</div>
           </Button>
         </div>
       </div>

@@ -36,8 +36,7 @@ function CreateSessionModal() {
     onError: console.error,
   });
 
-  const enableCreateSession =
-    sessionName.trim().length >= 3 && sessionName.trim().length <= 20;
+  const enableCreateSession = sessionName.trim().length >= 3 && sessionName.trim().length <= 20;
 
   const handleCreateSession = () => {
     if (!enableCreateSession || isPending) return;
@@ -57,30 +56,21 @@ function CreateSessionModal() {
           value={sessionName}
           onChange={setSessionName}
           validationStatus={{
-            status:
-              sessionName.trim().length === 0 || enableCreateSession
-                ? 'INITIAL'
-                : 'INVALID',
-            message: enableCreateSession
-              ? '세션 이름을 입력해주세요'
-              : '세션 이름은 3자 이상 20자 이하로 입력해주세요',
+            status: sessionName.trim().length === 0 || enableCreateSession ? 'INITIAL' : 'INVALID',
+            message: enableCreateSession ? '세션 이름을 입력해주세요' : '세션 이름은 3자 이상 20자 이하로 입력해주세요',
           }}
           placeholder='세션 이름을 입력해주세요'
         />
       </div>
       <div className='mt-4 inline-flex items-start justify-start gap-2.5'>
         <Button className='bg-gray-500' onClick={closeModal}>
-          <div className='w-[150px] text-sm font-medium text-white'>
-            취소하기
-          </div>
+          <div className='w-[150px] text-sm font-medium text-white'>취소하기</div>
         </Button>
         <Button
           className={`transition-colors duration-200 ${enableCreateSession ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
           onClick={handleCreateSession}
         >
-          <div className='w-[150px] text-sm font-medium text-white'>
-            세션 생성하기
-          </div>
+          <div className='w-[150px] text-sm font-medium text-white'>세션 생성하기</div>
         </Button>
       </div>
     </Modal>

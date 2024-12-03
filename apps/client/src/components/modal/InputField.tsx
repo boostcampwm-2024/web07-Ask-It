@@ -17,15 +17,7 @@ const validationStyle: Record<ValidationStatus, string> = {
   INVALID: 'max-h-10 text-rose-500 opacity-100',
 };
 
-function InputField({
-  label,
-  type,
-  value,
-  onKeyDown,
-  onChange,
-  placeholder,
-  validationStatus,
-}: InputFieldProps) {
+function InputField({ label, type, value, onKeyDown, onChange, placeholder, validationStatus }: InputFieldProps) {
   return (
     <div className='flex w-full flex-col items-center'>
       <div className='gap-4r flex w-full flex-row items-center justify-start'>

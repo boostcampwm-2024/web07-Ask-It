@@ -24,9 +24,7 @@ function DeleteConfirmModal({ onCancel, onConfirm }: DeleteConfirmModalProps) {
               closeModal();
             }}
           >
-            <span className='flex-grow text-sm font-medium text-white'>
-              취소하기
-            </span>
+            <span className='flex-grow text-sm font-medium text-white'>취소하기</span>
           </Button>
           <Button
             className='w-full bg-indigo-600 transition-colors duration-200'
@@ -35,9 +33,7 @@ function DeleteConfirmModal({ onCancel, onConfirm }: DeleteConfirmModalProps) {
               closeModal();
             }}
           >
-            <span className='flex-grow text-sm font-medium text-white'>
-              삭제하기
-            </span>
+            <span className='flex-grow text-sm font-medium text-white'>삭제하기</span>
           </Button>
         </div>
       </div>

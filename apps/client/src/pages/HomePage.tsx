@@ -9,9 +9,7 @@ import { Button, CreateSessionModal, FeatureCard } from '@/components';
 function HomePage() {
   const { isLogin } = useAuthStore();
 
-  const { Modal: CreateSession, openModal: openCreateSessionModal } = useModal(
-    <CreateSessionModal />,
-  );
+  const { Modal: CreateSession, openModal: openCreateSessionModal } = useModal(<CreateSessionModal />);
 
   return (
     <>
@@ -30,9 +28,7 @@ function HomePage() {
               className={`${isLogin() ? 'bg-indigo-600' : 'cursor-not-allowed bg-indigo-300'}`}
               onClick={isLogin() ? openCreateSessionModal : undefined}
             >
-              <div className='text-base font-bold text-white'>
-                새로운 세션 만들기
-              </div>
+              <div className='text-base font-bold text-white'>새로운 세션 만들기</div>
             </Button>
             {isLogin() ? undefined : (
               <span className='absolute top-1/2 flex w-full translate-y-full items-center justify-center rounded-md bg-indigo-600 p-1 text-sm font-bold text-white opacity-0 transition-opacity group-hover:opacity-100'>

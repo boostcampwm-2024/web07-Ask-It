@@ -43,12 +43,11 @@ const SessionSessionIdIndexRoute = SessionSessionIdIndexImport.update({
   getParentRoute: () => SessionRouteRoute,
 } as any);
 
-const SessionSessionIdQuestionIdIndexRoute =
-  SessionSessionIdQuestionIdIndexImport.update({
-    id: '/$sessionId/$questionId/',
-    path: '/$sessionId/$questionId/',
-    getParentRoute: () => SessionRouteRoute,
-  } as any);
+const SessionSessionIdQuestionIdIndexRoute = SessionSessionIdQuestionIdIndexImport.update({
+  id: '/$sessionId/$questionId/',
+  path: '/$sessionId/$questionId/',
+  getParentRoute: () => SessionRouteRoute,
+} as any);
 
 // Populate the FileRoutesByPath interface
 
@@ -104,9 +103,7 @@ const SessionRouteRouteChildren: SessionRouteRouteChildren = {
   SessionSessionIdQuestionIdIndexRoute: SessionSessionIdQuestionIdIndexRoute,
 };
 
-const SessionRouteRouteWithChildren = SessionRouteRoute._addFileChildren(
-  SessionRouteRouteChildren,
-);
+const SessionRouteRouteWithChildren = SessionRouteRoute._addFileChildren(SessionRouteRouteChildren);
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
@@ -135,26 +132,10 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths:
-    | '/'
-    | '/session'
-    | '/my'
-    | '/session/$sessionId'
-    | '/session/$sessionId/$questionId';
+  fullPaths: '/' | '/session' | '/my' | '/session/$sessionId' | '/session/$sessionId/$questionId';
   fileRoutesByTo: FileRoutesByTo;
-  to:
-    | '/'
-    | '/session'
-    | '/my'
-    | '/session/$sessionId'
-    | '/session/$sessionId/$questionId';
-  id:
-    | '__root__'
-    | '/'
-    | '/session'
-    | '/my'
-    | '/session/$sessionId/'
-    | '/session/$sessionId/$questionId/';
+  to: '/' | '/session' | '/my' | '/session/$sessionId' | '/session/$sessionId/$questionId';
+  id: '__root__' | '/' | '/session' | '/my' | '/session/$sessionId/' | '/session/$sessionId/$questionId/';
   fileRoutesById: FileRoutesById;
 }
 
@@ -170,9 +151,7 @@ const rootRouteChildren: RootRouteChildren = {
   MyRoute: MyRoute,
 };
 
-export const routeTree = rootRoute
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+export const routeTree = rootRoute._addFileChildren(rootRouteChildren)._addFileTypes<FileRouteTypes>();
 
 /* ROUTE_MANIFEST_START
 {

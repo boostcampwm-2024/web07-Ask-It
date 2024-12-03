@@ -23,18 +23,14 @@ export interface SessionSlice {
   setFromDetail: (fromDetail: boolean) => void;
   setSelectedQuestionId: (selectedQuestionId?: number) => void;
   setSessionUsers: (sessionUsers: User[]) => void;
-  updateSessionUser: (
-    user: Partial<Omit<User, 'userId'>> & { userId: number },
-  ) => void;
+  updateSessionUser: (user: Partial<Omit<User, 'userId'>> & { userId: number }) => void;
   setParticipantCount: (participantCount: number) => void;
 }
 
-export const createSessionSlice: StateCreator<
-  SessionSlice & QnASlice & ChattingSlice,
-  [],
-  [],
-  SessionSlice
-> = (set, get) => ({
+export const createSessionSlice: StateCreator<SessionSlice & QnASlice & ChattingSlice, [], [], SessionSlice> = (
+  set,
+  get,
+) => ({
   isHost: false,
   expired: false,
   fromDetail: false,

@@ -11,13 +11,9 @@ function Header() {
 
   const addToast = useToastStore((state) => state.addToast);
 
-  const { Modal: SignUp, openModal: openSignUpModal } = useModal(
-    <SignUpModal />,
-  );
+  const { Modal: SignUp, openModal: openSignUpModal } = useModal(<SignUpModal />);
 
-  const { Modal: SignIn, openModal: openSignInModal } = useModal(
-    <SignInModal />,
-  );
+  const { Modal: SignIn, openModal: openSignInModal } = useModal(<SignInModal />);
 
   const navigate = useNavigate();
 
@@ -47,19 +43,10 @@ function Header() {
               className='hover:bg-gray-200 hover:text-white hover:transition-all'
               onClick={isLogin() ? handleLogout : openSignInModal}
             >
-              <p className='text-base font-bold text-black'>
-                {isLogin() ? '로그아웃' : '로그인'}
-              </p>
+              <p className='text-base font-bold text-black'>{isLogin() ? '로그아웃' : '로그인'}</p>
             </Button>
-            <Button
-              className='bg-indigo-600'
-              onClick={
-                isLogin() ? () => navigate({ to: '/my' }) : openSignUpModal
-              }
-            >
-              <p className='text-base font-bold text-white'>
-                {isLogin() ? '세션 기록' : '회원가입'}
-              </p>
+            <Button className='bg-indigo-600' onClick={isLogin() ? () => navigate({ to: '/my' }) : openSignUpModal}>
+              <p className='text-base font-bold text-white'>{isLogin() ? '세션 기록' : '회원가입'}</p>
             </Button>
           </div>
         </div>

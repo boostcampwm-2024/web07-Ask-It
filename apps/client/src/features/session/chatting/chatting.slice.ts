@@ -9,16 +9,9 @@ export interface ChattingSlice {
   addChattingToFront: (chat: Chat) => void;
 }
 
-export const createChattingSlice: StateCreator<
-  ChattingSlice,
-  [],
-  [],
-  ChattingSlice
-> = (set) => ({
+export const createChattingSlice: StateCreator<ChattingSlice, [], [], ChattingSlice> = (set) => ({
   chatting: [],
   resetChatting: () => set({ chatting: [] }),
-  addChatting: (chat) =>
-    set((state) => ({ chatting: [...state.chatting, chat] })),
-  addChattingToFront: (chat) =>
-    set((state) => ({ chatting: [chat, ...state.chatting] })),
+  addChatting: (chat) => set((state) => ({ chatting: [...state.chatting, chat] })),
+  addChattingToFront: (chat) => set((state) => ({ chatting: [chat, ...state.chatting] })),
 });

@@ -164,10 +164,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
   await page.evaluate(() => {
-    localStorage.setItem(
-      'sessionTokens',
-      JSON.stringify({ 'fake-session-id': 'session-token' }),
-    );
+    localStorage.setItem('sessionTokens', JSON.stringify({ 'fake-session-id': 'session-token' }));
   });
 
   await page.goto('/session/fake-session-id', {
@@ -180,9 +177,7 @@ test('질문 목록이 올바르게 표시되는지 확인', async ({ page }) =>
 });
 
 test('질문 좋아요', async ({ page }) => {
-  const responsePromise = page.waitForResponse(async (response) =>
-    response.url().includes('/api/questions/1/likes'),
-  );
+  const responsePromise = page.waitForResponse(async (response) => response.url().includes('/api/questions/1/likes'));
   const likeButton = page.getByRole('button', { name: '0' }).first();
   await likeButton.click();
   expect((await responsePromise).status()).toBe(200);
@@ -190,9 +185,7 @@ test('질문 좋아요', async ({ page }) => {
 });
 
 test('질문 고정', async ({ page }) => {
-  const responsePromise = page.waitForResponse(async (response) =>
-    response.url().includes('/api/questions/1/pinned'),
-  );
+  const responsePromise = page.waitForResponse(async (response) => response.url().includes('/api/questions/1/pinned'));
   const pinButton = page.getByRole('button', { name: '고정' });
   await pinButton.click();
   expect((await responsePromise).status()).toBe(200);
@@ -200,9 +193,7 @@ test('질문 고정', async ({ page }) => {
 });
 
 test('질문 닫기', async ({ page }) => {
-  const responsePromise = page.waitForResponse(async (response) =>
-    response.url().includes('/api/questions/1/closed'),
-  );
+  const responsePromise = page.waitForResponse(async (response) => response.url().includes('/api/questions/1/closed'));
   const closeButton = page.locator(
     'button.flex.items-center.justify-center.rounded-md.px-3.py-2.self-start.transition-colors.duration-200.bg-red-100.hover\\:bg-red-200',
   );
@@ -221,9 +212,7 @@ test('질문 생성을 하면 새로운 질문이 리스트에 생긴다.', asyn
   await openModalButton.click();
   await page.fill('textarea', '완전 새로운 질문');
 
-  const responsePromise = page.waitForResponse(async (response) =>
-    response.url().includes('/api/questions'),
-  );
+  const responsePromise = page.waitForResponse(async (response) => response.url().includes('/api/questions'));
   const createButton = page.getByRole('button', { name: '생성하기' });
   await createButton.click();
   const response = await responsePromise;
@@ -234,14 +223,10 @@ test('질문 생성을 하면 새로운 질문이 리스트에 생긴다.', asyn
 });
 
 test('질문 삭제를 하면 리스트에서 사라진다.', async ({ page }) => {
-  const deleteButton = page.locator(
-    'div:nth-child(2) > div:nth-child(2) > button:nth-child(2)',
-  );
+  const deleteButton = page.locator('div:nth-child(2) > div:nth-child(2) > button:nth-child(2)');
   await deleteButton.click();
 
-  const responsePromise = page.waitForResponse(async (response) =>
-    response.url().includes('/api/questions/1'),
-  );
+  const responsePromise = page.waitForResponse(async (response) => response.url().includes('/api/questions/1'));
 
   const confirmButton = page.getByRole('button', { name: '삭제하기' });
   await confirmButton.click();
@@ -252,16 +237,12 @@ test('질문 삭제를 하면 리스트에서 사라진다.', async ({ page }) =
 });
 
 test('질문을 수정하면 리스트에 반영된다.', async ({ page }) => {
-  const editButton = page.locator(
-    'div:nth-child(2) > div:nth-child(2) > button:nth-child(1)',
-  );
+  const editButton = page.locator('div:nth-child(2) > div:nth-child(2) > button:nth-child(1)');
   await editButton.click();
 
   await page.fill('textarea', '수정된 질문 내용');
 
-  const responsePromise = page.waitForResponse(async (response) =>
-    response.url().includes('/api/questions/1/body'),
-  );
+  const responsePromise = page.waitForResponse(async (response) => response.url().includes('/api/questions/1/body'));
   const confirmButton = page.getByRole('button', { name: '수정하기' });
   await confirmButton.click();
 
