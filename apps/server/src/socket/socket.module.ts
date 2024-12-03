@@ -7,10 +7,12 @@ import { SessionTokenValidationGuard } from '@common/guards/session-token-valida
 import { SessionTokenModule } from '@common/guards/session-token.module';
 import { LoggerModule } from '@logger/logger.module';
 import { PrismaModule } from '@prisma-alias/prisma.module';
+import { SocketController } from './socket.controller';
 
 @Module({
   imports: [PrismaModule, ChatsModule, SessionTokenModule, LoggerModule],
   providers: [SocketGateway, SessionTokenValidationGuard],
   exports: [SocketGateway],
+  controllers: [SocketController],
 })
 export class SocketModule {}

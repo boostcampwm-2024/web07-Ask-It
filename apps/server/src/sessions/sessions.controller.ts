@@ -11,16 +11,14 @@ import { TerminateSessionSwagger } from './swagger/terminate-session.swagger';
 import { JwtAuthGuard } from '@auth/jwt-auth.guard';
 import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
-import { SocketGateway } from '@socket/socket.gateway';
+import { requestSocket } from '@common/request-socket';
+import { SOCKET_EVENTS } from '@socket/socket.constant';
 
 @ApiTags('Sessions')
 @UseInterceptors(TransformInterceptor)
 @Controller('sessions')
 export class SessionsController {
-  constructor(
-    private readonly sessionsService: SessionsService,
-    private readonly socketGateway: SocketGateway,
-  ) {}
+  constructor(private readonly sessionsService: SessionsService) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -47,7 +45,8 @@ export class SessionsController {
   @UseGuards(SessionTokenValidationGuard)
   async terminateSession(@Param('sessionId') sessionId: string, @Body() { token }: TerminateSessionDto) {
     const result = await this.sessionsService.terminateSession(sessionId, token);
-    this.socketGateway.broadcastSessionEnd(sessionId, token, result);
+    const event = SOCKET_EVENTS.SESSION_ENDED;
+    await requestSocket({ sessionId, token, event, content: result });
     return result;
   }
 }

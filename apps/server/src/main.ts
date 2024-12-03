@@ -6,7 +6,7 @@ import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 
-async function bootstrap() {
+async function bootstrap(port: number) {
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
@@ -25,6 +25,13 @@ async function bootstrap() {
 
   app.useWebSocketAdapter(new IoAdapter(app));
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(port);
 }
-bootstrap();
+
+const args = process.argv.slice(2);
+
+if (args.includes('http')) {
+  bootstrap(Number(process.env.API_SERVER_PORT ?? '3000'));
+} else if (args.includes('ws')) {
+  bootstrap(Number(process.env.SOCKET_SERVER_PORT ?? '4000'));
+}

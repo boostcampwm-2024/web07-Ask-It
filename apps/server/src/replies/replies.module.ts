@@ -8,10 +8,9 @@ import { SessionTokenModule } from '@common/guards/session-token.module';
 import { PrismaModule } from '@prisma-alias/prisma.module';
 import { QuestionsModule } from '@questions/questions.module';
 import { SessionsRepository } from '@sessions/sessions.repository';
-import { SocketModule } from '@socket/socket.module';
 
 @Module({
-  imports: [PrismaModule, SessionTokenModule, QuestionsModule, SocketModule],
+  imports: [PrismaModule, SessionTokenModule, QuestionsModule],
   controllers: [RepliesController],
   providers: [RepliesService, RepliesRepository, SessionsRepository],
 })

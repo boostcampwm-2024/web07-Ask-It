@@ -26,18 +26,16 @@ import { UpdateReplySwagger } from './swagger/update-reply.swagger';
 
 import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
+import { requestSocket } from '@common/request-socket';
 import { QuestionExistenceGuard } from '@questions/guards/question-existence.guard';
-import { SocketGateway } from '@socket/socket.gateway';
+import { SOCKET_EVENTS } from '@socket/socket.constant';
 import { BaseDto } from '@src/common/base.dto';
 
 @ApiTags('Replies')
 @UseInterceptors(TransformInterceptor)
 @Controller('replies')
 export class RepliesController {
-  constructor(
-    private readonly repliesService: RepliesService,
-    private readonly socketGateway: SocketGateway,
-  ) {}
+  constructor(private readonly repliesService: RepliesService) {}
 
   @Post()
   @CreateReplySwagger()
@@ -51,7 +49,7 @@ export class RepliesController {
     const resultForOwner = { reply: { ...reply, isHost } };
     const resultForOther = { reply: { ...reply, isHost, isOwner: false } };
     const { sessionId, token } = createReplyDto;
-    this.socketGateway.broadcastNewReply(sessionId, token, resultForOther);
+    await requestSocket({ sessionId, token, event: SOCKET_EVENTS.REPLY_CREATED, content: resultForOther });
     return resultForOwner;
   }
 
@@ -63,7 +61,7 @@ export class RepliesController {
     const updatedReply = await this.repliesService.updateBody(replyId, updateReplyBodyDto);
     const { sessionId, token } = updateReplyBodyDto;
     const result = { reply: updatedReply };
-    this.socketGateway.broadcastReplyUpdate(sessionId, token, result);
+    await requestSocket({ sessionId, token, event: SOCKET_EVENTS.REPLY_UPDATED, content: result });
     return result;
   }
 
@@ -74,7 +72,7 @@ export class RepliesController {
     const { sessionId, token } = data;
     const { questionId } = await this.repliesService.deleteReply(replyId, token, request['reply']);
     const resultForOther = { replyId, questionId };
-    this.socketGateway.broadcastReplyDelete(sessionId, token, resultForOther);
+    await requestSocket({ sessionId, token, event: SOCKET_EVENTS.REPLY_DELETED, content: resultForOther });
     return {};
   }
 
@@ -87,7 +85,8 @@ export class RepliesController {
     const { sessionId, token } = toggleReplyLikeDto;
     const resultForOwner = { liked, likesCount };
     const resultForOther = { replyId, liked: false, likesCount, questionId };
-    this.socketGateway.broadcastReplyLike(sessionId, token, resultForOther);
+    const event = SOCKET_EVENTS.REPLY_LIKED;
+    await requestSocket({ sessionId, token, event, content: resultForOther });
     return resultForOwner;
   }
 }

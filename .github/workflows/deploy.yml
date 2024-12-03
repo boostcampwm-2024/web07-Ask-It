@@ -70,15 +70,12 @@ jobs:
 
                       # 서버 디렉토리로 이동하여 환경 변수 설정
                       cd apps/server
-                      echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" > .env
-                      echo "JWT_ACCESS_SECRET=${{ secrets.JWT_ACCESS_SECRET }}" >> .env
-                      echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
-                      echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+                      echo "${{SERVER_ENV}}" > .env
 
                       # pm2로 기존 프로세스 종료 및 새 프로세스 시작
-                      pm2 stop ask-it || true
-                      pm2 delete ask-it || true
+                      pm2 stop all || true
+                      pm2 delete all || true
                       pnpx prisma generate
                       pnpx prisma migrate deploy
                       pnpm build
-                      pm2 start pnpm --name "ask-it" -- run start:prod
+                      pm2 start ecosystem.config.js

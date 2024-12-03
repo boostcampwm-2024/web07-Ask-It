@@ -25,6 +25,7 @@ import { ToggleQuestionLikeSwagger } from './swagger/toggle-question.swagger';
 import { BaseDto } from '@common/base.dto';
 import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
+import { requestSocket } from '@common/request-socket';
 import {
   UpdateQuestionBodyDto,
   UpdateQuestionClosedDto,
@@ -38,16 +39,13 @@ import {
   UpdateQuestionClosedSwagger,
   UpdateQuestionPinnedSwagger,
 } from '@questions/swagger/update-question.swagger';
-import { SocketGateway } from '@socket/socket.gateway';
+import { SOCKET_EVENTS } from '@socket/socket.constant';
 
 @ApiTags('Questions')
 @UseInterceptors(TransformInterceptor)
 @Controller('questions')
 export class QuestionsController {
-  constructor(
-    private readonly questionsService: QuestionsService,
-    private readonly socketGateway: SocketGateway,
-  ) {}
+  constructor(private readonly questionsService: QuestionsService) {}
 
   @Get()
   @GetQuestionSwagger()
@@ -66,7 +64,8 @@ export class QuestionsController {
     const { sessionId, token } = createQuestionDto;
     const resultForOwner = { question: createdQuestion };
     const resultForOther = { question: { ...createdQuestion, isOwner: false } };
-    this.socketGateway.broadcastNewQuestion(sessionId, token, resultForOther);
+    const event = SOCKET_EVENTS.QUESTION_CREATED;
+    await requestSocket({ sessionId, token, event, content: resultForOther });
     return resultForOwner;
   }
 
@@ -86,7 +85,8 @@ export class QuestionsController {
     );
     const { sessionId, token } = updateQuestionBodyDto;
     const result = { question: updatedQuestion };
-    this.socketGateway.broadcastQuestionUpdate(sessionId, token, result);
+    const event = SOCKET_EVENTS.QUESTION_UPDATED;
+    await requestSocket({ sessionId, token, event, content: result });
     return result;
   }
 
@@ -97,7 +97,8 @@ export class QuestionsController {
     const { sessionId, token } = data;
     await this.questionsService.deleteQuestion(questionId, req.question, data);
     const resultForOther = { questionId };
-    this.socketGateway.broadcastQuestionDelete(sessionId, token, resultForOther);
+    const event = SOCKET_EVENTS.QUESTION_DELETED;
+    await requestSocket({ sessionId, token, event, content: resultForOther });
     return {};
   }
 
@@ -112,7 +113,8 @@ export class QuestionsController {
     const updatedQuestion = await this.questionsService.updateQuestionPinned(questionId, updateQuestionPinnedDto);
     const { sessionId, token } = updateQuestionPinnedDto;
     const result = { question: updatedQuestion };
-    this.socketGateway.broadcastQuestionUpdate(sessionId, token, result);
+    const event = SOCKET_EVENTS.QUESTION_UPDATED;
+    await requestSocket({ sessionId, token, event, content: result });
     return result;
   }
 
@@ -127,7 +129,8 @@ export class QuestionsController {
     const updatedQuestion = await this.questionsService.updateQuestionClosed(questionId, updateQuestionClosedDto);
     const { sessionId, token } = updateQuestionClosedDto;
     const result = { question: updatedQuestion };
-    this.socketGateway.broadcastQuestionUpdate(sessionId, token, result);
+    const event = SOCKET_EVENTS.QUESTION_UPDATED;
+    await requestSocket({ sessionId, token, event, content: result });
     return result;
   }
 
@@ -143,7 +146,8 @@ export class QuestionsController {
     const { sessionId, token } = toggleQuestionLikeDto;
     const resultForOwner = { liked, likesCount };
     const resultForOther = { questionId, liked: false, likesCount };
-    this.socketGateway.broadcastQuestionLike(sessionId, token, resultForOther);
+    const event = SOCKET_EVENTS.QUESTION_LIKED;
+    await requestSocket({ sessionId, token, event, content: resultForOther });
     return resultForOwner;
   }
 }

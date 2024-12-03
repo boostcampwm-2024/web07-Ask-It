@@ -23,17 +23,15 @@ import { BaseDto } from '@common/base.dto';
 import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
 import { JwtPayloadInterceptor } from '@common/interceptors/jwt-payload.interceptor';
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
-import { SocketGateway } from '@socket/socket.gateway';
+import { requestSocket } from '@common/request-socket';
+import { SOCKET_EVENTS } from '@socket/socket.constant';
 
 @ApiTags('sessions-auth')
 @UseInterceptors(TransformInterceptor)
 @UseInterceptors(JwtPayloadInterceptor)
 @Controller('sessions-auth')
 export class SessionsAuthController {
-  constructor(
-    private readonly sessionsAuthService: SessionsAuthService,
-    private readonly socketGateway: SocketGateway,
-  ) {}
+  constructor(private readonly sessionsAuthService: SessionsAuthService) {}
 
   @Get()
   @AuthSessionsSwagger()
@@ -56,7 +54,8 @@ export class SessionsAuthController {
   async authorizeHost(@Param('userId', ParseIntPipe) userId: number, @Body() data: UpdateHostDto) {
     const { sessionId, token } = data;
     const result = { user: await this.sessionsAuthService.authorizeHost(userId, data) };
-    this.socketGateway.broadcastHostChange(sessionId, token, result);
+    const event = SOCKET_EVENTS.HOST_CHANGED;
+    await requestSocket({ sessionId, token, event, content: result });
     return result;
   }
 }

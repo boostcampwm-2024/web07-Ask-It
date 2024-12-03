@@ -12,29 +12,7 @@ import { Server, Socket } from 'socket.io';
 import { ChatsService } from '@chats/chats.service';
 import { SessionTokenValidationGuard } from '@common/guards/session-token-validation.guard';
 import { LoggerService } from '@logger/logger.service';
-
-export const SOCKET_EVENTS = {
-  QUESTION_CREATED: 'questionCreated',
-  QUESTION_UPDATED: 'questionUpdated',
-  QUESTION_DELETED: 'questionDeleted',
-  QUESTION_LIKED: 'questionLiked',
-
-  REPLY_CREATED: 'replyCreated',
-  REPLY_UPDATED: 'replyUpdated',
-  REPLY_DELETED: 'replyDeleted',
-  REPLY_LIKED: 'replyLiked',
-
-  CREATE_CHAT: 'createChat',
-  CHAT_MESSAGE: 'chatMessage',
-  CHAT_ERROR: 'chatError',
-
-  INVALID_CONNECTION: 'invalidConnection',
-  DUPLICATED_CONNECTION: 'duplicatedConnection',
-  PARTICIPANT_COUNT_UPDATED: 'participantCountUpdated',
-
-  HOST_CHANGED: 'hostChanged',
-  SESSION_ENDED: 'sessionEnded',
-} as const;
+import { SOCKET_EVENTS } from '@socket/socket.constant';
 
 interface Client {
   sessionId: string;
@@ -131,7 +109,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.to(sessionId).emit(SOCKET_EVENTS.CHAT_MESSAGE, data);
   }
 
-  private createEventBroadcaster(event: string) {
+  public createEventBroadcaster(event: string) {
     return (sessionId: string, token: string, content: Record<any, any>) => {
       const client = this.tokenToSocketMap.get(token);
       if (client) {
