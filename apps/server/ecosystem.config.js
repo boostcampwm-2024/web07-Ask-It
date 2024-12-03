@@ -3,22 +3,20 @@ module.exports = {
     {
       name: 'http-server',
       script: 'pnpm',
-      args: 'run start:prod',
+      args: 'run start:prod:http',
       interpreter: 'none',
       cwd: './',
       env: {
-        NODE_ENV: 'production',
         PORT: 3000,
       },
     },
     {
       name: 'ws-server',
       script: 'pnpm',
-      args: 'run start:prod',
+      args: 'run start:prod:ws',
       interpreter: 'none',
       cwd: './',
       env: {
-        NODE_ENV: 'production',
         PORT: 4000,
       },
     },
