@@ -9,7 +9,7 @@
     "lint": "eslint . --fix",
     "format": "prettier --write .",
     "preview": "vite preview",
-    "test": "pnpm exec playwright test --workers=1",
+    "test": "pnpm exec playwright test",
     "test-ui": "pnpm exec playwright test --ui",
     "test-debug": "pnpm exec playwright test --debug"
   },
