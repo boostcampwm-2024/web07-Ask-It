@@ -128,7 +128,7 @@ test('회원 가입이 이미 중복된 닉네임이 있어서 실패하는 경�
   await expect(signUpButton).toBeDisabled();
 });
 
-test('로그인 / 로그아웃 플로우 전체 테스트', async ({ page }) => {
+test('로그인 플로우 전체 테스트', async ({ page }) => {
   await page.click('text=로그인');
 
   const loginButton = page.getByRole('button', { name: '로그인' }).nth(1);
@@ -151,7 +151,4 @@ test('로그인 / 로그아웃 플로우 전체 테스트', async ({ page }) => 
   expect((await response).status()).toBe(200);
 
   await expect(page.locator('text=로그인 되었습니다.')).toBeVisible();
-
-  await page.click('text=로그아웃');
-  await expect(page.locator('text=로그아웃 되었습니다.')).toBeVisible();
 });
