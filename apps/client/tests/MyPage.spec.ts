@@ -61,10 +61,17 @@ test.beforeEach(async ({ page }) => {
 test('세션 목록 확인', async ({ page }) => {
   await expect(page.locator('text=참여한 세션 기록')).toBeVisible();
 
-  const sessionTitles = ['세션 1', '세션 2', '세션 3'];
-  await Promise.all(
-    sessionTitles.map(async (title) => {
-      await expect(page.locator(`text=${title}`)).toBeVisible();
-    }),
-  );
+  await expect(page.locator('text=세션 1')).toBeVisible();
+  await expect(page.locator('text=세션 2')).toBeHidden();
+  await expect(page.locator('text=세션 3')).toBeVisible();
+});
+
+test('세션 만료 여부 토글', async ({ page }) => {
+  const toggleButton = page.locator('text=만료된 세션 보이기');
+  await toggleButton.waitFor();
+  await toggleButton.click();
+
+  await expect(page.locator('text=세션 1')).toBeVisible();
+  await expect(page.locator('text=세션 2')).toBeVisible();
+  await expect(page.locator('text=세션 3')).toBeVisible();
 });
