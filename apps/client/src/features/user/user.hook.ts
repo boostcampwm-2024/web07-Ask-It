@@ -2,14 +2,9 @@ import { isAxiosError } from 'axios';
 import { debounce } from 'es-toolkit';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { getVerifyEmail, getVerifyNickname } from '@/features/user/index';
+import { getVerifyEmail, getVerifyNickname } from '@/features/user';
 
-import {
-  validateEmail,
-  validateNickname,
-  validatePassword,
-  ValidationStatusWithMessage,
-} from '@/shared';
+import { validateEmail, validateNickname, validatePassword, ValidationStatusWithMessage } from '@/shared';
 
 export function useSignUpForm() {
   const [email, setEmail] = useState('');
@@ -18,14 +13,17 @@ export function useSignUpForm() {
 
   const [password, setPassword] = useState('');
 
-  const [emailValidationStatus, setEmailValidationStatus] =
-    useState<ValidationStatusWithMessage>({ status: 'INITIAL' });
+  const [emailValidationStatus, setEmailValidationStatus] = useState<ValidationStatusWithMessage>({
+    status: 'INITIAL',
+  });
 
-  const [nicknameValidationStatus, setNicknameValidationStatus] =
-    useState<ValidationStatusWithMessage>({ status: 'INITIAL' });
+  const [nicknameValidationStatus, setNicknameValidationStatus] = useState<ValidationStatusWithMessage>({
+    status: 'INITIAL',
+  });
 
-  const [passwordValidationStatus, setPasswordValidationStatus] =
-    useState<ValidationStatusWithMessage>({ status: 'INITIAL' });
+  const [passwordValidationStatus, setPasswordValidationStatus] = useState<ValidationStatusWithMessage>({
+    status: 'INITIAL',
+  });
 
   const isSignUpEnabled = useMemo(
     () =>
@@ -50,9 +48,7 @@ export function useSignUpForm() {
         if (!isAxiosError(error)) return;
 
         const message =
-          error.response?.data.message ??
-          error.response?.data.messages.shift() ??
-          '알 수 없는 오류가 발생했습니다.';
+          error.response?.data.message ?? error.response?.data.messages.shift() ?? '알 수 없는 오류가 발생했습니다.';
 
         setEmailValidationStatus({
           status: 'INVALID',
@@ -78,9 +74,7 @@ export function useSignUpForm() {
         if (!isAxiosError(error)) return;
 
         const message =
-          error.response?.data.message ??
-          error.response?.data.messages.shift() ??
-          '알 수 없는 오류가 발생했습니다.';
+          error.response?.data.message ?? error.response?.data.messages.shift() ?? '알 수 없는 오류가 발생했습니다.';
 
         setNicknameValidationStatus({
           status: 'INVALID',

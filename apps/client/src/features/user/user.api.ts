@@ -1,29 +1,26 @@
 import axios from 'axios';
 
 import {
-  GetVerifyEmailDTO,
-  GetVerifyEmailSchema,
-  GetVerifyNicknameDTO,
-  GetVerifyNicknameSchema,
+  GetVerifyEmailRequestSchema,
+  GetVerifyEmailResponseDTO,
+  GetVerifyEmailResponseSchema,
+  GetVerifyNicknameRequestSchema,
+  GetVerifyNicknameResponseDTO,
+  GetVerifyNicknameResponseSchema,
   PostUserDTO,
   PostUserSchema,
 } from '@/features/user/user.dto';
 
-const USER_BASE_URL = `/api/users`;
-
-export const postUser = (body: PostUserDTO) =>
-  axios.post(USER_BASE_URL, PostUserSchema.parse(body));
+export const postUser = (body: PostUserDTO) => axios.post('/api/users', PostUserSchema.parse(body));
 
 export const getVerifyEmail = (email: string) =>
   axios
-    .get<GetVerifyEmailDTO>(
-      `${USER_BASE_URL}/emails/${encodeURIComponent(email)}`,
-    )
-    .then((res) => GetVerifyEmailSchema.parse(res.data));
+    .get<GetVerifyEmailResponseDTO>(`/api/users/emails/${encodeURIComponent(GetVerifyEmailRequestSchema.parse(email))}`)
+    .then((res) => GetVerifyEmailResponseSchema.parse(res.data));
 
 export const getVerifyNickname = (nickname: string) =>
   axios
-    .get<GetVerifyNicknameDTO>(
-      `${USER_BASE_URL}/nicknames/${encodeURIComponent(nickname)}`,
+    .get<GetVerifyNicknameResponseDTO>(
+      `/api/users/nicknames/${encodeURIComponent(GetVerifyNicknameRequestSchema.parse(nickname))}`,
     )
-    .then((res) => GetVerifyNicknameSchema.parse(res.data));
+    .then((res) => GetVerifyNicknameResponseSchema.parse(res.data));

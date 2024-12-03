@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouterState } from '@tanstack/react-router';
 import { isAxiosError } from 'axios';
 import { useState } from 'react';
+import { ZodError } from 'zod';
 
 import { login } from '@/features/auth/auth.api';
 import { useAuthStore } from '@/features/auth/auth.store';
@@ -25,8 +26,7 @@ export function useSignInForm() {
   });
 
   const { mutate: loginQuery, isPending } = useMutation({
-    mutationFn: (credentials: { email: string; password: string }) =>
-      login(credentials),
+    mutationFn: (credentials: { email: string; password: string }) => login(credentials),
     onSuccess: (response) => {
       addToast({
         type: 'SUCCESS',
@@ -51,14 +51,29 @@ export function useSignInForm() {
             message: error.response.data.message,
           });
         }
+      } else if (error instanceof ZodError) {
+        const { issues } = error;
+        const emailIssue = issues.find((issue) => issue.path.includes('email'));
+        const passwordIssue = issues.find((issue) => issue.path.includes('password'));
+
+        if (emailIssue) {
+          setLoginFailed({
+            status: 'INVALID',
+            message: '올바른 이메일 형식이 아닙니다.',
+          });
+        } else if (passwordIssue) {
+          setLoginFailed({
+            status: 'INVALID',
+            message: '비밀번호는 8-20자여야 합니다.',
+          });
+        }
       }
     },
   });
 
   const isLoginEnabled = email.length > 0 && password.length > 7 && !isPending;
 
-  const handleLogin = (callback: () => void) =>
-    loginQuery({ email, password }, { onSuccess: callback });
+  const handleLogin = (callback: () => void) => loginQuery({ email, password }, { onSuccess: callback });
 
   return {
     email,
