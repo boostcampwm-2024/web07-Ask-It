@@ -1,8 +1,19 @@
 # Ask-it
 
-## [링크로 바로가기](#링크)
-
 <img src='https://github.com/user-attachments/assets/935d4951-55f8-47ff-b7c5-53ef1bcd7593' alt='배너' width='100%' />
+
+## 링크
+
+저희 서비스를 직접 경험해보세요!
+
+### 🌐 메인 서비스
+[![Ask-it 로고](https://img.shields.io/badge/Ask--it-방문하기-4A90E2?style=for-the-badge&logo=safari&logoColor=white)](https://ask-it.site)
+
+### 📝 방명록 남기기
+> 여러분의 소중한 의견을 기다립니다
+
+[![방명록](https://img.shields.io/badge/방명록-의견_남기기-FF69B4?style=for-the-badge&logo=bookstack&logoColor=white)](https://ask-it.site/session/44d77e5c-3116-400b-a904-a4f455d3aa27)
+
 
 ## 핵심 기능
 
@@ -25,19 +36,5 @@
 
 ## 시스템 아키텍처
 
-![architecture](https://github.com/user-attachments/assets/7b4ce0db-4457-4885-86c2-092b435908f6)
+![architecture](https://github.com/user-attachments/assets/a77de05e-cdad-4dcc-be0f-5e6697f0738e)
 
-
-## 링크
-
-저희 서비스를 직접 경험해보세요!
-
-### 🌐 메인 서비스
-[![Ask-it 로고](https://img.shields.io/badge/Ask--it-방문하기-4A90E2?style=for-the-badge&logo=safari&logoColor=white)](https://ask-it.site)
-
-### 📝 방명록 남기기
-> 여러분의 소중한 의견을 기다립니다
->
-[![방명록](https://img.shields.io/badge/방명록-의견_남기기-FF69B4?style=for-the-badge&logo=bookstack&logoColor=white)](https://ask-it.site/session/44d77e5c-3116-400b-a904-a4f455d3aa27)
-
----
