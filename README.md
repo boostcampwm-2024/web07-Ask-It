@@ -4,6 +4,10 @@
 
 ## 링크
 
+### 🛠️ 리팩토링 저장소로 이동하기
+
+[![리팩토링-저장소](https://img.shields.io/badge/리팩토링--저장소-4F46E5?style=for-the-badge&logo=safari&logoColor=white)](https://github.com/boostcampwm-2024/refactor-web07-Ask-It)
+
 저희 서비스를 직접 경험해보세요!
 
 ### 🌐 메인 서비스
